@@ -322,6 +322,7 @@ Human.isHuman(newZero); // true
 ### 2.7. 프로미스
 프로미스: 내용이 실행은 되었지만 결과를 아직 반환하지 않은 객체이다.
 콜백 헬이라고 불리는 지저분한 자바스크립트 코드의 해결책이다.
+- 콜백과 프로미스의 중요한 차이: 콜백은 코드가 바로 이어져야 되지만 프로미스는 중간에 다른 코드가 들어올 수 있다(코드 분리).
 
 ```javascript
 const condition = true; //  true면 resolve, false면 reject
@@ -414,3 +415,189 @@ function findAndSaveUser(Users) {
 ```
 - 위 코드는 콜백 패턴(3중첩)을 프로미스로 바꾼 모습이다. findOne, save 메서드가 프로미스를 지원한다고 가정 했을때의 경우이다.
 
+```javascript
+const promise1 = Promise.resolve('성공1');
+const promise2 = Promise.resolve('성공2');
+Promise.all([promise, promise2])
+    .then((result) => {
+        console.log(result);    //  ['성공1', '성공2']
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+```
+- Promise.resolve(성공리턴값): 바로 resolve하는 프로미스이다.
+- Promise.reject(실패리턴값): 바로 reject하는 프로미스이다.
+- Promise.all(배열): 여러 개의 프로미스를 동시에 실행한다.
+    - 하나라도 실패하면 catch로 간다.
+    - allSettled로 실패한 것만 추려낼 수도 있다.
+
+### 2.8. async/await
+프로미스 패턴의 코드를 Async/await으로 한 번 더 축약 가능하다.
+```javascript
+async function findAndSaveUser(Users) {
+    try {
+        let user = await Users.findOne({});
+        user.name = 'zero';
+        user = await user.save();
+        user = await Users.findOne({ gender: 'm' });
+        // 생략
+    } catch (error) {
+        console.error(error);
+    }
+}
+```
+- 변수 = await 프로미스; 인 경우 프로미스가 resolve된 값이 변수에 저장된다.
+- 변수 await 값;인 경우 그 값이 변수에 저장된다.
+- 에러 처리를 위해 try catch로 감싸주어야 한다.
+    - 각각의 프로미스 에러 처리를 위해서는 각각을 try catch로 감싸주어야 한다.
+
+```javascript
+const findAndSaveUser = async (Users) => {
+    try {
+        let user = await Users.findOne({});
+        user.name = 'zero';
+        user = await user.save();
+        user = await Users.findOne({ gender: 'm' });
+        // 생략
+    } catch (error) {
+        console.error(error);
+    }
+};
+```
+- 화살표 함수도 async/await 가능하다.
+
+```javascript
+async function findAndSaveUser(Users) {
+    // 생략
+}
+findAndSaveUse().then(() => { // 생략 });
+// 또는
+async function other() {
+    const result = await findAndSaveUser();
+}
+```
+- Async 함수는 항상 promise를 반환한다.
+- Then이나 await을 붙일 수 있다.
+
+```javascript
+const promise1 = Promise.resolve('성공1');
+const promise2 = Promise.resolve('성공2');
+(async () => {
+    for await (promise of [promise1, promise2]) {
+        console.log(promise);
+    }
+})();
+```
+- for await (변수 of 프로미스배열) -> 노트 10부터 지원한다.
+    - resolve된 프로미스가 변수에 담겨 나온다.
+    - await을 사용하기 때문에 async 함수 안헤서 해야한다.
+    
+<br/>
+
+## **3. 프론트엔드 자바스크립트**
+---
+### 3.1. AJAX
+서버로 요청을 보내는 코드이다.
+- 라이브러리 없이는 브라우저가 지원하는 XMLHttpRequest 객체를 이용한다.
+- 하지만 AJAX 요청 시 Axios 라이버리를 사용하는 게 편하다.
+- HTML에 아래 스크립트를 추가하면 사용할 수 있다.
+```javascript
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    // 여기에 예제 코드를 넣으세요.
+</script>
+```
+
+```javascript
+axios.get('https://www.zerocho.com/api/get')
+    .then((result) => {
+        console.log(result);
+        console.log(result.data);   // {}
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+```
+- axios.get 함수의 인수로 요청을 보낼 주소를 넣으면 된다.
+- 프로미스 기반 코드라 async/await 사용 가능하다.
+
+```javascript
+(async () => {
+    try {
+        const result = await axios.post('https://www.zerocho.com/api/post/json', {
+            name: 'zerocho',
+            birth: 1994,
+        });
+        console.log(result);
+        console.log(result.data);   // {}
+    } catch (error) {
+        console.error(error);
+    }
+})();
+```
+- 위 코드는 POST 요청을 하는 코드이다(데이터를 담아 서버로 보내는 경우).
+- axios.post 함수의 두 번째 인수로 데이터를 넣어 보낸다.
+
+### 3.2. FormData
+HTML form 태그에 담긴 데이터를 AJAX 요청으로 보내구 싶은 경우: FormData 객체를 이용하면 된다.
+
+```javascript
+const formData = new FormData();
+formData.append('name', 'zerocho');
+formData.append('item', 'orange');
+formData.append('item', 'melon');
+formData.has('item');   // true
+formData.has('money');  // false
+formData.get('item');   // orange
+formData.getAll('item');    // ['orange', 'melon'];
+formData.append('test', ['hi', 'zero']);
+formData.get('test');   //  hi, zero
+formData.delete('test');
+formData.get('test');   //  null
+formData.set('item', 'apple');
+formData.getAll('item');    // ['apple'];
+```
+FormData 메서드 사용 예제 코드이다.
+- FormData POST 요청으로 보내려면 Axios의 data 자리에 formData를 넣어서 보내면 된다.
+
+### 3.3. encodeURIConponent, decodeURIComponent
+- URL: 서버에 있는 파일 위치를 가리킨다.
+- URI: 서버에 있는 자원 위치를 가리킨다.
+
+```javascript
+(asyne () => {
+    try {
+        const result = await axios.get(`https://www.zerocho.com/api/search/${encodeURIComponent('노드')}`);
+        console.log(result);
+        console.log(result.data);   // {}
+    } catch (error) {
+        console.error(error);
+    }
+})();
+```
+주소창에 한글 입력하면 서버가 처리하지 못하는 경우가 발생한다.
+- encodeURIComponent로 한글 감싸줘서 처리하면 된다.
+- 서버에서는 decodeURIComponent로 한글로 해석해서 처리하면 된다.
+
+### 3.4. data attribute와 dataset
+- HTML 태그에 데이터를 저장하는 방법이다.
+- 태그 송석으로 data-속성명
+- 자바스크립트에서 태그.dataset.속성명으로 접근 가능하다.
+    - data-user-job -> dataset.userJob
+    - data-id -> dataset.id
+- 반대로 자바스크립트 dataset에 값을 넣으면 data-속성이 생긴다.
+    - dataset.monthSalary = 10000 -> data-month-salary="10000"
+
+```javascript
+<ul>
+    <li data-id="1" data-user-job="programmer">Zero</li>
+    <li data-id="2" data-user-job="designer">Nero</li>
+    <li data-id="3" data-user-job="programmer">Hero</li>
+    <li data-id="4" data-user-job="ceo">Kero</li>
+</ul>
+<script>
+    console.log(document.querySelector('li').dataset);
+    // { id: '1', userJob: 'programmer' }
+</script>
+```
