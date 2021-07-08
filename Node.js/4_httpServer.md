@@ -49,7 +49,7 @@ $ node server1
 ```
 
 연결되고 난 후 localhost:8080 또는 http://127.0.0.1:8080에 접속한다.
-<img src="./image/port.PNG" width="500" height="300">
+<img width="372" alt="port" src="https://user-images.githubusercontent.com/35963403/124872877-c08cb200-e000-11eb-8a6b-3913f615f218.PNG">
 
 ### 1.5. localhost와 포트
 **localhost**는 컴퓨터 내부 주소이다.
@@ -281,22 +281,100 @@ Set-Cookie 시 다양한 옵션이 있다.
 - 요즘에는 https 적용이 필수이다.
 
 ### 4.2. https 서버
-http 서버를 https 서버로
+http 서버를 https 서버로 변경하려면?
 - 암호화를 위해 인증서를 발급받아야 한다.
 
 createServer가 인자를 두 개 받는다.
 - 첫 번째 인자는 인증서와 관련된 옵션 객체이다.
 - pem, crt, key 등 인증서를 구입할 때 얻을 수 있는 파일을 넣는다.
 - 두 번째 인자는 서버 로직이다.
+```javascript
+// server1.js
+const http = require('http');
 
+http.createServer((req, res) => {
+    res.writeHead(500, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.write('<h1>Hello Node!</h1>');
+    res.end('<p>Hello Server!</p>');
+})
+    .listen(8080, () => {   // 서버 연결
+        console.log('8080번 포트에서 서버 대기중입니다.');
+    })
+```
+**http -> https**
+```javascript
+// server1-3.js
+const https = require('https');
+const fs = require('fs');
+
+https.createServer({
+    cert: fs.readFileSync('도메인 인증서 경로'),
+    key: fs.readFileSync('도메인 비밀키 경로'),
+    ca: [
+        fs.readFileSync('상위 인증서 경로'),
+        fs.readFileSync('상위 인증서 경로'),
+    ]
+}, (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/html charset=utf=8' });
+    res.write('<h1>Hello Node!</h1>');
+    res.end('<p>Hello Server!</p>');
+})
+    .listen(443, () => {
+        console.log('443번 포트에서 서버 대기중입니다.');
+    });
+```
+
+### 4.3. http2
+SSL 암호화와 더불어 최신 HTTP 프로토콜인 http/2를 사용하는 모듈이다.
+- 요청 및 응답 방식이 기존 http/1.1보다 개선되었다.
+- 웹의 속도도 개선되었다.
+
+### 4.4. http2 적용 서버
+https 모듈을 http2로, createServer 메서드를 createSecureServer 메서드로 변경한다.
+
+**https -> http2**
+```javascript
+// server1-4.js
+const http2 = require('http2');
+const fs = require('fs');
+
+https.createServer({
+    cert: fs.readFileSync('도메인 인증서 경로'),
+    key: fs.readFileSync('도메인 비밀키 경로'),
+    ca: [
+        fs.readFileSync('상위 인증서 경로'),
+        fs.readFileSync('상위 인증서 경로'),
+    ]
+}, (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/html charset=utf=8' });
+    res.write('<h1>Hello Node!</h1>');
+    res.end('<p>Hello Server!</p>');
+})
+    .listen(443, () => {
+        console.log('443번 포트에서 서버 대기중입니다.');
+    });
+```
 
 <br/>
-
 
 ## **5. cluster**
 ---
+### 5.1. cluster
+기본적으로 싱글 스레드인 노드가 CPU 코어를 모두 사용할 수 있게 해주는 모듈이다.
+- 포트를 공유하는 노드 프로세스를 여러 개 둘 수 있다.
+- 요청이 많이 들어왔을 때 병렬로 실행된 서버의 개수만큼 요청이 분산된다.
+- 서버에 무리가 덜 간다.
+- 코어가 8개인 서버가 있을 때: 보통은 코어 하나만 활용한다.
+    - cluster로 코어 하나당 노드 프로세스 하나를 배정 가능하다.
+    - 성능이 8배가 되는 것은 아니지만 개선된다.
+    - 단점: 컴퓨터 자원(메모리, 세션)을 공유하지 못한다.
+    - Redis등 별도 서버로 해결 해야된다.
 
-###
+### 5.2. 서버 클러스터링
+마스터 프로세스와 워커 프로세스
+- 마스터 프로세스는 CPU 개수만큼 워커 프로세스를 만든다(worker_threads랑 구조가 비슷하다).
+- 요청이 들어오면 워커 프로세스에 고르게 분배한다.
 
+### 5.3. 워커 프로세스 개수 확인하기
 
-<br/>
+### 5.4. 워커 프로세스 다시 살리기
