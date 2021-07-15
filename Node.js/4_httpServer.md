@@ -48,7 +48,8 @@ $ node server1
 8080번 포트에서 서버 대기중입니다.
 ```
 
-연결되고 난 후 localhost:8080 또는 http://127.0.0.1:8080에 접속한다.
+연결되고 난 후 localhost:8080 또는 http://127.0.0.1:8080 에 접속한다.
+
 <img width="372" alt="port" src="https://user-images.githubusercontent.com/35963403/124872877-c08cb200-e000-11eb-8a6b-3913f615f218.PNG">
 
 ### 1.5. localhost와 포트
@@ -57,6 +58,7 @@ $ node server1
 
 **포트**는 서버 내에서 프로세스를 구분하는 번호이다.
 - 기본적으로 http 서버는 80번 포트를 사용한다(https는 443).
+    - 생략이 가능하다.
 - 다른 포트로 데이터베이스나 다른 서버 동시에 연결이 가능하다.
 
 ### 1.6. 이벤트 리스너 붙이기
@@ -66,12 +68,13 @@ listening 과 error 이벤트를 붙일 수 있다.
 const http = require('http');
 
 const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); // html인 것을 알려줌
     res.write('<h1>Hello Node!</h1>');
     res.end('<p>Hello Server!</p>');
 });
 server.listen(8080);
 
+// 에러 처리
 server.on('listening', () => {
     console.log('8080번 포트에서 서버 대기중입니다.');
 });
@@ -105,21 +108,21 @@ write와 end에 문자열을 넣는 것은 비효율적이다.
 ```javascript
 // server2.js
 const http = require('http');
-const fs = require('fs').promise;
+const fs = require('fs').promises;
 
 http.createServer(async (req, res) => {
-    try {
+    try {   // async를 사용할 때는 try catch으로 에러처리하기
         const data = await fs.readFile('./server2.html');
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         res.end(data);
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
         res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end(err.message);
     }
 })
-    .listen(8081, () => {
-        console.log('8081번 포트에서 서버 대기 중입니다.');
+    .listen(8080, () => {
+        console.log('8080번 포트에서 서버 대기 중입니다.');
     });
 ```
 
@@ -136,6 +139,7 @@ http.createServer(async (req, res) => {
 서버에 요청을 보낼 때는 주소를 통해 요청의 내용을 표현한다.
 - /index.html이면 index.html을 보내달라는 뜻이다.
 - 항상 html을 요구할 필요는 없다.
+    - 사용자 정보를 요구할 수도 있다.
 - 서버가 이해하기 쉬운 주소가 좋다.
 
 **REST API(Respresentational State Transfer)**
@@ -170,16 +174,221 @@ http.createServer(async (req, res) => {
 >| DELETE | /users/사용자id | 해당 id의 사용자 제거 |
 
 ### 2.3. REST 서버 만들기
+restServer.js
+- GET 메서드에서 /, /about 요청 주소는 페이지를 요청하는 것이므로 HTML 파일을 읽어서 전송한다. AJAX 요청을 처리하는 /users에서는 users 데이터를 전송한다. JSON 형식으로 보내기 위해 JSON.stringify를 해주었다. 그 외의 GET 요청은 CSS나 JS 파일을 요청하는 것이므로 찾아서 보내주고, 없다면 404 NOT FOUND 에러를 응답한다.
+- POST와 PUT 메서드는 클라이언트로부터 데이터를 받으므로 특별한 처리가 필요하다. req.on('data', 콜백)과 req.on('end', 콜백) 부분을 보면 readStream을 사용했다. readStream으로 요청과 같이 들어오는 요청 본문을 받을 수 있다. 단, 문자열이므로 JSON으로 만드는 JSON.parse 과정이 한 번 필요하다.
+- DELETE 메서드로 요청이 오면 주소에 들어 있는 키에 해당하는 사용자를 제거한다.
+- 해당하는 주소가 없을 경우 404 NOT FOUND 에러를 응답한다.
 
+```javascript
+// restServer.js
+const http = require('http');
+const fs = require('fs').promises;
 
+const users = {}; // 데이터 저장용
 
+http.createServer(async (req, res) => {
+  try {
+    if (req.method === 'GET') {
+      if (req.url === '/') {
+        const data = await fs.readFile('./restFront.html');
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        return res.end(data);
+      } else if (req.url === '/about') {
+        const data = await fs.readFile('./about.html');
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        return res.end(data);
+      } else if (req.url === '/users') {
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        return res.end(JSON.stringify(users));
+      }
+      // /도 /about도 /users도 아니면
+      try {
+        const data = await fs.readFile(`.${req.url}`);
+        return res.end(data);
+      } catch (err) {
+        // 주소에 해당하는 라우트를 못 찾았다는 404 Not Found error 발생
+      }
+    } else if (req.method === 'POST') {
+      if (req.url === '/user') {
+        let body = '';
+        // 요청의 body를 stream 형식으로 받음
+        req.on('data', (data) => {
+          body += data;
+        });
+        // 요청의 body를 다 받은 후 실행됨
+        return req.on('end', () => {
+          console.log('POST 본문(Body):', body);
+          const { name } = JSON.parse(body);
+          const id = Date.now();
+          users[id] = name;
+          res.writeHead(201, { 'Content-Type': 'text/plain; charset=utf-8' });
+          res.end('ok');
+        });
+      }
+    } else if (req.method === 'PUT') {
+      if (req.url.startsWith('/user/')) {
+        const key = req.url.split('/')[2];
+        let body = '';
+        req.on('data', (data) => {
+          body += data;
+        });
+        return req.on('end', () => {
+          console.log('PUT 본문(Body):', body);
+          users[key] = JSON.parse(body).name; // 클라이언트에서 보낸 것을 위의 과정을 거쳐 가져옴
+          res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+          return res.end('ok');
+        });
+      }
+    } else if (req.method === 'DELETE') {
+      if (req.url.startsWith('/user/')) {
+        const key = req.url.split('/')[2];
+        delete users[key];
+        res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('ok');
+      }
+    }
+    res.writeHead(404);
+    return res.end('NOT FOUND');
+  } catch (err) {
+    console.error(err);
+    res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end(err.message);
+  }
+})
+  .listen(8082, () => {
+    console.log('8082번 포트에서 서버 대기 중입니다');
+  });
+```
+```javascript
+// restFront.js
+async function getUser() { // 로딩 시 사용자 가져오는 함수
+  try {
+    const res = await axios.get('/users');
+    const users = res.data;
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+    // 사용자마다 반복적으로 화면 표시 및 이벤트 연결
+    Object.keys(users).map(function (key) {
+      const userDiv = document.createElement('div');
+      const span = document.createElement('span');
+      span.textContent = users[key];
+      const edit = document.createElement('button');
+      edit.textContent = '수정';
+      edit.addEventListener('click', async () => { // 수정 버튼 클릭
+        const name = prompt('바꿀 이름을 입력하세요');
+        if (!name) {
+          return alert('이름을 반드시 입력하셔야 합니다');
+        }
+        try {
+          await axios.put('/user/' + key, { name });
+          getUser();
+        } catch (err) {
+          console.error(err);
+        }
+      });
+      const remove = document.createElement('button');
+      remove.textContent = '삭제';
+      remove.addEventListener('click', async () => { // 삭제 버튼 클릭
+        try {
+          await axios.delete('/user/' + key);
+          getUser();
+        } catch (err) {
+          console.error(err);
+        }
+      });
+      userDiv.appendChild(span);
+      userDiv.appendChild(edit);
+      userDiv.appendChild(remove);
+      list.appendChild(userDiv);
+      console.log(res.data);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
 
+window.onload = getUser; // 화면 로딩 시 getUser 호출
+// 폼 제출(submit) 시 실행
+document.getElementById('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = e.target.username.value;
+  if (!name) {
+    return alert('이름을 입력하세요');
+  }
+  try {
+    await axios.post('/user', { name });
+    getUser();
+  } catch (err) {
+    console.error(err);
+  }
+  e.target.username.value = '';
+});
+```
+```html
+<!-- restFront.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>RESTful SERVER</title>
+  <link rel="stylesheet" href="./restFront.css" />
+</head>
+<body>
+<nav>
+  <a href="/">Home</a>
+  <a href="/about">About</a>
+</nav>
+<div>
+  <form id="form">
+    <input type="text" id="username">
+    <button type="submit">등록</button>
+  </form>
+</div>
+<div id="list"></div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="./restFront.js"></script>
+</body>
+</html>
+```
+```html
+<!-- about.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>RESTful SERVER</title>
+  <link rel="stylesheet" href="./restFront.css" />
+</head>
+<body>
+<nav>
+  <a href="/">Home</a>
+  <a href="/about">About</a>
+</nav>
+<div>
+  <h2>소개 페이지입니다.</h2>
+  <p>사용자 이름을 등록하세요!</p>
+</div>
+</body>
+</html>
+```
+```css
+<!-- restFront.css -->
+a { color: blue; text-decoration: none; }
+```
+### 2.4. REST 서버 실행하기
+```javascript
+// console
+$ node restServer
+8082번 포트에서 서버 대기 중입니다.
+```
 
-
-
+### 2.5. REST 요청 확인하기
+개발자도구(F12) Network 탭에서 요청 내용 실시간 확인 가능하다.
+- Name은 요청 주소, Method는 요청 메서드, Status는 HTTP 응답 코드
+- Protocol은 HTTP 프로토콜, Type은 요청 종류(xhr은 AJAX 요청)
 
 <br/>
-
 
 ## **3. 쿠키와 세션 이해하기**
 ---
@@ -189,7 +398,7 @@ http.createServer(async (req, res) => {
     - 로그인을 구현하려면 쿠키와 세션을 같이 이용하면 된다.
 
 쿠키: 키=값의 쌍이다.
-- name = don
+- 매 요청마다 name = don과 같은 키=값 형식으로 서버에 데이터를 보낸다.
 - 매 요청마다 서버에 포함해서 보낸다.
 - 서버는 쿠키를 읽어 누구인지 파악한다.
 
@@ -197,12 +406,13 @@ http.createServer(async (req, res) => {
 쿠키 넣는 것을 직접 구현해본다.
 - writeHead: 요청 헤더에 입력하는 메서드
 - Set-Cookie: 브라우저에게 쿠키를 설정하라고 명령하는 키
+
 ```javascript
 // cookie.js
 const http = require('http');
 
 http.createServer((req, res) => {
-    console.log(req.url, req.headerscookie);
+    console.log(req.url, req.headers.cookie);
     res.writeHead(200, { 'Set-Cookie': 'mycookie=test' });
     res.end('Hello Cookie');
 })
@@ -212,6 +422,8 @@ http.createServer((req, res) => {
 ```
 
 ### 3.3. 쿠키 서버 실행하기
+Application탭 -> Cookies에서 확인할 수 있다.
+
 req.headers.cookie: 쿠키가 문자열로 담겨있다.
 
 req.url: 요청 주소이다.
@@ -219,6 +431,7 @@ req.url: 요청 주소이다.
 localhost:8082에 접속한다.
 - 요청이 전송되고 응답이 왔을 때 쿠키가 설정된다.
 - favicon.ico는 브라우저가 자동으로 보내는 요청이다.
+    - 아이콘이 들어있다.
 - 두 번째 요청인 favicon.ico에 쿠키가 넣어진다.
 
 
@@ -243,6 +456,72 @@ writeHead 메서드에 첫 번째 인수로 넣은 값이다.
     - /login인 경우 querystring으로 온 이름을 쿠키로 저장한다.
     - 그 외의 경우 쿠키가 있는지 없는지 판단한다.
         - 없으면 로그인 페이지로 리다이렉트한다.
+- 한글인 경우 encodeURIComponent()로 감싸주어야 한다.
+```javascript
+// cookie2.js
+const http = require('http');
+const fs = require('fs').promises;
+const url = require('url');
+const qs = require('querystring');
+
+const parseCookies = (cookie = '') =>
+  cookie
+    .split(';')
+    .map(v => v.split('='))
+    .reduce((acc, [k, v]) => {
+      acc[k.trim()] = decodeURIComponent(v);
+      return acc;
+    }, {});
+
+http.createServer(async (req, res) => {
+  const cookies = parseCookies(req.headers.cookie); // { mycookie: 'test' }
+  // 주소가 /login으로 시작하는 경우
+  if (req.url.startsWith('/login')) {
+    const { query } = url.parse(req.url);
+    const { name } = qs.parse(query);
+    const expires = new Date();
+    // 쿠키 유효 시간을 현재시간 + 5분으로 설정
+    expires.setMinutes(expires.getMinutes() + 5);
+    res.writeHead(302, {
+      Location: '/',
+      'Set-Cookie': `name=${encodeURIComponent(name)}; Expires=${expires.toGMTString()}; HttpOnly; Path=/`,
+    });
+    res.end();
+  // name이라는 쿠키가 있는 경우
+  } else if (cookies.name) {
+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end(`${cookies.name}님 안녕하세요`);
+  } else {
+    try {
+      const data = await fs.readFile('./cookie2.html');
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(data);
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end(err.message);
+    }
+  }
+})
+  .listen(8084, () => {
+    console.log('8084번 포트에서 서버 대기 중입니다!');
+  });
+```
+```html
+<!-- cookie2.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>쿠키&세션 이해하기</title>
+</head>
+<body>
+<form action="/login">
+    <input id="name" name="name" placeholder="이름을 입력하세요" />
+    <button id="login">로그인</button>
+</form>
+</body>
+</html>
+```
 
 ### 3.7. 쿠키 옵션
 Set-Cookie 시 다양한 옵션이 있다.
@@ -262,16 +541,63 @@ Set-Cookie 시 다양한 옵션이 있다.
 - 중요한 정보는 서버에서 관리하고 클라이언트에는 세션 키만 제공한다.
 - 서버에 세션 객체(session)생성 후, uniqueInt(키)를 만들어 속성명으로 사용한다.
 - 속성 값에 정보를 저장하고 uniqueInt를 클라이언트에 보낸다.
+- 실 서버에서는 세션을 직접 구현하지 않는게 좋다.
+    - express-session을 사용하자.
+```javascript
+// session.js
+const http = require('http');
+const fs = require('fs').promises;
+const url = require('url');
+const qs = require('querystring');
 
-### 3.10 세션 서버 실행하기
+const parseCookies = (cookie = '') =>
+  cookie
+    .split(';')
+    .map(v => v.split('='))
+    .reduce((acc, [k, v]) => {
+      acc[k.trim()] = decodeURIComponent(v);
+      return acc;
+    }, {});
 
+const session = {};
 
-
-
-
-
+http.createServer(async (req, res) => {
+  const cookies = parseCookies(req.headers.cookie);
+  if (req.url.startsWith('/login')) {
+    const { query } = url.parse(req.url);
+    const { name } = qs.parse(query);
+    const expires = new Date();
+    expires.setMinutes(expires.getMinutes() + 5);
+    const uniqueInt = Date.now();
+    session[uniqueInt] = {
+      name,
+      expires,
+    };
+    res.writeHead(302, {
+      Location: '/',
+      'Set-Cookie': `session=${uniqueInt}; Expires=${expires.toGMTString()}; HttpOnly; Path=/`,
+    });
+    res.end();
+  // 세션쿠키가 존재하고, 만료 기간이 지나지 않았다면
+  } else if (cookies.session && session[cookies.session].expires > new Date()) {
+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end(`${session[cookies.session].name}님 안녕하세요`);
+  } else {
+    try {
+      const data = await fs.readFile('./cookie2.html');
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(data);
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end(err.message);
+    }
+  }
+})
+  .listen(8085, () => {
+    console.log('8085번 포트에서 서버 대기 중입니다!');
+  });
+```
 <br/>
-
 
 ## **4. http와 http2**
 ---
@@ -308,12 +634,12 @@ const https = require('https');
 const fs = require('fs');
 
 https.createServer({
-    cert: fs.readFileSync('도메인 인증서 경로'),
+    cert: fs.readFileSync('도메인 인증서 경로'),  // 딱 한번만 실행하거나 서버 초기화할 때 sync 사용해도 됨
     key: fs.readFileSync('도메인 비밀키 경로'),
     ca: [
         fs.readFileSync('상위 인증서 경로'),
         fs.readFileSync('상위 인증서 경로'),
-    ]
+    ],
 }, (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/html charset=utf=8' });
     res.write('<h1>Hello Node!</h1>');
@@ -377,4 +703,4 @@ https.createServer({
 
 ### 5.3. 워커 프로세스 개수 확인하기
 
-### 5.4. 워커 프로세스 다시 살리기
+### 5.4. 워커 프로세스 다시 살리기,
