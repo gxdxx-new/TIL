@@ -177,13 +177,176 @@ npm start로 서버 실행 후 http://localhost:8081 로 접속한다.
 
 ### 2.1. 모델 생성
 
-- models/user.js: 사용자 테이블과 연결됨
+```javascript
+// models/user.js
+const Sequelize = require("sequelize");
+
+module.exports = class User extends Sequelize.Model {
+  static init(sequelize) {
+    return super.init(
+      {
+        email: {
+          type: Sequelize.STRING(40),
+          allowNull: true,
+          unique: true,
+        },
+        nick: {
+          type: Sequelize.STRING(15),
+          allowNull: false,
+        },
+        password: {
+          type: Sequelize.STRING(100),
+          allowNull: true,
+        },
+        provider: {
+          type: Sequelize.STRING(10),
+          allowNull: false,
+          defaultValue: "local",
+        },
+        snsId: {
+          type: Sequelize.STRING(30),
+          allowNull: true,
+        },
+      },
+      {
+        sequelize,
+        timestamps: true,
+        underscored: false,
+        modelName: "User",
+        tableName: "users",
+        paranoid: true,
+        charset: "utf8",
+        collate: "utf8_general_ci",
+      }
+    );
+  }
+
+  static associate(db) {
+    db.User.hasMany(db.Post);
+    db.User.belongsToMany(db.User, {
+      foreignKey: "followingId",
+      as: "Followers",
+      through: "Follow",
+    });
+    db.User.belongsToMany(db.User, {
+      foreignKey: "followerId",
+      as: "Followings",
+      through: "Follow",
+    });
+  }
+};
+```
+
+```javascript
+// models/post.js
+const Sequelize = require("sequelize");
+
+module.exports = class Post extends Sequelize.Model {
+  static init(sequelize) {
+    return super.init(
+      {
+        content: {
+          type: Sequelize.STRING(140),
+          allowNull: false,
+        },
+        img: {
+          type: Sequelize.STRING(200),
+          allowNull: true,
+        },
+      },
+      {
+        sequelize,
+        timestamps: true,
+        underscored: false,
+        modelName: "Post",
+        tableName: "posts",
+        paranoid: false,
+        charset: "utf8mb4",
+        collate: "utf8mb4_general_ci",
+      }
+    );
+  }
+
+  static associate(db) {
+    db.Post.belongsTo(db.User);
+    db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag" });
+  }
+};
+```
+
+```javascript
+// models / hashtag.js;
+const Sequelize = require("sequelize");
+
+module.exports = class Hashtag extends Sequelize.Model {
+  static init(sequelize) {
+    return super.init(
+      {
+        title: {
+          type: Sequelize.STRING(15),
+          allowNull: false,
+          unique: true,
+        },
+      },
+      {
+        sequelize,
+        timestamps: true,
+        underscored: false,
+        modelName: "Hashtag",
+        tableName: "hashtags",
+        paranoid: false,
+        charset: "utf8mb4",
+        collate: "utf8mb4_general_ci",
+      }
+    );
+  }
+
+  static associate(db) {
+    db.Hashtag.belongsToMany(db.Post, { through: "PostHashtag" });
+  }
+};
+```
+
+- models/user.js: 사용자 테이블과 연결된다.
   - provider: 카카오 로그인인 경우 kakao, 로컬 로그인(이메일/비밀번호)인 경우 local
   - snsId: 카카오 로그인인 경우 주어지는 id
-- models/post.js: 게시글 내용과 이미지 경로를 저장(이미지는 파일로 저장)
-- models/hashtag.js: 해시태그 이름을 저장(나중에 태그로 검색하기 위해서)
+- models/post.js: 게시글 내용과 이미지 경로를 저장한다(이미지는 파일로 저장).
+- models/hashtag.js: 해시태그 이름을 저장한다(나중에 태그로 검색하기 위해서).
 
 ### 2.2. models/index.js
+
+```javascript
+// models/inedx.js
+const Sequelize = require("sequelize");
+const env = process.env.NODE_ENV || "development";
+const config = require("../config/config")[env];
+const User = require("./user");
+const Post = require("./post");
+const Hashtag = require("./hashtag");
+
+const db = {};
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config
+);
+
+db.sequelize = sequelize;
+db.User = User;
+db.Post = Post;
+db.Hashtag = Hashtag;
+
+User.init(sequelize);
+Post.init(sequelize);
+Hashtag.init(sequelize);
+
+User.associate(db);
+Post.associate(db);
+Hashtag.associate(db);
+
+module.exports = db;
+```
 
 시퀄라이즈가 자동으로 생성해주는 코드 대신 다음과 같이 변경한다.
 
@@ -205,10 +368,12 @@ npm start로 서버 실행 후 http://localhost:8081 로 접속한다.
 
 ### 2.4. 팔로잉-팔로워 다대다 관계
 
+<img width="512" alt="db" src="https://user-images.githubusercontent.com/35963403/126131266-ec439c7d-f2af-4dc6-a8b6-b70fdad52a63.PNG">
+
 User(다):User(다)
 
 - 다대다 관계이므로 중간 테이블(Follow)이 생성된다.
-- 모델 이름이 같으므로 구분이 필요하다(as가 구분자 역할, foreignKey는 반대 테이블 컬럼의 프라이머리 키 컬럼)
+- 모델 이름이 같으므로 구분이 필요하다(as가 구분자 역할, foreignKey는 반대 테이블 컬럼의 프라이머리 키 컬럼).
 - 시퀄라이즈는 as 이름을 바탕으로 자동으로 addFollower, getFollowers, addFollowing, getFollowings 메서드를 생성한다.
 
 ### 2.5. 시퀄라이즈 설정하기
@@ -265,13 +430,52 @@ app.use(morgan('dev'));
 ...
 ```
 
-<br/>
+- 테이블 정의를 수정하면 테이블을 수동으로 수정해줘야 한다.
+  - force
+    - true: 테이블이 지워졌다가 다시 생성된다.
+      - 데이터가 날라가므로 조심해야 한다.
+    - false: 개발환경에서만 사용한다.
+  - alter - true: 데이터는 유지하고 테이블 컬럼 바뀐것만 반영한다. - 기존 데이터와 맞지 않아 에러 발생할 수 있다.
+    <br/>
 
 ## **3. 패스포트 모듈로 로그인**
 
 ---
 
 ### 3.1. 패스포트 설치하기
+
+```javascript
+// app.js
+...
+const dotenv = require('dotenv');
+const passport = require('passport');
+
+dotenv.config();
+const pageRouter = require('./routes/page');
+const authRouter = require('./routes/auth');
+const { sequelize } = require('./models');
+const passportConfig = require('./passport');
+
+const app = express();
+app.set('port', process.env.PORT || 8001);
+app.set('view engine', 'html');
+passportConfig();
+...
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+    },
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/', pageRouter);
+app.use('/auth', authRouter);
+```
 
 로그인 과정을 쉽게 처리할 수 있게 도와주는 Passport를 설치한다.
 
@@ -288,10 +492,35 @@ $ npm i passport passport-local passport-kakao bcrypt
 
 ### 3.2. 패스포트 모듈 작성
 
-passport/index.js 작성
+passport/index.js 에 작성한다.
 
-- passport.serializeUser: req.session 객체에 어떤 데이터를 저장할 지 선택, 사용자 정보를 다 들고 있으면 메모리를 많이 차지하기 때문에 사용자의 아이디만 저장
-- passport.deserializeUser: req.session에 저장된 사용자 아이디를 바탕으로 DB 조회로 사용자 정보를 얻어낸 후 req.user에 저장
+```javascript
+// passport/index.js
+const passport = require("passport");
+const local = require("./localStrategy");
+const kakao = require("./kakaoStrategy");
+const User = require("../models/user");
+
+module.exports = () => {
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser((id, done) => {
+    User.findOne({ where: { id } })
+      .then((user) => done(null, user))
+      .catch((err) => done(err));
+  });
+
+  local();
+  kakao();
+};
+```
+
+- passport.serializeUser: req.session
+  - 객체에 어떤 데이터를 저장할 지 선택, 사용자 정보를 다 들고 있으면 메모리를 많이 차지하기 때문에 사용자의 아이디만 저장한다.
+- passport.deserializeUser
+  - req.session에 저장된 사용자 아이디를 바탕으로 DB 조회로 사용자 정보를 얻어낸 후 req.user에 저장한다.
 
 ### 3.3. 패스포트 처리 과정
 
@@ -314,7 +543,61 @@ passport/index.js 작성
 
 ### 3.4. 로컬 로그인 구현하기
 
-passport-local 패키지 필요하다.
+passport-local 패키지가 필요하다.
+
+```javascript
+// routes/middleware.js
+exports.isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.status(403).send("로그인 필요");
+  }
+};
+
+exports.isNotLoggedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    next();
+  } else {
+    const message = encodeURIComponent("로그인한 상태입니다.");
+    res.redirect(`/?error=${message}`);
+  }
+};
+```
+
+```javascript
+// routes/page.js
+const express = require("express");
+
+const router = express.Router();
+
+router.use((req, res, next) => {
+  res.locals.user = null;
+  res.locals.followerCount = 0;
+  res.locals.followingCount = 0;
+  res.locals.followerIdList = [];
+  next();
+});
+
+router.get("/profile", (req, res) => {
+  res.render("profile", { title: "내 정보 - NodeBird" });
+});
+
+router.get("/join", (req, res) => {
+  res.render("join", { title: "회원가입 - NodeBird" });
+});
+
+router.get("/", (req, res, next) => {
+  const twits = [];
+  res.render("main", {
+    title: "NodeBird",
+    twits,
+    user: req.user,
+  });
+});
+
+module.exports = router;
+```
 
 - 로컬 로그인 전략 수립
 - 로그인에만 해당하는 전략이므로 회원가입은 따로 만들어야 한다.
@@ -322,73 +605,296 @@ passport-local 패키지 필요하다.
 
 ### 3.5. 회원가입 라우터
 
-routes/auth.js 작성
+```javascript
+// routes/auth.js
+const express = require("express");
+const passport = require("passport");
+const bcrypt = require("bcrypt");
+const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
+const User = require("../models/user");
 
-- bcrypt.hash로 비밀번호 암호화
-- hash의 두 번째 인수는 암호화 라운드
-- 라운드가 높을수록 안전하지만 오래 걸린다.
-- 적당한 라운드를 찾는 게 좋다.
-- ?error 쿼리스트링으로 1회성 메시지
+const router = express.Router();
+
+router.post("/join", isNotLoggedIn, async (req, res, next) => {
+  const { email, nick, password } = req.body;
+  try {
+    const exUser = await User.findOne({ where: { email } });
+    if (exUser) {
+      return res.redirect("/join?error=exist");
+    }
+    const hash = await bcrypt.hash(password, 12);
+    await User.create({
+      email,
+      nick,
+      password: hash,
+    });
+    return res.redirect("/");
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+```
+
+- isNotLoggedIn() 함수를 통해 로그인 한 상태인지 확인한다.
+  - 로그인 하지 않았으면 next()를 호출해서 돌아온다.
+- 프론트에서 email, nick, password를 받아온다.
+- 이미 존재하는 이메일로 가입하는 사람이 있는지 확인한다.
+  - 이미 존재하면
+    - ?error 쿼리스트링으로 1회성 메시지 전달한다.
+  - 존재하지 않으면
+    - db에 저장한다.
+- bcrypt.hash()로 비밀번호를 암호화한다.
+  - hash의 두 번째 인수는 암호화 라운드
+    - 숫자가 클수록 해킹 위험은 적지만 시간이 오래 걸린다.
 
 ### 3.6. 로그인 라우터
 
-routes/auth.js 작성
+```javascript
+// routes/auth.js
+...
+router.post('/login', isNotLoggedIn, (req, res, next) => {
+  passport.authenticate('local', (authError, user, info) => {
+    if (authError) {
+      console.error(authError);
+      return next(authError);
+    }
+    if (!user) {
+      return res.redirect(`/?loginError=${info.message}`);
+    }
+    return req.login(user, (loginError) => {
+      if (loginError) {
+        console.error(loginError);
+        return next(loginError);
+      }
+      return res.redirect('/');
+    });
+  })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
+});
+```
 
-- passport.authenticate(‘local’): 로컬 전략
+- 프론트에서 서버로 로그인 요청을 보내면 실행된다.
+- isNotLoggedIn() 함수를 통해 로그인 한 상태인지 확인한다.
+  - 로그인 하지 않았으면 next()를 호출해서 돌아온다.
+- passport.authenticate('local')이 실행된다.
+  - passport가 local strategy를 찾아서 실행시킨다.
 - 전략을 수행하고 나면 authenticate의 콜백 함수 호출된다.
-- authError: 인증 과정 중 에러
-- user: 인증 성공 시 유저 정보
-- info: 인증 오류에 대한 메시지
-- 인증이 성공했다면 req.login으로 세션에 유저 정보 저장
+  - authError: 인증 과정 중 에러
+  - user: 인증 성공 시 유저 정보
+  - info: 인증 오류에 대한 메시지
+- 인증이 성공했다면 req.login()으로 세션에 유저 정보를 저장한다.
+  - passport/index.js 의 serializeUser()가 실행된다.
+    - 세션에 유저 id만 저장해서 메모리를 아낀다.
+- 콜백 함수로 로그인 에러가 발생했는지 확인한다.
+  - 로그인에 성공했으면 메인 페이지로 이동한다.
+    - 로그인 할 때 세션 쿠키를 브라우저로 전송해서 로그인 상태를 확인하게 해준다.
 
-### 3.7. 로컬 전략 작성
+### 3.7. 로그아웃 라우터
 
-passport/localStrategy.js 작성
+```javascript
+// routes/auth.js
+...
+router.get("/logout", isLoggedIn, (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.redirect("/");
+});
+```
+
+- isLoggedIn() 함수를 통해 로그인 한 상태인지 확인한다.
+  - 로그인 한 상태이면 다음 함수를 실행한다.
+- req.logout()이 실행되면서 서버가 세션 쿠키를 삭제한다.
+
+### 3.8. 로컬 전략 작성
+
+```javascript
+// passport/localStrategy.js
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcrypt");
+
+const User = require("../models/user");
+
+module.exports = () => {
+  passport.use(
+    new LocalStrategy(
+      {
+        usernameField: "email", // req.body.email
+        passwordField: "password", // req.body.password
+      },
+      async (email, password, done) => {
+        try {
+          const exUser = await User.findOne({ where: { email } });
+          if (exUser) {
+            const result = await bcrypt.compare(password, exUser.password);
+            if (result) {
+              done(null, exUser);
+            } else {
+              done(null, false, { message: "비밀번호가 일치하지 않습니다." });
+            }
+          } else {
+            done(null, false, { message: "가입되지 않은 회원입니다." });
+          }
+        } catch (error) {
+          console.error(error);
+          done(error);
+        }
+      }
+    )
+  );
+};
+```
+
+<img width="400" alt="done" src="https://user-images.githubusercontent.com/35963403/126243185-91e79932-c5d3-4d93-baea-63c0563afd3b.png">
 
 - usernameField와 passwordField가 input 태그의 name(body-parser의 req.body)
-- 사용자가 DB에 저장되어있는지 확인한 후 있다면 비밀번호 비교(bcrypt.compare)
+- 사용자가 DB에 저장되어있는지 확인한 후 있다면 비밀번호를 비교한다(bcrypt.compare).
 - 비밀번호까지 일치한다면 로그인
+- done() 함수는 인수를 3개 받는다.
+  - 첫번째 : 서버 에러
+  - 두번째 : 로그인 성공했을 때 User 객체
+    - 실패하면 false
+  - 세번째 : 로그인이 실패했을 때 메시지
+  - 실행이 끝나면 다음 콜백 함수로 간다.
 
-### 3.8. 카카오 로그인 구현
+### 3.9. 카카오 로그인 구현
 
-passport/kakaoStratecy.js 작성
+```javascript
+// passport/kakaoStrategy.js;
+const passport = require("passport");
+const KakaoStrategy = require("passport-kakao").Strategy;
+
+const User = require("../models/user");
+
+module.exports = () => {
+  passport.use(
+    new KakaoStrategy(
+      {
+        clientID: process.env.KAKAO_ID,
+        callbackURL: "/auth/kakao/callback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        console.log("kakao profile", profile);
+        try {
+          const exUser = await User.findOne({
+            where: { snsId: profile.id, provider: "kakao" },
+          });
+          if (exUser) {
+            done(null, exUser);
+          } else {
+            const newUser = await User.create({
+              email: profile._json && profile._json.kakao_account_email,
+              nick: profile.displayName,
+              snsId: profile.id,
+              provider: "kakao",
+            });
+            done(null, newUser);
+          }
+        } catch (error) {
+          console.error(error);
+          done(error);
+        }
+      }
+    )
+  );
+};
+```
 
 - clientID에 카카오 앱 아이디 추가
 - callbackURL: 카카오 로그인 후 카카오가 결과를 전송해줄 URL
 - accessToken, refreshToken: 로그인 성공 후 카카오가 보내준 토큰(사용하지 않음)
+- snsId와 provider로 카카오에 가입한 사람이 있는지 db에서확인한다.
+  - 가입한 사람이 있으면 로그인한다.
+  - 가입한 사람이 없으면 회원가입을 시킨 후 로그인한다.
 - profile: 카카오가 보내준 유저 정보
 - profile의 정보를 바탕으로 회원가입
 
-### 3.9. 카카오 로그인용 라우터 만들기
+### 3.10. 카카오 로그인용 라우터 만들기
 
 회원가입과 로그인이 전략에서 동시에 수행된다.
 
-- passport.authenticate(‘kakao’)만 하면 된다.
-- /kakao/callback 라우터에서는 인증 성공 시(res.redirect)와 실패 시(failureRedirect) 리다이렉트할 경로 지정
+```javascript
+// routes/auth.js
+...
+router.get('/logout', isLoggedIn, (req, res) => {
+    req.logout();
+    req.session.destroy();
+    res.redirect('/');
+});
 
-### 3.10. 카카오 로그인 앱 만들기
+router.get('/kakao', passport.authenticate('kakao'));
+
+router.get('/kakao/callback', passport.authenticate('kakao', {
+    failureRedirect: '/',
+}), (req, res) => {
+    res.redirect('/');
+});
+
+router.get('/kakao', passport.authenticate('kakao'));
+
+router.get('/kakao/callback', passport.authenticate('kakao', {
+    failureRedirect: '/',
+}), (req, res) => {
+    res.redirect('/');
+});
+
+module.exports = router;
+```
+
+```javascript
+// app.js
+...
+const pageRouter = require('./routes/page');
+const authRouter = require('./routes/auth');
+const { sequelize } = require('./models');
+...
+app.use('/', pageRouter);
+app.use('/auth', authRouter);
+...
+```
+
+- passport.authenticate(‘kakao’)만 하면 된다.
+- /kakao/callback 라우터에서는 인증 성공 시(res.redirect)와 실패 시(failureRedirect) 리다이렉트할 경로를 지정한다.
+
+### 3.11. 카카오 로그인 앱 만들기
 
 https://developers.kakao.com 에 접속하여 회원가입한다.
 
-- NodeBird 앱 만들기
+<img width="500" alt="kakao1" src="https://user-images.githubusercontent.com/35963403/126243676-c4001b80-a530-412b-aad2-4e2438851692.PNG">
 
-### 3.11. 카카오 앱 키 저장하기
+- 추가하기 버튼 클릭
+
+<img width="500" alt="kakao2" src="https://user-images.githubusercontent.com/35963403/126243699-9378ee32-2248-4e63-b907-c372041ed87f.PNG">
+
+- 앱 정보 작성
+
+### 3.12. 카카오 앱 키 저장하기
 
 REST API 키를 저장해서 .env에 저장한다.
 
-### 3.12. 카카오 웹 플랫폼 추가
+<img width="500" alt="kakao3" src="https://user-images.githubusercontent.com/35963403/126243958-57c31d37-092f-45cf-925f-23529e139b5b.PNG">
+
+### 3.13. 카카오 웹 플랫폼 추가
 
 웹 플랫폼을 추가해야 callbackURL 등록할 수 있다.
 
+<img width="500" alt="kakao4" src="https://user-images.githubusercontent.com/35963403/126244125-5253a7b1-f90a-4239-9b28-8c085fef900e.png">
+
 - http://localhost:8001 등록
 
-### 3.13. 카카오 동의항목 설정
+### 3.14. 카카오 동의항목 설정
 
 이메일, 생일 등의 정보를 얻기 위해 동의항목을 설정한다.
 
-### 3.14. 카카오 로그인 시도
+<img width="300" alt="kakao5" src="https://user-images.githubusercontent.com/35963403/126244236-4356e2a5-c8c7-4f65-9a91-72da3c3b63da.PNG">
 
-카카오톡 로그인 버튼을 누르면 카카오 로그인 창으로 전환한다.
+### 3.15. 카카오 로그인 시도
+
+<img width="500" alt="kakao6" src="https://user-images.githubusercontent.com/35963403/126244385-fdb4a657-4b0a-4727-ad06-538564f37a93.png">
+
+- 카카오톡 로그인 버튼을 누르면 카카오 로그인 창으로 전환한다.
+
+<img width="500" alt="kakako7" src="https://user-images.githubusercontent.com/35963403/126244465-cb833e59-0ec1-4990-a439-90f5937c73af.PNG">
 
 - 계정 동의 후 NodeBird 서비스로 리다이렉트한다.
 
