@@ -1,8 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const passport = rquire('passport');
+const passport = require('passport');
 const User = require('../models/user');
-const { isLoggedIn, isNotLoggedIn } = require('./middleware');
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
 router.post('/join', isNotLoggedIn, async(req, res, next) => {
