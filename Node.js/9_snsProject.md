@@ -275,7 +275,7 @@ module.exports = class Post extends Sequelize.Model {
 ```
 
 ```javascript
-// models / hashtag.js;
+// models/hashtag.js;
 const Sequelize = require("sequelize");
 
 module.exports = class Hashtag extends Sequelize.Model {
@@ -435,8 +435,11 @@ app.use(morgan('dev'));
     - true: 테이블이 지워졌다가 다시 생성된다.
       - 데이터가 날라가므로 조심해야 한다.
     - false: 개발환경에서만 사용한다.
-  - alter - true: 데이터는 유지하고 테이블 컬럼 바뀐것만 반영한다. - 기존 데이터와 맞지 않아 에러 발생할 수 있다.
-    <br/>
+  - alter
+    - true: 데이터는 유지하고 테이블 컬럼 바뀐것만 반영한다.
+      - 기존 데이터와 맞지 않아 에러 발생할 수 있다.
+
+<br/>
 
 ## **3. 패스포트 모듈로 로그인**
 
@@ -520,7 +523,7 @@ module.exports = () => {
 - passport.serializeUser: req.session
   - 객체에 어떤 데이터를 저장할 지 선택, 사용자 정보를 다 들고 있으면 메모리를 많이 차지하기 때문에 사용자의 아이디만 저장한다.
 - passport.deserializeUser
-  - req.session에 저장된 사용자 아이디를 바탕으로 DB 조회로 사용자 정보를 얻어낸 후 req.user에 저장한다.
+  - req.session에 저장된 사용자 아이디를 바탕으로 DB 조회로 사용자 정보를 얻어낸 후 **req.user에 저장한다**.
 
 ### 3.3. 패스포트 처리 과정
 
@@ -546,7 +549,7 @@ module.exports = () => {
 passport-local 패키지가 필요하다.
 
 ```javascript
-// routes/middleware.js
+// routes/middlewarew.js
 exports.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     next();
@@ -674,15 +677,15 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
 ```
 
 - 프론트에서 서버로 로그인 요청을 보내면 실행된다.
-- isNotLoggedIn() 함수를 통해 로그인 한 상태인지 확인한다.
+- **isNotLoggedIn() 함수를 통해 로그인 한 상태인지 확인한다.**
   - 로그인 하지 않았으면 next()를 호출해서 돌아온다.
-- passport.authenticate('local')이 실행된다.
-  - passport가 local strategy를 찾아서 실행시킨다.
-- 전략을 수행하고 나면 authenticate의 콜백 함수 호출된다.
+- **passport.authenticate('local')이 실행된다.**
+  - **passport가 local strategy를 찾아서 실행시킨다.**
+- **전략을 수행하고 나면 authenticate의 콜백 함수 호출된다.**
   - authError: 인증 과정 중 에러
   - user: 인증 성공 시 유저 정보
   - info: 인증 오류에 대한 메시지
-- 인증이 성공했다면 req.login()으로 세션에 유저 정보를 저장한다.
+- **인증이 성공했다면 req.login()으로 세션에 유저 정보를 저장한다.**
   - passport/index.js 의 serializeUser()가 실행된다.
     - 세션에 유저 id만 저장해서 메모리를 아낀다.
 - 콜백 함수로 로그인 에러가 발생했는지 확인한다.
@@ -701,9 +704,9 @@ router.get("/logout", isLoggedIn, (req, res) => {
 });
 ```
 
-- isLoggedIn() 함수를 통해 로그인 한 상태인지 확인한다.
+- **isLoggedIn() 함수를 통해 로그인 한 상태인지 확인한다.**
   - 로그인 한 상태이면 다음 함수를 실행한다.
-- req.logout()이 실행되면서 서버가 세션 쿠키를 삭제한다.
+- **req.logout()이 실행되면서 서버가 세션 쿠키를 삭제한다.**
 
 ### 3.8. 로컬 전략 작성
 
@@ -750,7 +753,7 @@ module.exports = () => {
 - usernameField와 passwordField가 input 태그의 name(body-parser의 req.body)
 - 사용자가 DB에 저장되어있는지 확인한 후 있다면 비밀번호를 비교한다(bcrypt.compare).
 - 비밀번호까지 일치한다면 로그인
-- done() 함수는 인수를 3개 받는다.
+- **done()** 함수는 인수를 3개 받는다.
   - 첫번째 : 서버 에러
   - 두번째 : 로그인 성공했을 때 User 객체
     - 실패하면 false
@@ -830,14 +833,6 @@ router.get('/kakao/callback', passport.authenticate('kakao', {
     res.redirect('/');
 });
 
-router.get('/kakao', passport.authenticate('kakao'));
-
-router.get('/kakao/callback', passport.authenticate('kakao', {
-    failureRedirect: '/',
-}), (req, res) => {
-    res.redirect('/');
-});
-
 module.exports = router;
 ```
 
@@ -906,40 +901,159 @@ REST API 키를 저장해서 .env에 저장한다.
 
 ### 4.1. 이미지 업로드 구현
 
-form 태그의 enctype이 multipart/form-data
+form 태그의 enctype이 multipart/form-data 인 경우
 
 - body-parser로는 요청 본문을 해석할 수 없다.
-- multer 패키지가 필요하다.
+- **multer** 패키지가 필요하다.
   - $ npm i multer
 - 이미지를 먼저 업로드하고, 이미지가 저장된 경로를 반환할 것이다.
 - 게시글 form을 submit할 때는 이미지 자체 대신 경로를 전송한다.
 
 ### 4.2. 이미지 업로드 라우터 구현
 
-fs.readdir, fs.mkdirSync로 upload 폴더가 없으면 생성한다.
+```javascript
+// routes/post.js
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-multer() 함수로 업로드 미들웨어를 생성한다.
+const { Post, Hashtag } = require("../models");
+const { isLoggedIn } = require("./middlewares");
 
+const router = express.Router();
+
+try {
+  fs.readdirSync("uploads");
+} catch (error) {
+  console.error("uploads 폴더가 없어 uploads 폴더를 생성합니다.");
+  fs.mkdirSync("uploads");
+}
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, "uploads/");
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
+
+// 이미지 업로드
+router.post("/img", isLoggedIn, upload.single("img"), (req, res) => {
+  console.log(req.file);
+  res.json({ url: `/img/${req.file.filename}` });
+});
+
+// 게시글 업로드
+const upload2 = multer();
+router.post("/", isLoggedIn, upload2.none(), async (req, res, next) => {
+  try {
+    const post = await Post.create({
+      content: req.body.content,
+      img: req.body.url,
+      UserId: req.user.id,
+    });
+    const hashtags = req.body.content.match(/#[^\s#]*/g);
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map((tag) => {
+          return Hashtag.findOrCreate({
+            where: { title: tag.slice(1).toLowerCase() },
+          });
+        })
+      );
+      await post.addHashtags(result.map((r) => r[0]));
+    }
+    res.redirect("/");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+module.exports = router;
+```
+
+- fs.readdir(), fs.mkdirSync()로 upload 폴더가 없으면 생성한다.
+- multer() 함수로 업로드 미들웨어를 생성한다.
 - storage: diskStorage는 이미지를 서버 디스크에 저장(destination은 저장 경로, filename은 저장 파일명)
+- uploads 폴더에 이미지 파일을 저장한다.
 - limits는 파일 최대 용량(5MB)
-- upload.single(‘img’): 요청 본문의 img에 담긴 이미지 하나를 읽어 설정대로 저장하는 미들웨어
-- 저장된 파일에 대한 정보는 req.file 객체에 담김
+- multer() 함수를 실행하면 함수를 실행한 객체 안에 single()이라는 미들웨어가 실행된다.
+- upload.single(‘img’): 요청 본문의 img에 담긴 이미지 하나를 읽어 설정대로 저장하는 미들웨어이다.
+  - 클라이언트에서는 img 폴더 안에 있는 이미지 파일을 요청하지만 실제로는 uploads 폴더 안에 있는 이미지 파일을 가져온다.
+    - app.js에서 static 미들웨어를 사용해 요청과 실제 주소가 다르게 만든다.
+- 저장된 파일에 대한 정보는 req.file 객체에 담긴다.
+- res.json({ url: `/img/${req.file.filename}` }); 으로 url을 프론트로 보내서 게시글과 같이 묶여있도록 한다.
 
 ### 4.3. 게시글 등록
 
 upload2.none()은 multipart/formdata 타입의 요청이지만 이미지는 없을 때 사용한다.
 
-- 게시글 등록 시 아까 받은 이미지 경로 저장
-- 게시글에서 해시태그를 찾아서 게시글과 연결(post.addHashtags)
-- findOrCreate는 기존에 해시태그가 존재하면 그걸 사용하고, 없다면 생성하는 시퀄라이즈 메서드
+<img width="250" alt="hashtag" src="https://user-images.githubusercontent.com/35963403/126441446-fb7fa1d9-1fbc-4a42-83e6-d491bd8f20cc.PNG">
+
+- 게시글 등록 시 아까 받은 이미지 경로에 저장한다.
+- 게시글에서 해시태그를 찾아서 게시글과 연결한다(post.addHashtags())
+- findOrCreate()는 기존에 해시태그가 존재하면 그걸 사용하고, 없다면 생성하는 시퀄라이즈 메서드이다.
 
 ### 4.4. 메인 페이지에 게시글 보여주기
 
-메인 페이지(/) 요청 시 게시글을 먼저 조회한 후 템플릿 엔진 렌더링
+```javascript
+// routes/page.js
+const express = require("express");
 
-- include로 관계가 있는 모델을 합쳐서 가져올 수 있음
-- Post와 User는 관계가 있음 (1대다)
-- 게시글을 가져올 때 게시글 작성자까지 같이 가져오는 것)
+const router = express.Router();
+
+router.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
+
+router.get("/profile", (req, res) => {
+  res.render("profile", { title: "내 정보 - NodeBird" });
+});
+
+router.get("/join", (req, res) => {
+  res.render("join", { title: "회원가입 - NodeBird" });
+});
+
+router.get("/", async (req, res, next) => {
+  try {
+    res.locals.user = req.user;
+    const posts = await Post.findAll({
+      include: {
+        model: User,
+        attributes: ["id", "nick"],
+      },
+      order: [["createdAt", "DESC"]],
+    });
+    res.render("main", {
+      title: "NodeBird",
+      twits: posts,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+modulse.exports = router;
+```
+
+메인 페이지(/) 요청 시 게시글을 먼저 조회한 후 템플릿 엔진 렌더링을 한다.
+
+- render에 넣는 변수들은 **res.locals**로 뺄 수 있다.
+  - req.user가 모든 라우터에 들어가면 res.locals에 넣어 중복 제거 가능하다.
+- Post.findAll()으로 업로드한 게시글을 찾는다.
+- 찾은 게시글들(posts)을 twits에 넣는다.
+- include로 관계가 있는 모델을 합쳐서 가져올 수 있다.
+- Post와 User는 관계가 있다. (Post.findAll => 1대다)
+- 게시글을 가져올 때 게시글 작성자까지 같이 가져온다.
 
 <br/>
 
@@ -949,27 +1063,127 @@ upload2.none()은 multipart/formdata 타입의 요청이지만 이미지는 없�
 
 ### 5.1. 팔로잉 기능 구현
 
+```javascript
+// routes/user.js
+const express = require("express");
+
+const { isLoggedIn } = require("./middlewares");
+const User = require("../models/user");
+
+const router = express.Router();
+
+router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (user) {
+      await user.addFollowings([parseInt(req.params.id, 10)]);
+      res.send("success");
+    } else {
+      res.status(404).send("no user");
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+module.exports = router;
+```
+
 POST /:id/follow 라우터를 추가한다.
 
 - /사용자아이디/follow
-- 사용자 아이디는 req.params.id로 접근
-- user.addFollowing(사용자아이디)로 팔로잉하는 사람 추가
+- User.findOne()으로 사용자를 찾는다.
+- 사용자 아이디는 req.params.id로 접근한다.
+- user.addFollowings(사용자아이디)로 팔로잉하는 사람을 추가한다.
 
 ### 5.2. 팔로잉 기능 구현
 
-deserializeUser 수정
+**deserializeUser** 수정
 
+- <mark>req.user는 deserializeUser에서 생성된다.</mark>
 - req.user.Followers로 팔로워 접근 가능
 - req.user.Followings로 팔로잉 접근
-- 단, 목록이 유출되면 안 되므로 팔로워/팔로잉 숫자만 프런트로 전달
+- 단, 목록이 유출되면 안 되므로 팔로워/팔로잉 숫자만 프론트로 전달
 
 ### 5.3. 해시태그 검색 기능 추가
 
+```javascript
+// routes/post.js
+...
+const upload2 = multer();
+router.post('/', isLoggedIn, upload2.none(), async(req, res, next) => {
+    try {
+        const post = await Post.create({
+            content: req.body.content,
+            img: req.body.url,
+            UserId: req.user.id,
+        });
+        const hashtags = req.body.content.match(/#[^\s#]*/g);
+        if (hashtags) {
+            const result = await Promise.all(
+                hashtags.map(tag => {
+                    return Hashtag.findOrCreate({
+                        where: { title: tag.slice(1).toLowerCase() },
+                    })
+                }),
+            );
+            await post.addHashtags(result.map(r => r[0]));
+        }
+        res.redirect('/');
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+...
+```
+
 GET /hashtag 라우터를 추가한다.
 
-- 해시태그를 먼저 찾고(hashtag)
-- hashtag.getPosts로 해시태그와 관련된 게시글을 모두 찾음
-- 찾으면서 include로 게시글 작성자 모델도 같이 가져옴
+- 게시글에서 해시태그를 꺼내온다.
+  - 정규표현식
+    - req.body.content.match(/#[^\s#]\*/g);
+      - #으로 시작해서 띄어쓰기와 #이 아닌 글자 모두 고르기
+- 해시태그 배열에서 첫글자인 #을 떼고 findOrCreate(해시태그) 실행한다.
+  - db에 이미 등록된 해시태그이면 조회한다.
+  - 등록되어 있지 않으면 생성한다.
+  - 중복 저장을 막아준다.
+
+```javascript
+// routes/page.js
+...
+router.get('/hashtag', async (req, res, next) => {
+  const query = req.query.hashtag;
+  if (!query) {
+    return res.redirect('/');
+  }
+  try {
+    const hashtag = await Hashtag.findOne({ where: { title: query } });
+    let posts = [];
+    if (hashtag) {
+      posts = await hashtag.getPosts({ include: [{ model: User, attributes: ['id', 'nick'] }] });
+    }
+
+    return res.render('main', {
+      title: `#${query} 검색 결과 | NodeBird`,
+      twits: posts,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+...
+```
+
+- 해시태그 입력이 없으면 메인 페이지로 돌아간다.
+- 해시태그 입력이 있으면 Hashtag.findOne()으로 db에 등록된 해시태그가 있는지 찾는다.
+- 해시태그가 있으면 hashtag.getPosts()로 해시태그와 관련된 게시글을 모두 찾는다.
+  - 찾으면서 include로 게시글 작성자 모델도 같이 가져온다.
+    - 보안을 위해 프론트로 보낼 때 id, nick과 같이 필요한 것만 attributes로 설정해서 보낸다.
+- 한글로 입력이 들어오면 encodeURIComponent를 사용한다.
+  - 서버쪽에선 decodeURIComponent로 받아야 한다.
 
 ### 5.4. 업로드한 이미지 제공하기
 
@@ -980,3 +1194,5 @@ express.static 미들웨어로 uploads 폴더에 저장된 이미지를 제공�
 ### 5.5. 프로젝트 화면
 
 서버를 실행하고 http://localhost:8001 로 접속한다.
+
+<img width="500" alt="page" src="https://user-images.githubusercontent.com/35963403/126434730-24faf7ab-f119-439f-b5c7-8fba0c14086b.PNG">
