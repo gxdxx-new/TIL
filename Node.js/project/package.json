@@ -4,14 +4,16 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon app",
-        "test": "jest"
+        "start": "nodemon server",
+        "test": "jest",
+        "coverage": "jest --coverage"
     },
     "author": "don",
     "license": "MIT",
     "devDependencies": {
         "jest": "^27.0.6",
-        "nodemon": "^2.0.12"
+        "nodemon": "^2.0.12",
+        "supertest": "^6.1.4"
     },
     "dependencies": {
         "bcrypt": "^5.0.1",

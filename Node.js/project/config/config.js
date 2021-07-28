@@ -10,19 +10,20 @@ const development = {
     //port: env.MYSQL_PORT
 };
 
-const production = {
-    username: env.MYSQL_USERNAME,
-    password: env.MYSQL_PASSWORD,
-    database: null,
-    host: env.MYSQL_HOST,
-    dialect: "mysql",
-    //port: env.MYSQL_PORT
-};
-
 const test = {
     username: env.MYSQL_USERNAME,
     password: env.MYSQL_PASSWORD,
-    database: null,
+    database: env.MYSQL_DATABASE_TEST,
+    host: env.MYSQL_HOST,
+    dialect: "mysql",
+    logging: false,
+    //port: env.MYSQL_PORT
+};
+
+const production = {
+    username: env.MYSQL_USERNAME,
+    password: null,
+    database: "database_production",
     host: env.MYSQL_HOST,
     dialect: "mysql",
     //port: env.MYSQL_PORT
