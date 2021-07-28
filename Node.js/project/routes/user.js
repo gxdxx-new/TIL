@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { isLoggedIn } = require("./middlewares");
-const { addFollowing } = require('../controllers/user');
+const { addFollowing } = require("../controllers/user");
 
 const User = require("../models/user");
 

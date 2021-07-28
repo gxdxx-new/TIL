@@ -1,10 +1,10 @@
-const { User } = require("../models/user");
+const User = require("../models/user");
 
 exports.addFollowing = async(req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
         if (user) {
-            await User.addFollowings([parseInt(req.params.id, 10)]);
+            await user.addFollowings([parseInt(req.params.id, 10)]);
             res.send("success");
         } else {
             res.status(404).send("no user");
