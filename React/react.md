@@ -102,7 +102,7 @@ Boiler Plater에 특성화된 구조로 변경하기
 - 앱에 맞게 코드를 수정한다.
 
 ```javascript
-// App.js
+// client/src/App.js
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
@@ -140,3 +140,215 @@ export default App;
 - 요청을 보낼 때 Axios 라이브러리를 이용해 보낸다.
   - JQuery의 AJAX와 비슷하다.
   - npm i axios
+
+```javascript
+// client/src/components/vies/LandingPage/LandingPage.js
+import React, { useEffect } from "react";
+import axios from "axios";
+
+function LandingPage() {
+  useEffect(() => {
+    axios.get("/api/hello").then((response) => console.log(response.data));
+  }, []);
+  return <div> LandingPage </div>;
+}
+
+export default LandingPage;
+```
+
+```javascript
+// server/index.js
+...
+app.get("/api/hello", (req, res) => {
+  res.send("안녕하세요");
+});
+...
+```
+
+---
+
+### CORS 이슈, Proxy 설정
+
+- 5000번 포트를 사용하는 서버와 3000번 포트를 사용하는 클라이언트
+  - Request를 보낼 수 없다.
+
+**CORS**
+
+- Cross-Origin-Resource-Sharing
+- 보안을 위해 포트가 다르면 Request를 막는다.
+- Proxy로 해결이 가능하다.
+
+**Proxy**
+
+- npm i http-proxy-middleware
+- 아이피를 Proxy Server에서 임의로 바꿔 버린다.
+  - 인터넷에서는 접근하는 사용자의 IP를 모르게 된다.
+- 보내는 데이터도 임의로 바꿀 수 있다.
+- Proxy의 기능
+  1. 방화벽 기능
+  2. 웹 필터 기능
+  3. 캐쉬 데이터, 공유 데이터 제공 기능
+
+```javascript
+// client/src/setupProxy.js
+const { createProxyMiddleware } = require("http-proxy-middleware");
+
+module.exports = function (app) {
+  app.use(
+    "/api",
+    createProxyMiddleware({
+      target: "http://localhost:5000",
+      changeOrigin: true,
+    })
+  );
+};
+```
+
+- src/setupProxy.js 파일을 생성한다.
+- 프론트에서 보낼 때 3000번 포트에서 5000번 포트로 보낸다.
+
+---
+
+### Concurrently
+
+```javascript
+// package.json
+{
+    "name": "react",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node server/index.js",
+        "backend": "nodemon server/index.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\""
+    },
+    ...
+```
+
+- 여러개의 명령어를 동시에 작동시켜주는 Tool이다.
+- npm i concurrently
+
+---
+
+### CSS Framework
+
+- 기능을 만드는것에 더 집중할 수 있다.
+- npm i antd
+- client/index.js에 아래 코드를 추가한다.
+  - import "antd/dist/antd.css";
+
+---
+
+### Redux
+
+- 상태 관리 라이브러리이다.
+
+  - State를 관리해준다.
+
+<img width="550" alt="3" src="https://user-images.githubusercontent.com/35963403/128363435-5ac5dd01-06fc-40c9-96ed-d5ee65b0cfad.PNG">
+
+<img width="550" alt="4" src="https://user-images.githubusercontent.com/35963403/128364109-bfd504be-2419-4eb3-9cd4-645418dd6148.PNG">
+
+<img width="550" alt="5" src="https://user-images.githubusercontent.com/35963403/128364117-6505d3d2-34c3-4538-9907-889902b5d9f1.PNG">
+
+<img width="550" alt="6" src="https://user-images.githubusercontent.com/35963403/128364332-a62b7661-9368-4877-9ce0-0e3f1b800c89.PNG">
+
+Props vs State
+
+- Props
+
+  - properties
+  - 컴포넌트간에 주고받을 때 사용한다.
+  - 부모 컴포넌트에서 자식 컴포넌트로만 보낼 수 있다.
+  - 자식 컴포넌트로 보내진 prop는 변경할 수 없다.
+  - 부모 컴포넌트에서 새로운 값을 보내줘야 변경할 수 있다.
+
+    <img width="327" alt="1" src="https://user-images.githubusercontent.com/35963403/128348422-36f96900-20ce-4e75-b333-d8608238cd2f.PNG">
+
+- State
+
+  - 자식 컴포넌트 내에서 state를 변경할 수 있다.
+  - state가 변경되면 다시 렌더링 된다.
+
+    <img width="295" alt="2" src="https://user-images.githubusercontent.com/35963403/128348429-0b4e2fe5-509d-4bf5-8e98-9d375d75b9b8.PNG">
+
+---
+
+### Redux 세팅
+
+- Redux 미들웨어를 설치한다.
+- npm i redux react-redux redux-promise redux-thunk
+- Store는 객체 형식의 dispatch(action)만 받을 수 있다.
+  - redux-thunk
+    - dispatch에게 함수를 받을 수 있게 한다.
+  - redux-promise
+    - dispatch에게 promise를 받을 수 있게 한다.
+- client/index.js의 App에 redux를 연결시켜야 한다.
+  - redux에서 제공하는 Provider를 이용한다.
+
+```javascript
+// client/index.js
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import { Provider } from "react-redux";
+import "antd/dist/antd.css";
+import { applyMiddleware, createStore } from "redux";
+import promiseMiddleware from "redux-promise";
+import ReduxThunk from "redux-thunk";
+import Reducer from "./_reducers";
+
+const createStoreWithMiddleware = applyMiddleware(
+  promiseMiddleware,
+  ReduxThunk
+)(createStore);
+
+ReactDOM.render(
+  <Provider
+    store={createStoreWithMiddleware(
+      Reducer,
+      window.__REDUX_DEVTOOLS_EXTENSION__ &&
+        window.__REDUX_DEVTOOLS_EXTENSION__()
+    )}
+  >
+    <APP />
+  </Provider>,
+
+  document.getElementById("root")
+);
+
+reportWebVitals();
+```
+
+```javascript
+// client/_reducers/index.js
+import { combineReducers } from "redux";
+// imoprt user from './user_reducer'
+
+const rootReducer = combineReducers({
+  // user,
+});
+
+export default rootReducer;
+```
+
+---
+
+### React Hooks
+
+- Class Component
+  - 더 많은 기능을 제공한다.
+  - 코드가 길어진다.
+  - 코드가 복잡하다.
+  - 성능이 느리다.
+- Functional Component
+  - 적은 기능을 제공한다.
+  - 코드가 짧아진다.
+  - 코드가 간결하다.
+  - 성능이 빠르다.
+
+<img width="800" alt="7" src="https://user-images.githubusercontent.com/35963403/128370056-15d7a8e4-253d-4a90-a5cd-68bcd2b79d0e.PNG">
+
+- React Hooks를 이용해 함수형 컴포넌트를 클래스 컴포넌트처럼 사용할 수 있다.
