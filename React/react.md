@@ -339,7 +339,7 @@ export default rootReducer;
 ### React Hooks
 
 - Class Component
-  - 더 많은 기능을 제공한다.
+  - 많은 기능을 제공한다.
   - 코드가 길어진다.
   - 코드가 복잡하다.
   - 성능이 느리다.
@@ -352,3 +352,357 @@ export default rootReducer;
 <img width="800" alt="7" src="https://user-images.githubusercontent.com/35963403/128370056-15d7a8e4-253d-4a90-a5cd-68bcd2b79d0e.PNG">
 
 - React Hooks를 이용해 함수형 컴포넌트를 클래스 컴포넌트처럼 사용할 수 있다.
+
+---
+
+### 로그인 페이지
+
+- 타이핑을 할 때 onChange 이벤트를 발생시켜서 Email, Password State를 바꿔준다.
+- State가 바뀌면 value가 바뀌게 된다.
+- event.preventDefault()
+  - 페이지가 refresh 되는걸 막아준다.
+- 서버로 보내려는 값들을 State에서 갖고 있다.
+- dispatch를 이용해서 action을 보낸다.
+- client/src/\_actions/user_action.js 에서
+  - server의 /api/users/login로 값을 보낸다.
+- 서버에서 사용자 정보와 입력된 정보가 일치하는지 확인하고 결과값을 클라이언트로 보낸다.
+- 받은 데이터를 request에 저장하고 reducer로 보낸다.
+
+```javascript
+// client/src/components/views/LoginPage/LoginPage.js
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../../_actions/user_action";
+
+function LoginPage(props) {
+  const dispatch = useDispatch();
+
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+
+  const onEmailHandler = (event) => {
+    setEmail(event.currentTarget.value);
+  };
+
+  const onPasswordHandler = (event) => {
+    setPassword(event.currentTarget.value);
+  };
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+
+    let body = {
+      email: Email,
+      password: Password,
+    };
+
+    dispatch(loginUser(body)).then((response) => {
+      if (response.payload.loginSuccess) {
+        props.history.push("/");
+      } else {
+        alert("Error");
+      }
+    });
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "100vh",
+      }}
+    >
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={onSubmitHandler}
+      >
+        <label> Email </label>
+        <input type="email" value={Email} onChange={onEmailHandler} />
+        <label> Password </label>
+        <input type="password" value={Password} onChange={onPasswordHandler} />
+        <br />
+        <button> Login </button>
+      </form>
+    </div>
+  );
+}
+
+export default LoginPage;
+```
+
+```javascript
+// client/src/_actions/user_action.js
+import Axios from "axios";
+import { LOGIN_USER } from "./types";
+
+export function loginUser(dataToSubmit) {
+  const request = Axios.post("/api/users/login", dataToSubmit).then(
+    (response) => response.data
+  );
+
+  return {
+    type: LOGIN_USER,
+    payload: request,
+  };
+}
+```
+
+```javascript
+// client/src/_actions/types.js
+export const LOGIN_USER = "login_user";
+```
+
+```javascript
+// client/src/_reducers/user_reducer.js
+import { LOGIN_USER } from "../_actions/types";
+
+export default function (state = {}, action) {
+  switch (action.type) {
+    case LOGIN_USER:
+      return { ...state, loginSuccess: action.payload };
+
+    default:
+      return state;
+  }
+}
+```
+
+```javascript
+// client/src/_reducer/index.js
+import { combineReducers } from "redux";
+import user from "./user_reducer";
+
+const rootReducer = combineReducers({
+  user,
+});
+
+export default rootReducer;
+```
+
+<img width="207" alt="8" src="https://user-images.githubusercontent.com/35963403/128449585-87d8da87-540c-4446-9897-0007781b9555.PNG">
+
+---
+
+### 회원가입 페이지
+
+```javascript
+// client/src/components/views/RegisterPage/RegisterPage.js
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../../_actions/user_action";
+
+function RegisterPage(props) {
+  const dispatch = useDispatch();
+
+  const [Email, setEmail] = useState("");
+  const [Name, setName] = useState("");
+  const [Password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
+
+  const onEmailHandler = (event) => {
+    setEmail(event.currentTarget.value);
+  };
+
+  const onNameHandler = (event) => {
+    setName(event.currentTarget.value);
+  };
+
+  const onPasswordHandler = (event) => {
+    setPassword(event.currentTarget.value);
+  };
+
+  const onConfirmPasswordHandler = (event) => {
+    setConfirmPassword(event.currentTarget.value);
+  };
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+
+    if (Password !== ConfirmPassword) {
+      return alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+    }
+
+    let body = {
+      email: Email,
+      name: Name,
+      password: Password,
+    };
+
+    dispatch(registerUser(body)).then((response) => {
+      if (response.payload.success) {
+        props.history.push("/login");
+      } else {
+        alert("Failed to sign up");
+      }
+    });
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "100vh",
+      }}
+    >
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={onSubmitHandler}
+      >
+        <label> Email </label>{" "}
+        <input type="email" value={Email} onChange={onEmailHandler} />{" "}
+        <label> Name </label>{" "}
+        <input type="text" value={Name} onChange={onNameHandler} />{" "}
+        <label> Password </label>{" "}
+        <input type="password" value={Password} onChange={onPasswordHandler} />{" "}
+        <label> Confirm Password </label>{" "}
+        <input
+          type="password"
+          value={ConfirmPassword}
+          onChange={onConfirmPasswordHandler}
+        />{" "}
+        <br />
+        <button> 회원가입 </button>{" "}
+      </form>{" "}
+    </div>
+  );
+}
+
+export default RegisterPage;
+```
+
+```javascript
+// client/src/_actions/user_actions.js
+import Axios from "axios";
+import { LOGIN_USER, REGISTER_USER } from "./types";
+
+export function loginUser(dataToSubmit) {
+  const request = Axios.post("/api/users/login", dataToSubmit).then(
+    (response) => response.data
+  );
+
+  return {
+    type: LOGIN_USER,
+    payload: request,
+  };
+}
+
+export function registerUser(dataToSubmit) {
+  const request = Axios.post("/api/users/register", dataToSubmit).then(
+    (response) => response.data
+  );
+
+  return {
+    type: REGISTER_USER,
+    payload: request,
+  };
+}
+```
+
+```javascript
+// client/src/_actions/types.js
+export const LOGIN_USER = "login_user";
+export const REGISTER_USER = "register_user";
+```
+
+```javascript
+// clinet/src/_reducers/user_reducer.js
+import { LOGIN_USER, REGISTER_USER } from "../_actions/types";
+
+export default function (state = {}, action) {
+  switch (action.type) {
+    case LOGIN_USER:
+      return { ...state, loginSuccess: action.payload };
+    case REGISTER_USER:
+      return { ...state, register: action.payload };
+    default:
+      return state;
+  }
+}
+```
+
+```javascript
+// clinet/src/_reducers/index.js
+import { combineReducers } from "redux";
+import user from "./user_reducer";
+
+const rootReducer = combineReducers({
+  user,
+});
+
+export default rootReducer;
+```
+
+<img width="196" alt="9" src="https://user-images.githubusercontent.com/35963403/128453641-ec1f71be-3f36-462c-9263-a7039616acc1.PNG">
+
+---
+
+### 로그아웃
+
+- 메인 페이지에서 로그아웃 버튼을 누르면 로그아웃이 된다.
+
+```javascript
+// client/src/components/views/LandingPage/LandingPage.js
+import React, { useEffect } from "react";
+import axios from "axios";
+
+function LandingPage() {
+  useEffect(() => {
+    axios.get("/api/hello").then((response) => console.log(response.data));
+  }, []);
+
+  const onClickHandler = () => {
+    axios.get("/api/users/logout").then((response) => {
+      if (response.data.success) {
+        props.history.push("/login");
+      } else {
+        alert("로그아웃 실패");
+      }
+    });
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "100vh",
+      }}
+    >
+      <h2> 시작 페이지 </h2> <button onClick={onClickHandler}>로그아웃 </button>
+    </div>
+  );
+}
+
+export default LandingPage;
+```
+
+---
+
+### 인증 체크
+
+- 아무나 진입 가능한 페이지
+  - Landing Page, About Page
+- 로그인한 회원만 진입 가능한 페이지
+  - Detail Page
+- 로그인한 회원은 진입 못하는 페이지
+  - Register Page, Login Page
+- 관리자만 진입 가능한 페이지
+
+  - Admin Page
+
+- HOC
+  - 컴포넌트를 인자로 받아 새로운 컴포넌트를 반환하는 함수이다.
+  - 컴포넌트 로직을 재사용하기 위한 방식이다.
+
+백엔드에 request를 보내서 상태를 가져온다.
+
+- useEffect() 사용
+- auth 미들웨어에서 로그인 유무를 판단해서 보내준다.
