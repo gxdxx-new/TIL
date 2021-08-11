@@ -35,9 +35,10 @@ Webpack
 
 - 복잡한 모듈들을 같은 형식파일 끼리 묶어준다.
 
-**npx create-react-app** 으로 리액트를 설치한다.
+**npx create-react-app .** 으로 리액트를 설치한다.
 
 - Babel, Webpack 설정 없이 바로 시작할 수 있게 해준다.
+- .을 넣어서 client 디렉토리 안에 create-react-app을 설치할 수 있게 한다.
 
 ---
 
@@ -48,10 +49,14 @@ NPM(Node Package Manager)
 - 라이브러리들을 담고 있는 저장소 역할을 한다.
 - 어플리케이션을 실행하거나 배포할 때 빌드를 해준다.
 - create-react-app을 실행하려면 global로 다운로드 받아야 한다.
+- -g를 하면 컴퓨터 안에 다운로드가 된다.
+- -D를 하면 devDependencies에 저장이 된다.
+  - devDependencies: 실제 코드에 포함되지 않고 개발 단계에만 필요한 의존성 파일들
 
-NPX
+**NPX**
 
 - npm registry에 있는 create-react-app을 다운로드 받지 않고 실행할 수 있다.
+  - global로 다운로드 받지 않아도 된다.
   - 저장 공간을 낭비하지 않는다.
   - 항상 최신 버전을 사용할 수 있다.
 
@@ -60,6 +65,7 @@ NPX
 ### Create React App 구조
 
 - Webpack은 src 폴더에 있는 파일들만 관리해준다.
+  - 이미지와 같은 파일들은 src 폴더에 넣어서 관리한다.
 
 Boiler Plater에 특성화된 구조로 변경하기
 
@@ -75,28 +81,53 @@ Boiler Plater에 특성화된 구조로 변경하기
     - 네비게이션 바
 - ./App.js
   - Routing 관련 일을 처리한다.
+  - 페이지가 렌더링된다.
 - ./Config.js
   - 환경 변수같은 것들을 정하는 곳이다.
 - ./hoc
   - Higher Order Component
   - 리액트 컴포넌트를 인자로 받아서 다른 리액트 컴포넌트를 반환하는 함수이다.
   - 컴포넌트 로직을 재사용하게 해준다.
+  - ex) 유저가 페이지에 들어갈 자격이 되는지를 알아낸 후에 자격이 되면 다음 컴포넌트에 가게 해주고 자격이 안되면 다른 페이지로 보낸다.
 - ./utils
   - 여러 군데에서 쓰일수 있는 것들을 넣어서 어디서든 쓸 수 있게 해준다.
+
+---
+
+### 화면 렌더링 방법
+
+1. src/index.js의 첫 번째 인수에 렌더링 할 페이지를 넣는다.
+2. 두 번째 인수와 index.html의 id를 같게 한다.
+3. App.js가 렌더링된다.
+
+```javascript
+// src/index.js
+...
+ReactDOM.render(<App />, document.getElementById("root"));
+...
+```
+
+```javascript
+// public/index.html
+...
+<div id="root"></div>
+...
+```
 
 ---
 
 ### 리액트 함수형 컴포넌트 생성
 
 - 마켓플레이스에 es7으로 검색하고 제일 위에 있는 익스텐션을 설치한다.
-- js파일에서 rfce를 누르면 자동완성이 뜬다.
+- js파일에서 **rfce**를 누르면 자동완성이 뜬다.
 - react 임포트와 파일이름으로 컴포넌트를 생성해준다.
+- rcc를 누르면 클래스 컴포넌트를 생성해준다.
 
 ---
 
 ### App.js React Router DOM
 
-- 페이지 이동을 할 때 React Router Dom을 사용한다.
+- **페이지 이동을 할 때 React Router Dom을 사용한다.**
 - npm i react-router-dom
 - react router dom 코드 documentation에서 코드를 복사한다.
 - 앱에 맞게 코드를 수정한다.
@@ -137,9 +168,15 @@ export default App;
 3. Server에서는 Database에 사용자가 존재하고 요청된 정보와 일치하는지 찾는다.
 4. Client로 응답을 보낸다.
 
-- 요청을 보낼 때 Axios 라이브러리를 이용해 보낸다.
+- **요청을 보낼 때 Axios 라이브러리를 이용해 보낸다.**
+
   - JQuery의 AJAX와 비슷하다.
   - npm i axios
+
+- LandingPage()의 useEffect 실행순서
+  1. axios.get("/api/hello")로 서버에 요청을 보낸다.
+  2. 서버에서 요청을 처리하고 응답을 클라이언트로 보낸다.
+  3. .then()이 실행되며 response.data로 서버에서 res.send()로 보낸 응답을 사용한다.
 
 ```javascript
 // client/src/components/vies/LandingPage/LandingPage.js
@@ -228,7 +265,9 @@ module.exports = function (app) {
 ```
 
 - 여러개의 명령어를 동시에 작동시켜주는 Tool이다.
+  - 프론트와 서버를 한 번에 작동시킬 수 있다.
 - npm i concurrently
+- **"dev": "concurrently \\"npm run backend\\" \\"npm run start --prefix client\\""**
 
 ---
 
@@ -241,23 +280,43 @@ module.exports = function (app) {
 
 ---
 
-### Redux
+### **Redux**
 
 - 상태 관리 라이브러리이다.
 
-  - State를 관리해준다.
+  - **State를 관리해준다.**
+
+<img width="368" alt="10" src="https://user-images.githubusercontent.com/35963403/128973259-2ae8f518-14ee-46f4-97dc-037b8161e8f1.PNG">
+
+- 하위/상위 컴포넌트에서 State 수정이 있으면 상위/하위 컴포넌트에 알려주어야 한다.
+  - State 관리가 복잡해진다.
+
+<img width="349" alt="11" src="https://user-images.githubusercontent.com/35963403/128973266-ca57798a-9b8e-47be-a268-6a586c04876d.PNG">
+
+- Redux Store에 저장을 해놓으면 Store에 바로 접근하면 된다.
 
 <img width="550" alt="3" src="https://user-images.githubusercontent.com/35963403/128363435-5ac5dd01-06fc-40c9-96ed-d5ee65b0cfad.PNG">
 
+- **Redux는 React Component에서 시작된다.**
+
 <img width="550" alt="4" src="https://user-images.githubusercontent.com/35963403/128364109-bfd504be-2419-4eb3-9cd4-645418dd6148.PNG">
+
+- **Action은 무엇이 일어났는지 설명하는 객체이다.**
+  - ex) { type: 'ADD_TODO', text: 'Read the Redux docs.' }
+    - 'Read the Redux docs.' text를 TODO 리스트에 추가했다.
 
 <img width="550" alt="5" src="https://user-images.githubusercontent.com/35963403/128364117-6505d3d2-34c3-4538-9907-889902b5d9f1.PNG">
 
+- **Reducer는 이전 State와 Action object를 받은 후에 next State를 return한다.**
+
 <img width="550" alt="6" src="https://user-images.githubusercontent.com/35963403/128364332-a62b7661-9368-4877-9ce0-0e3f1b800c89.PNG">
 
-Props vs State
+- **Store는 application의 전체적인 State를 감싸주는 역할을 한다.**
+- Store 내장함수로 State를 관리할 수 있다.
 
-- Props
+<mark>Props vs State</mark>
+
+- **Props**
 
   - properties
   - 컴포넌트간에 주고받을 때 사용한다.
@@ -265,14 +324,14 @@ Props vs State
   - 자식 컴포넌트로 보내진 prop는 변경할 수 없다.
   - 부모 컴포넌트에서 새로운 값을 보내줘야 변경할 수 있다.
 
-    <img width="327" alt="1" src="https://user-images.githubusercontent.com/35963403/128348422-36f96900-20ce-4e75-b333-d8608238cd2f.PNG">
+    <img width="300" alt="1" src="https://user-images.githubusercontent.com/35963403/128348422-36f96900-20ce-4e75-b333-d8608238cd2f.PNG">
 
-- State
+- **State**
 
   - 자식 컴포넌트 내에서 state를 변경할 수 있다.
   - state가 변경되면 다시 렌더링 된다.
 
-    <img width="295" alt="2" src="https://user-images.githubusercontent.com/35963403/128348429-0b4e2fe5-509d-4bf5-8e98-9d375d75b9b8.PNG">
+    <img width="300" alt="2" src="https://user-images.githubusercontent.com/35963403/128348429-0b4e2fe5-509d-4bf5-8e98-9d375d75b9b8.PNG">
 
 ---
 
@@ -280,13 +339,17 @@ Props vs State
 
 - Redux 미들웨어를 설치한다.
 - npm i redux react-redux redux-promise redux-thunk
-- Store는 객체 형식의 dispatch(action)만 받을 수 있다.
+- **Store는 객체 형식의 dispatch(action)만 받을 수 있다.**
   - redux-thunk
-    - dispatch에게 함수를 받을 수 있게 한다.
+    - dispatch에게 function을 받을 수 있게 한다.
   - redux-promise
     - dispatch에게 promise를 받을 수 있게 한다.
-- client/index.js의 App에 redux를 연결시켜야 한다.
-  - redux에서 제공하는 Provider를 이용한다.
+
+1. client/index.js의 App에 redux를 연결시켜야 한다.
+   - redux에서 제공하는 Provider를 이용한다.
+2. applyMiddleeware() 미들웨어에 redux-promise와 redux-thunk를 넣는다.
+   - Redux Store가 promise와 function을 받을 수 있게 된다.
+3. 만든 Store에 Reducer를 넣어준다.
 
 ```javascript
 // client/index.js
@@ -334,6 +397,9 @@ const rootReducer = combineReducers({
 export default rootReducer;
 ```
 
+- 여러 State로 인해 여러 Reducer가 생긴다.
+  - Root Reducer로 여러 Reducer를 하나로 합친다.
+
 ---
 
 ### React Hooks
@@ -351,22 +417,46 @@ export default rootReducer;
 
 <img width="800" alt="7" src="https://user-images.githubusercontent.com/35963403/128370056-15d7a8e4-253d-4a90-a5cd-68bcd2b79d0e.PNG">
 
-- React Hooks를 이용해 함수형 컴포넌트를 클래스 컴포넌트처럼 사용할 수 있다.
+리액트 생성 순서
+
+1. constructor가 실행되면서 state를 부여한다.
+2. render에 있는 JSX가 DOM에 들어가 화면에 렌더링된다.
+3. componentDidMount()가 실행된다.
+
+React Hooks를 이용해 함수형 컴포넌트를 클래스 컴포넌트처럼 사용할 수 있다.
 
 ---
 
 ### 로그인 페이지
 
-- 타이핑을 할 때 onChange 이벤트를 발생시켜서 Email, Password State를 바꿔준다.
-- State가 바뀌면 value가 바뀌게 된다.
-- event.preventDefault()
-  - 페이지가 refresh 되는걸 막아준다.
-- 서버로 보내려는 값들을 State에서 갖고 있다.
-- dispatch를 이용해서 action을 보낸다.
-- client/src/\_actions/user_action.js 에서
-  - server의 /api/users/login로 값을 보낸다.
-- 서버에서 사용자 정보와 입력된 정보가 일치하는지 확인하고 결과값을 클라이언트로 보낸다.
-- 받은 데이터를 request에 저장하고 reducer로 보낸다.
+- Email, Password를 위한 State를 생성한다.
+
+  - uses를 치면 State가 생성된다.
+  - useState()에 ""를 넣는다.
+    - react 라이브러리에서 useState를 가져온다.
+  - Email, Password를 State를 input type의 value에 넣는다.
+
+- form에 onSubmit 이벤트를 넣어서 submit 버튼을 누를 떄 onSubmitHandler가 실행된다.
+
+  - event.preventDefault()
+    - 페이지가 refresh 되는걸 막아준다.
+
+1. <mark>**타이핑을 할 때 onChange 이벤트를 발생시켜서 Email, Password State를 바꿔준다.**</mark>
+   - 이벤트 핸들러에서 setEmail(), setPassword()을 이용해서 State를 바꾼다.
+   - <mark>**State가 바뀌면 value가 바뀌게 된다.**</mark>
+   - **서버로 보내려는 값들을 State에서 갖고 있다.**
+2. **dispatch를 이용해서 action을 보낸다.**
+3. client/src/\_actions/user_action.js 에서
+   - server의 /api/users/login로 값을 보낸다.
+4. **서버에서 사용자 정보와 입력된 정보가 일치하는지 확인하고**
+   - 결과값을 클라이언트로 보낸다.
+5. **서버로부터 받은 데이터(response)를 request에 저장하고 reducer로 보낸다.**
+   - type와 request를 넣어서 보낸다.
+6. **reducer에서 action의 type마다 처리를 해준다.**
+   - \_actions/type.js에 type을 모아두고 사용한다.
+7. **request를 reducer의 loginSuccess: action.payload에 넣으면 Redux Store에 저장된다.**
+8. **로그인에 성공하면 LandingPage로 이동한다.**
+   - export default withRouter(LoginPage);로 해야 history를 사용할 수 있다.
 
 ```javascript
 // client/src/components/views/LoginPage/LoginPage.js
@@ -424,7 +514,7 @@ function LoginPage(props) {
         <label> Password </label>
         <input type="password" value={Password} onChange={onPasswordHandler} />
         <br />
-        <button> Login </button>
+        <button type="submit"> Login </button>
       </form>
     </div>
   );
@@ -440,7 +530,7 @@ import { LOGIN_USER } from "./types";
 
 export function loginUser(dataToSubmit) {
   const request = Axios.post("/api/users/login", dataToSubmit).then(
-    (response) => response.data
+    (response) => response.data // 서버에서 처리한 정보들이 response에 들어있다.
   );
 
   return {
@@ -487,6 +577,8 @@ export default rootReducer;
 ---
 
 ### 회원가입 페이지
+
+- user_actions.js에서 registerUser() 액션의 경로가 server의 index.js에서 register 경로와 같게 한다.
 
 ```javascript
 // client/src/components/views/RegisterPage/RegisterPage.js
@@ -698,11 +790,79 @@ export default LandingPage;
 
   - Admin Page
 
-- HOC
-  - 컴포넌트를 인자로 받아 새로운 컴포넌트를 반환하는 함수이다.
-  - 컴포넌트 로직을 재사용하기 위한 방식이다.
+HOC
 
-백엔드에 request를 보내서 상태를 가져온다.
+- 컴포넌트를 인자로 받아 새로운 컴포넌트를 반환하는 함수이다.
+- 컴포넌트 로직을 재사용하기 위한 방식이다.
 
-- useEffect() 사용
-- auth 미들웨어에서 로그인 유무를 판단해서 보내준다.
+1. 백엔드에 request를 보낸다.
+   - useEffect() 사용
+2. auth 미들웨어에서 로그인 유무를 판단해서 상태를 보내준다.
+
+```javascript
+// client/_actions/user_action.js
+...
+export function auth() {
+  const request = Axios.get("/api/users/auth").then(
+    (response) => response.data
+  );
+
+  return {
+    type: AUTH_USER,
+    payload: request,
+  };
+}
+```
+
+```javascript
+// client/src/hoc/auth.js
+import React, { useEffect } from "react";
+import Axios from "axios";
+import { useDispatch } from "react-redux";
+import { auth } from "../_actions/user_action";
+
+export default function (SpecificComponent, option, adminRoute = null) {
+  //null    =>  아무나 출입이 가능한 페이지
+  //true    =>  로그인한 유저만 출입이 가능한 페이지
+  //false   =>  로그인한 유저는 출입 불가능한 페이지
+  function AuthenticationCheck(props) {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      dispatch(auth()).then((response) => {
+        console.log(response);
+        //로그인 하지 않은 상태
+        if (!response.payload.isAuth) {
+          if (option) {
+            props.history.push("/login");
+          }
+        } else {
+          //로그인 한 상태
+          if (adminRoute && !response.payload.isAdmin) {
+            props.history.push("/");
+          } else {
+            if (option === false) props.history.push("/");
+          }
+        }
+      });
+    }, []);
+
+    return <SpecificComponent />;
+  }
+  return AuthenticationCheck;
+}
+```
+
+- 페이지가 이동할 때 마다 dispatch가 작동한다.
+  - 서버에 계속 request를 준다.
+
+```javascript
+// client/App.js
+...
+          <Route exact path="/" component={Auth(LandingPage, null)} />{" "}
+          <Route exact path="/login" component={Auth(LoginPage, false)} />{" "}
+          <Route exact path="/register" component={Auth(RegisterPage, false)} />{" "}
+...
+```
+
+- HOC에 컴포넌트를 넣으려면 Auth로 컴포넌트를 감싸면 된다.
