@@ -8,7 +8,7 @@ router.use((req, res, next) => {
 });
 
 router.get("/", (req, res) => {
-  res.render("main", { title: "내 정보 - NodeBird" });
+  res.render("main", { title: "YU도서", user: req.user });
 });
 
 router.get("/join", (req, res) => {
