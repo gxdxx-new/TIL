@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <title>YU 도서</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+
+    <!-- Favicons -->
+    <link href="../assets/img/favicon.png" rel="icon" />
+    <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet"
+    />
+
+    <!-- Vendor CSS Files -->
+    <link href="../assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link
+      href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/vendor/boxicons/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/vendor/glightbox/css/glightbox.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
+    <link
+      href="../assets/vendor/swiper/swiper-bundle.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Login Form -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <link href="../login_css/login_css.css" rel="stylesheet" />
+
+    <!-- Template Main CSS File -->
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- ======= Header ======= -->
+    {% include "header.html" %}
+
+    <!-- ======= 메인페이지 ======= -->
+    {% include "hero.html" %}
+
+    <main id="main">
+      <!-- ======= 책 검색 ======= -->
+      <section id="search" class="about">
+        <div class="container-fluid">
+          <div class="row">
+            <div
+              class="
+                col-xl-5 col-lg-6
+                video-box
+                d-flex
+                justify-content-center
+                align-items-stretch
+              "
+              data-aos="fade-right"
+            >
+              <a
+                href="https://www.youtube.com/watch?v=jDDaplaOz7Q"
+                class="venobox play-btn mb-4"
+                data-vbtype="video"
+                data-autoplay="true"
+              ></a>
+            </div>
+
+            <div
+              class="
+                col-xl-7 col-lg-6
+                icon-boxes
+                d-flex
+                flex-column
+                align-items-stretch
+                justify-content-center
+                py-5
+                px-lg-5
+              "
+              data-aos="fade-left"
+            >
+              <form id="join-form" action="auth/join" method="post">
+                <div class="input-group">
+                  <label for="join-email">이메일</label>
+                  <input id="join-email" type="email" name="email" />
+                </div>
+                <div class="input-group">
+                  <label for="join-nick">닉네임</label>
+                  <input id="join-nick" type="text" name="nick" />
+                </div>
+                <div class="input-group">
+                  <label for="join-password">비밀번호</label>
+                  <input id="join-password" type="password" name="password" />
+                </div>
+                <button id="join-btn" type="submit" class="btn">
+                  회원가입
+                </button>
+              </form>
+              <h3>입력</h3>
+              <p>
+                Esse voluptas cumque vel exercitationem. Reiciendis est hic
+                accusamus. Non ipsam et sed minima temporibus laudantium. Soluta
+                voluptate sed facere corporis dolores excepturi. Libero
+                laboriosam sint et id nulla tenetur. Suscipit aut voluptate.
+              </p>
+
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="100">
+                <div class="icon"><i class="bx bx-fingerprint"></i></div>
+                <h4 class="title"><a href="">Lorem Ipsum</a></h4>
+                <p class="description">
+                  Voluptatum deleniti atque corrupti quos dolores et quas
+                  molestias excepturi sint occaecati cupiditate non provident
+                </p>
+              </div>
+
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="200">
+                <div class="icon"><i class="bx bx-gift"></i></div>
+                <h4 class="title"><a href="">Nemo Enim</a></h4>
+                <p class="description">
+                  At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                  blanditiis praesentium voluptatum deleniti atque
+                </p>
+              </div>
+
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="300">
+                <div class="icon"><i class="bx bx-atom"></i></div>
+                <h4 class="title"><a href="">Dine Pad</a></h4>
+                <p class="description">
+                  Explicabo est voluptatum asperiores consequatur magnam. Et
+                  veritatis odit. Sunt aut deserunt minus aut eligendi omnis
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End About Section -->
+
+      <!-- ======= Features Section 대출현황 ======= -->
+      <section id="features" class="features">
+        <div class="container">
+          <div class="section-title" data-aos="fade-up">
+            <h2>Features</h2>
+            <p>Check The Features</p>
+          </div>
+
+          <div class="row" data-aos="fade-left">
+            <div class="col-lg-3 col-md-4">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="50">
+                <i class="ri-store-line" style="color: #ffbb2c"></i>
+                <h3><a href="">Lorem Ipsum</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="100">
+                <i class="ri-bar-chart-box-line" style="color: #5578ff"></i>
+                <h3><a href="">Dolor Sitema</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="150">
+                <i class="ri-calendar-todo-line" style="color: #e80368"></i>
+                <h3><a href="">Sed perspiciatis</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4 mt-lg-0">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="200">
+                <i class="ri-paint-brush-line" style="color: #e361ff"></i>
+                <h3><a href="">Magni Dolores</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="250">
+                <i class="ri-database-2-line" style="color: #47aeff"></i>
+                <h3><a href="">Nemo Enim</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="300">
+                <i class="ri-gradienter-line" style="color: #ffa76e"></i>
+                <h3><a href="">Eiusmod Tempor</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="350">
+                <i class="ri-file-list-3-line" style="color: #11dbcf"></i>
+                <h3><a href="">Midela Teren</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="400">
+                <i class="ri-price-tag-2-line" style="color: #4233ff"></i>
+                <h3><a href="">Pira Neve</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="450">
+                <i class="ri-anchor-line" style="color: #b2904f"></i>
+                <h3><a href="">Dirada Pack</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="500">
+                <i class="ri-disc-line" style="color: #b20969"></i>
+                <h3><a href="">Moton Ideal</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="550">
+                <i class="ri-base-station-line" style="color: #ff5828"></i>
+                <h3><a href="">Verdo Park</a></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 mt-4">
+              <div class="icon-box" data-aos="zoom-in" data-aos-delay="600">
+                <i class="ri-fingerprint-line" style="color: #29cc61"></i>
+                <h3><a href="">Flavor Nivelanda</a></h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Features Section -->
+
+      <!-- ======= Counts Section ======= -->
+      <section id="counts" class="counts">
+        <div class="container">
+          <div class="row" data-aos="fade-up">
+            <div class="col-lg-3 col-md-6">
+              <div class="count-box">
+                <i class="bi bi-emoji-smile"></i>
+                <span
+                  data-purecounter-start="0"
+                  data-purecounter-end="232"
+                  data-purecounter-duration="1"
+                  class="purecounter"
+                ></span>
+                <p>Happy Clients</p>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mt-5 mt-md-0">
+              <div class="count-box">
+                <i class="bi bi-journal-richtext"></i>
+                <span
+                  data-purecounter-start="0"
+                  data-purecounter-end="521"
+                  data-purecounter-duration="1"
+                  class="purecounter"
+                ></span>
+                <p>Projects</p>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mt-5 mt-lg-0">
+              <div class="count-box">
+                <i class="bi bi-headset"></i>
+                <span
+                  data-purecounter-start="0"
+                  data-purecounter-end="1463"
+                  data-purecounter-duration="1"
+                  class="purecounter"
+                ></span>
+                <p>Hours Of Support</p>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mt-5 mt-lg-0">
+              <div class="count-box">
+                <i class="bi bi-people"></i>
+                <span
+                  data-purecounter-start="0"
+                  data-purecounter-end="15"
+                  data-purecounter-duration="1"
+                  class="purecounter"
+                ></span>
+                <p>Hard Workers</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Counts Section -->
+
+      <!-- ======= Gallery Section 열람실 ======= -->
+      <section id="gallery" class="gallery">
+        <div class="container">
+          <div class="section-title" data-aos="fade-up">
+            <h2>Gallery</h2>
+            <p>Check our Gallery</p>
+          </div>
+
+          <div class="row no-gutters" data-aos="fade-left">
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+                <a
+                  href="assets/img/gallery/gallery-1.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-1.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="150">
+                <a
+                  href="assets/img/gallery/gallery-2.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-2.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+                <a
+                  href="assets/img/gallery/gallery-3.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-3.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="250">
+                <a
+                  href="assets/img/gallery/gallery-4.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-4.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
+                <a
+                  href="assets/img/gallery/gallery-5.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-5.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="350">
+                <a
+                  href="assets/img/gallery/gallery-6.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-6.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
+                <a
+                  href="assets/img/gallery/gallery-7.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-7.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="450">
+                <a
+                  href="assets/img/gallery/gallery-8.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-8.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Gallery Section -->
+
+      <!-- ======= Contact Section ======= -->
+      <section id="contact" class="contact">
+        <div class="container">
+          <div class="section-title" data-aos="fade-up">
+            <h2>Contact</h2>
+            <p>로그인</p>
+          </div>
+          {% include "login.html" %}
+          <div class="row">
+            <div class="col-lg-4" data-aos="fade-right" data-aos-delay="100">
+              <div class="info">
+                <div class="address">
+                  <i class="bi bi-geo-alt"></i>
+                  <h4>Location:</h4>
+                  <p>A108 Adam Street, New York, NY 535022</p>
+                </div>
+
+                <div class="email">
+                  <i class="bi bi-envelope"></i>
+                  <h4>Email:</h4>
+                  <p>info@example.com</p>
+                </div>
+
+                <div class="phone">
+                  <i class="bi bi-phone"></i>
+                  <h4>Call:</h4>
+                  <p>+1 5589 55488 55s</p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="col-lg-8 mt-5 mt-lg-0"
+              data-aos="fade-left"
+              data-aos-delay="200"
+            >
+              <form
+                action="forms/contact.php"
+                method="post"
+                role="form"
+                class="php-email-form"
+              >
+                <div class="row">
+                  <div class="col-md-6 form-group">
+                    <input
+                      type="text"
+                      name="name"
+                      class="form-control"
+                      id="name"
+                      placeholder="Your Name"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6 form-group mt-3 mt-md-0">
+                    <input
+                      type="email"
+                      class="form-control"
+                      name="email"
+                      id="email"
+                      placeholder="Your Email"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="form-group mt-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="subject"
+                    id="subject"
+                    placeholder="Subject"
+                    required
+                  />
+                </div>
+                <div class="form-group mt-3">
+                  <textarea
+                    class="form-control"
+                    name="message"
+                    rows="5"
+                    placeholder="Message"
+                    required
+                  ></textarea>
+                </div>
+                <div class="my-3">
+                  <div class="loading">Loading</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">
+                    Your message has been sent. Thank you!
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="submit">Send Message</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Contact Section -->
+    </main>
+    <!-- End #main -->
+
+    <a
+      href="#"
+      class="back-to-top d-flex align-items-center justify-content-center"
+      ><i class="bi bi-arrow-up-short"></i
+    ></a>
+    <div id="preloader"></div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+      integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+      integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Vendor JS Files -->
+    <script src="../assets/vendor/aos/aos.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="../assets/vendor/php-email-form/validate.js"></script>
+    <script src="../assets/vendor/purecounter/purecounter.js"></script>
+    <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="../assets/js/main.js"></script>
+  </body>
+</html>
