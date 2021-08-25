@@ -1,0 +1,64 @@
+<div id="join" class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <div class="card card-signin my-5">
+        <div class="card-body">
+          <h5 class="card-title text-center">회원가입</h5>
+          <form
+            class="form-signin"
+            id="join-form"
+            action="/auth/join"
+            method="post"
+          >
+            <div class="form-label-group">
+              <input
+                type="email"
+                id="join-email"
+                name="join-email"
+                class="form-control"
+              />
+              <label for="inputEmail">Email</label>
+            </div>
+
+            <div class="form-label-group">
+              <input type="text" id="nick" name="nick" class="form-control" />
+              <label for="inputNick">NickName</label>
+            </div>
+
+            <div class="form-label-group">
+              <input
+                type="password"
+                id="join-password"
+                name="join-password"
+                class="form-control"
+              />
+              <label for="inputPassword">Password</label>
+            </div>
+
+            <button
+              class="btn btn-lg btn-primary btn-block text-uppercase"
+              type="submit"
+            >
+              회원가입
+            </button>
+            <hr class="my-4" />
+            <a
+              id="find-email"
+              href="/auth/join/"
+              class="btn btn-lg btn-google btn-block text-uppercase"
+            >
+              아이디 찾기
+            </a>
+            <a
+              id="find-password"
+              href="/auth/join/"
+              class="btn btn-lg btn-facebook btn-block text-uppercase"
+            >
+              비밀번호 찾기</a
+            >
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

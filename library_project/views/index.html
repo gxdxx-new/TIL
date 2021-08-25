@@ -106,23 +106,6 @@
               "
               data-aos="fade-left"
             >
-              <form id="join-form" action="auth/join" method="post">
-                <div class="input-group">
-                  <label for="join-email">이메일</label>
-                  <input id="join-email" type="email" name="email" />
-                </div>
-                <div class="input-group">
-                  <label for="join-nick">닉네임</label>
-                  <input id="join-nick" type="text" name="nick" />
-                </div>
-                <div class="input-group">
-                  <label for="join-password">비밀번호</label>
-                  <input id="join-password" type="password" name="password" />
-                </div>
-                <button id="join-btn" type="submit" class="btn">
-                  회원가입
-                </button>
-              </form>
               <h3>입력</h3>
               <p>
                 Esse voluptas cumque vel exercitationem. Reiciendis est hic
@@ -163,12 +146,12 @@
       </section>
       <!-- End About Section -->
 
-      <!-- ======= Features Section 대출현황 ======= -->
-      <section id="features" class="features">
+      <!-- ======= 대출현황 ======= -->
+      <section id="loan" class="features">
         <div class="container">
           <div class="section-title" data-aos="fade-up">
-            <h2>Features</h2>
-            <p>Check The Features</p>
+            <h2>loan</h2>
+            <p>대출현황</p>
           </div>
 
           <div class="row" data-aos="fade-left">
@@ -309,12 +292,12 @@
       </section>
       <!-- End Counts Section -->
 
-      <!-- ======= Gallery Section 열람실 ======= -->
-      <section id="gallery" class="gallery">
+      <!-- =======  열람실 ======= -->
+      <section id="study_room" class="gallery">
         <div class="container">
           <div class="section-title" data-aos="fade-up">
-            <h2>Gallery</h2>
-            <p>Check our Gallery</p>
+            <h2>study room</h2>
+            <p>열람실</p>
           </div>
 
           <div class="row no-gutters" data-aos="fade-left">
@@ -442,104 +425,173 @@
       </section>
       <!-- End Gallery Section -->
 
-      <!-- ======= Contact Section ======= -->
-      <section id="contact" class="contact">
+      <!-- ======= 게시판 ======= -->
+      <section id="board" class="gallery">
         <div class="container">
           <div class="section-title" data-aos="fade-up">
-            <h2>Contact</h2>
-            <p>로그인</p>
+            <h2>board</h2>
+            <p>게시판</p>
           </div>
-          {% include "login.html" %}
-          <div class="row">
-            <div class="col-lg-4" data-aos="fade-right" data-aos-delay="100">
-              <div class="info">
-                <div class="address">
-                  <i class="bi bi-geo-alt"></i>
-                  <h4>Location:</h4>
-                  <p>A108 Adam Street, New York, NY 535022</p>
-                </div>
 
-                <div class="email">
-                  <i class="bi bi-envelope"></i>
-                  <h4>Email:</h4>
-                  <p>info@example.com</p>
-                </div>
-
-                <div class="phone">
-                  <i class="bi bi-phone"></i>
-                  <h4>Call:</h4>
-                  <p>+1 5589 55488 55s</p>
-                </div>
+          <div class="row no-gutters" data-aos="fade-left">
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+                <a
+                  href="assets/img/gallery/gallery-1.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-1.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
               </div>
             </div>
-            <div
-              class="col-lg-8 mt-5 mt-lg-0"
-              data-aos="fade-left"
-              data-aos-delay="200"
-            >
-              <form
-                action="forms/contact.php"
-                method="post"
-                role="form"
-                class="php-email-form"
-              >
-                <div class="row">
-                  <div class="col-md-6 form-group">
-                    <input
-                      type="text"
-                      name="name"
-                      class="form-control"
-                      id="name"
-                      placeholder="Your Name"
-                      required
-                    />
-                  </div>
-                  <div class="col-md-6 form-group mt-3 mt-md-0">
-                    <input
-                      type="email"
-                      class="form-control"
-                      name="email"
-                      id="email"
-                      placeholder="Your Email"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="form-group mt-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="subject"
-                    id="subject"
-                    placeholder="Subject"
-                    required
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="150">
+                <a
+                  href="assets/img/gallery/gallery-2.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-2.jpg"
+                    alt=""
+                    class="img-fluid"
                   />
-                </div>
-                <div class="form-group mt-3">
-                  <textarea
-                    class="form-control"
-                    name="message"
-                    rows="5"
-                    placeholder="Message"
-                    required
-                  ></textarea>
-                </div>
-                <div class="my-3">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">
-                    Your message has been sent. Thank you!
-                  </div>
-                </div>
-                <div class="text-center">
-                  <button type="submit">Send Message</button>
-                </div>
-              </form>
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+                <a
+                  href="assets/img/gallery/gallery-3.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-3.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="250">
+                <a
+                  href="assets/img/gallery/gallery-4.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-4.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
+                <a
+                  href="assets/img/gallery/gallery-5.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-5.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="350">
+                <a
+                  href="assets/img/gallery/gallery-6.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-6.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
+                <a
+                  href="assets/img/gallery/gallery-7.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-7.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+              <div class="gallery-item" data-aos="zoom-in" data-aos-delay="450">
+                <a
+                  href="assets/img/gallery/gallery-8.jpg"
+                  class="gallery-lightbox"
+                >
+                  <img
+                    src="assets/img/gallery/gallery-8.jpg"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </section>
-      <!-- End Contact Section -->
+      <!-- End Gallery Section -->
+
+      <!-- ======= 로그인 ======= -->
+      <!-- 로그인 안했으면 로그인 폼 보여주고 했으면 안보이게 -->
+      {%if user and user.id %}
+      {% endif %}
+      {%if not user %}
+      <section id="login" class="contact">
+        <div class="container">
+          <div class="section-title" data-aos="fade-up">
+            <h2>login</h2>
+            <p>로그인</p>
+            {% include "login.html" %} 
+          </div>
+          </div>
+        </div>
+      </section>
+      {% endif %}
+
+      <!-- 회원가입 -->
+      {%if user and user.id %}
+      {% endif %}
+      {%if not user %}
+      <section id="join2" class="contact">
+        <div class="container">
+          <div class="section-title" data-aos="fade-up">
+            <h2>join</h2>
+            <p>회원가입</p>
+            {% include "join.html" %} 
+          </div>
+          </div>
+        </div>
+      </section>
+      {% endif %}
+
+
     </main>
     <!-- End #main -->
 

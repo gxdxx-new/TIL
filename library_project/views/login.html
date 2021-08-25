@@ -4,13 +4,18 @@
       <div class="card card-signin my-5">
         <div class="card-body">
           <h5 class="card-title text-center">로그인</h5>
-          <form class="form-signin">
+          <form
+            class="form-signin"
+            id="login-form"
+            action="/auth/login"
+            method="post"
+          >
             <div class="form-label-group">
               <input
                 type="email"
-                id="inputEmail"
+                id="email"
+                name="email"
                 class="form-control"
-                placeholder="Email address"
               />
               <label for="inputEmail">Email</label>
             </div>
@@ -18,9 +23,9 @@
             <div class="form-label-group">
               <input
                 type="password"
-                id="inputPassword"
+                id="password"
+                name="password"
                 class="form-control"
-                placeholder="Password"
               />
               <label for="inputPassword">Password</label>
             </div>
@@ -42,23 +47,35 @@
               로그인
             </button>
             <hr class="my-4" />
-            <button
+            <!-- <button
               class="btn btn-lg btn-google btn-block text-uppercase"
-              type="submit"
+              type="button"
             >
               <i class="fab fa-google mr-2"></i> 카카오 로그인
-            </button>
-            <button
+            </button> -->
+            <a
+              id="kakao"
+              href="/auth/kakao"
+              class="btn btn-lg btn-google btn-block text-uppercase"
+            >
+              카카오 로그인
+            </a>
+            <!-- <button
               class="btn btn-lg btn-facebook btn-block text-uppercase"
               type="submit"
             >
               <i class="fab fa-facebook-f mr-2"></i>회원가입
-            </button>
+            </button> -->
+            <a
+              id="join"
+              href="#join2"
+              class="btn btn-lg btn-facebook btn-block text-uppercase scrollto"
+            >
+              회원가입</a
+            >
           </form>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<div class="modal active" data-modalid
