@@ -40,8 +40,15 @@
             <li><a href="#">Drop Down 4</a></li>
           </ul>
         </li>
+        {% if user %}
+        <li><a class="nav-link scrollto" href="#hero">{{user.nick}}님</a></li>
+        <li>
+          <a id="logout" href="/auth/logout" class="nav-link">로그아웃</a>
+        </li>
+        {% endif %} {% if not user %}
         <li><a class="nav-link scrollto" href="#login">로그인</a></li>
         <li><a class="nav-link scrollto" href="#join2">회원가입</a></li>
+        {% endif %}
       </ul>
       <i class="bi bi-list mobile-nav-toggle"></i>
     </nav>
