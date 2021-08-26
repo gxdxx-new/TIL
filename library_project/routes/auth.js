@@ -2,31 +2,47 @@ const express = require("express");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
+const { check, validationResult } = require("express-validator");
 const User = require("../models/user");
 
 const router = express.Router();
 
-router.post("/join", isNotLoggedIn, async (req, res, next) => {
-  const { email, nick, password } = req.body;
-  try {
-    const exUser = await User.findOne({ where: { email } });
-    if (exUser) {
+router.post(
+  "/join",
+  isNotLoggedIn,
+  [
+    check("joinEmail", "Invalid Email").isEmail(),
+    check("joinPassword", "Invalid Password").isLength({ min: 6 }),
+  ],
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { joinEmail, joinNick, joinPassword, joinConfirmPassword } = req.body;
+    if (joinPassword !== joinConfirmPassword) {
       return res.redirect("/join?error=exist");
     }
-    const hash = await bcrypt.hash(password, 12);
-    await User.create({
-      email,
-      nick,
-      password: hash,
-    });
-    return res.redirect("/");
-  } catch (error) {
-    console.error(error);
-    return next(error);
+    try {
+      const exUser = await User.findOne({ where: { email: joinEmail } });
+      if (exUser) {
+        return res.redirect("/join?error=exist");
+      }
+      const hash = await bcrypt.hash(joinPassword, 12);
+      await User.create({
+        email: joinEmail,
+        nick: joinNick,
+        password: hash,
+      });
+      return res.redirect("/");
+    } catch (error) {
+      console.error(error);
+      return next(error);
+    }
   }
-});
+);
 
-router.post("/login", isNotLoggedIn, (req, res, next) => {
+router.post("/login", isNotLoggedIn, async (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
     if (authError) {
       console.error(authError);

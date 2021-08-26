@@ -61,6 +61,35 @@
 
     <!-- Template Main CSS File -->
     <link href="../assets/css/style.css" rel="stylesheet" />
+
+    <script>
+      function joinFormSubmit() {
+        const joinEmail = document.getElementById('joinEmail');
+        const joinNick = document.getElementById('joinNick');
+        const joinPassword = document.getElementById('joinPassword');
+        const joinConfirmPassword = document.getElementById('joinConfirmPassword');
+
+        if (joinEmail.value === "") {
+          alert('이메일을 입력하세요.')
+          joinEmail.focus();
+          return false;
+        }
+
+        if (joinNick.value === "") {
+          alert('이메일을 입력하세요.')
+          joinNick.focus();
+          return false;
+        }
+        
+        if(joinPassword.value !== joinConfirmPassword.value) {
+          alert('비밀번호가 일치하지 않습니다.')
+          joinConfirmPassword.focus();
+          return false;
+        }
+
+        document.joinForm.submit()
+      }
+    </script> 
   </head>
 
   <body>
@@ -560,9 +589,7 @@
 
       <!-- ======= 로그인 ======= -->
       <!-- 로그인 안했으면 로그인 폼 보여주고 했으면 안보이게 -->
-      {%if user and user.id %}
-      {% endif %}
-      {%if not user %}
+      {% if not user %}
       <section id="login" class="contact">
         <div class="container">
           <div class="section-title" data-aos="fade-up">
@@ -576,9 +603,7 @@
       {% endif %}
 
       <!-- 회원가입 -->
-      {%if user and user.id %}
-      {% endif %}
-      {%if not user %}
+      {% if not user %}
       <section id="join2" class="contact">
         <div class="container">
           <div class="section-title" data-aos="fade-up">
