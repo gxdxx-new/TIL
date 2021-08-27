@@ -62,12 +62,14 @@
     <!-- Template Main CSS File -->
     <link href="../assets/css/style.css" rel="stylesheet" />
 
+    <!-- join check -->
     <script>
       function joinFormSubmit() {
         const joinEmail = document.getElementById('joinEmail');
         const joinNick = document.getElementById('joinNick');
         const joinPassword = document.getElementById('joinPassword');
         const joinConfirmPassword = document.getElementById('joinConfirmPassword');
+        const regularExpression = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
         if (joinEmail.value === "") {
           alert('이메일을 입력하세요.')
@@ -75,12 +77,30 @@
           return false;
         }
 
+        if(joinEmail.value.match(regularExpression) === null) {
+          alert('이메일 형식을 맞춰주세요.')
+          joinEmail.focus();
+          return false;
+        }
+
         if (joinNick.value === "") {
-          alert('이메일을 입력하세요.')
+          alert('닉네임을 입력하세요.')
           joinNick.focus();
           return false;
         }
         
+        if(joinPassword.value === "") {
+          alert('비밀번호를 입력하세요.');
+          joinPasswrod.focus();
+          return false;
+        }
+
+        if(joinConfirmPassword.value === "") {
+          alert('비밀번호를 입력하세요.');
+          joinPasswrod.focus();
+          return false;
+        }
+
         if(joinPassword.value !== joinConfirmPassword.value) {
           alert('비밀번호가 일치하지 않습니다.')
           joinConfirmPassword.focus();
