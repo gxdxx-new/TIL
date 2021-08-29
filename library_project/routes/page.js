@@ -1,14 +1,17 @@
 const express = require("express");
-
+const { Post, User } = require("../models");
 const router = express.Router();
 
 router.use((req, res, next) => {
-  res.locals.user = null;
+  res.locals.user = req.user;
   next();
 });
 
 router.get("/", (req, res) => {
-  res.render("main", { title: "YU도서", user: req.user });
+  res.render("index", {
+    title: "YU도서",
+    user: req.user,
+  });
 });
 
 router.get("/join", (req, res) => {
