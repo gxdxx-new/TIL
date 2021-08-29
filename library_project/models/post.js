@@ -4,13 +4,17 @@ module.exports = class Post extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        content: {
-          type: Sequelize.STRING(140),
+        title: {
+          type: Sequelize.STRING(100),
           allowNull: false,
         },
-        img: {
-          type: Sequelize.STRING(200),
-          allowNull: true,
+        content: {
+          type: Sequelize.STRING(500),
+          allowNull: false,
+        },
+        hit: {
+          type: Sequelize.INTEGER.UNSIGNED,
+          defaultValue: 0,
         },
       },
       {
