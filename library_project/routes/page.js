@@ -7,11 +7,23 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get("/", (req, res) => {
-  res.render("index", {
-    title: "YU도서",
-    user: req.user,
-  });
+router.get("/", async (req, res) => {
+  try {
+    const posts = await Post.findAll({
+      include: {
+        model: User,
+        attributes: ["id", "nick"],
+      },
+      order: [["createdAt", "DESC"]],
+    });
+    res.render("index", {
+      title: "YU도서",
+      posts: posts,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
 });
 
 router.get("/join", (req, res) => {

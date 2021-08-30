@@ -1,0 +1,45 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>날짜</th>
+      <th>조회수</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for post in posts %}
+    <tr>
+      <td>{{post.id}}</td>
+      <td>{{post.title}}</td>
+      <td>{{post.userNick}}</td>
+      <td>{{post.createdAt}}</td>
+      <td>{{post.hit}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr />
+<a class="btn btn-default">글쓰기</a>
+
+<nav>
+  <ul class="pagination">
+    <li>
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">5</a></li>
+    <li>
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>

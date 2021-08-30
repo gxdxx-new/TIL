@@ -10,9 +10,10 @@ router.post("/", isLoggedIn, async (req, res, next) => {
     await Post.create({
       title: req.body.writeTitle,
       content: req.body.writeContent,
-      UserId: req.user.id,
+      userEmail: req.user.email,
+      userNick: req.user.nick,
     });
-    res.redirect("/#board");
+    res.redirect("/");
   } catch (error) {
     console.error(error);
     next(error);
