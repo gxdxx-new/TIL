@@ -47,30 +47,42 @@ life is too short
 
 ## **sys.stdin.readline()**
 ---
-모듈이란 함수나 변수 또는 클래스를 모아 놓은 파일이다.
+**모듈**이란 함수나 변수 또는 클래스를 모아 놓은 파일이다.
 
 sys 모듈은 파이썬 인터프리터가 제공하는 변수와 함수를 직접 제어할 수 있게 해주는 모듈이다.
 
 input() 함수는 동작 속도가 느리기 때문에 입력의 개수가 많은 경우에는 sys.stdin.readline() 함수를 이용하는게 좋다.
 
-input() 함수와 마찬가지로 입력되는 모든 것을 문자열로 취급한다.
+input() 함수와 마찬가지로 입력되는 모든 것을 **문자열로 취급한다.**
 
 input()과 sys.stdin.readline()의 차이
 - sys.stdin.readline()은 한번에 읽어와 버퍼에 저장한다.
 - input()은 하나씩 누를 때마다 데이터를 버퍼에 저장한다.
 
 이 함수를 이용해서 입력하면 엔터(Enter)가 줄 바꿈 기호로 입력되기 때문에 이 공백 문자를 제거하려면 **rstrip()** 함수를 사용해야 한다.
+- int()로 감쌀 경우 줄 바꿈 기호가 자동으로 사라져서 rstrip() 함수를 사용하지 않아도 된다.
 
 ### split() 함수와 strip() 함수 비교
-- split() 함수 : 문자열 내부에 있는 공백 또는 특별한 문자를 구분해서, 리스트로 만든다.
+- split() 함수 : 문자열 내부에 있는 공백 또는 특별한 문자를 구분해서, <mark>**리스트로 만든다.**</mark>
 - strip() 함수 : 문자열 앞뒤의 공백 또는 특별한 문자를 삭제한다.
-
 
 ### readline() 사용 예시
 ```python
 import sys
 
 # 문자열 입력받기
-data = sys.stdin.readlint().rstrip()
-print(data)
+data = sys.stdin.readline().rstrip()
+
+# 입력받은 문자열 정수로 바꾸기
+# data = int(input()) 와 같다.
+data = int(sys.stdin.readline())
+
+# 한 줄에 여러 개 입력받아서 리스트로 만들기
+# data = input().split() 와 같다.
+# 문자열 리스트가 된다.
+data = sys.stdin.readline().split()
+
+# data = list(map(int, input().split())) 와 같다.
+# 정수형 리스트가 된다.
+data = list(map(int, sys.stdin.readline().split()))
 ```
