@@ -33,17 +33,15 @@
 <a class="btn btn-default">글쓰기</a>
 
 <nav>
-  <ul class="pagination">
+  <ul class="pagination justify-content-center">
     <li>
       <a href="#" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">4</a></li>
-    <li><a href="#">5</a></li>
+    {% set pages = posts.length // 2 %} {% for page in range(pages) %}
+    <li><a href="/board/page/{{page+1}}">{{loop.index}}</a></li>
+    {% endfor %}
     <li>
       <a href="#" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
