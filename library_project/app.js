@@ -11,6 +11,8 @@ dotenv.config();
 const pageRouter = require("./routes/page");
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
+const boardRouter = require("./routes/board");
+const searchRouter = require("./routes/search");
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 
@@ -53,6 +55,8 @@ app.use(passport.session());
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
 app.use("/post", postRouter);
+app.use("/board", boardRouter);
+app.use("/search", searchRouter);
 
 app.use((req, res, next) => {
   // 404 처리 미들웨어
