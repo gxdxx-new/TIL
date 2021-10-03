@@ -2,11 +2,11 @@ const express = require("express");
 const { Post, User } = require("../models");
 const router = express.Router();
 
-router.get("/page/1", async (req, res) => {
+router.get("/page/:page", async (req, res) => {
   try {
-    let pageNum = req.query.page; // 요청 페이지 넘버
+    let pageNum = req.params.page; // 요청 페이지 넘버
     let offset = 0;
-
+    console.log(req.params.page);
     if (pageNum > 1) {
       offset = 2 * (pageNum - 1);
     }
@@ -17,12 +17,22 @@ router.get("/page/1", async (req, res) => {
         attributes: ["id", "nick"],
       },
       order: [["createdAt", "DESC"]],
+    });
+
+    const currentPosts = await Post.findAll({
+      include: {
+        model: User,
+        attributes: ["id", "nick"],
+      },
+      order: [["createdAt", "DESC"]],
       offset: offset,
       limit: 2,
     });
-    res.render("index", {
+    // res.redirect("/");
+    res.render("board2", {
       title: "YU도서",
       posts: posts,
+      currentPosts: currentPosts,
     });
   } catch (err) {
     console.error(err);

@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for post in posts %}
+    {% for post in currentPosts %}
     <tr>
       <td>{{post.id}}</td>
       <td>
@@ -73,6 +73,12 @@
 </div>
 
 <script>
+  // function buttonClick() {
+  //   console.log("213123122");
+  //   req.body.post.hit += 1;
+  //   alert("Das");
+  // }
+
   $("#myModal").on("show.bs.modal", function (e) {
     const title = $(e.relatedTarget).data("title");
     const content = $(e.relatedTarget).data("content");
