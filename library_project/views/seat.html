@@ -1,20 +1,28 @@
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>명칭</th>
-      <th>전체</th>
-      <th>잔여좌석</th>
-      <th>사용률</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for seat in seats %}
-    <tr>
-      <td>{{seat.title}}</td>
-      <td>{{seat.seats}}</td>
-      <td>{{seat.remaingSeats}}</td>
-      <td>{{seat.usingRates}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<section id="study_room" class="gallery">
+  <div class="container">
+    <div class="section-title" data-aos="fade-up">
+      <h2>study room</h2>
+      <p>열람실</p>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>명칭</th>
+          <th>전체</th>
+          <th>잔여좌석</th>
+          <th>사용률</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for seat in seats %}
+        <tr>
+          <td>{{seat.title}}</td>
+          <td>{{seat.seats}}</td>
+          <td>{{seat.remaingSeats}}</td>
+          <td>{{seat.usingRates}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>

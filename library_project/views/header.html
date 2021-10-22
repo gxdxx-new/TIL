@@ -1,32 +1,26 @@
-<header
-  id="header"
-  class="fixed-top d-flex align-items-center header-transparent"
->
+<header id="header" class="fixed-top d-flex align-items-center header-transparent">
   <div class="container d-flex align-items-center justify-content-between">
     <div class="logo">
       <h1>
-        <a class="nav-link scrollto" href="#hero"><span>YU도서</span></a>
+        <a class="nav-link scrollto" href="/#"><span>YU도서</span></a>
       </h1>
     </div>
 
     <nav id="navbar" class="navbar">
       <ul>
-        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-        <li><a class="nav-link scrollto" href="#search">책 검색</a></li>
-        <li><a class="nav-link scrollto" href="#loan">대출현황</a></li>
-        <li><a class="nav-link scrollto" href="#study_room">열람실</a></li>
-        <li><a class="nav-link scrollto" href="#board">게시판</a></li>
+        <li><a class="nav-link scrollto active" href="/#">Home</a></li>
+        <li><a class="nav-link scrollto" href="/#search">책 검색</a></li>
+        <li><a class="nav-link scrollto" href="/#loan">대출현황</a></li>
+        <li><a class="nav-link scrollto" href="/#study_room">열람실</a></li>
+        <li><a class="nav-link scrollto" href="/#board">게시판</a></li>
+        <li><a class="nav-link scrollto" href="/board/page/1">게시판2</a></li>
 
         <li class="dropdown">
-          <a href="#team"
-            ><span>Drop Down</span> <i class="bi bi-chevron-down"></i
-          ></a>
+          <a href="/#team"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
           <ul>
-            <li><a href="#about">Drop Down 1</a></li>
+            <li><a href="/#about">Drop Down 1</a></li>
             <li class="dropdown">
-              <a href="#"
-                ><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i
-              ></a>
+              <a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
               <ul>
                 <li><a href="#">Deep Drop Down 1</a></li>
                 <li><a href="#">Deep Drop Down 2</a></li>
@@ -41,13 +35,13 @@
           </ul>
         </li>
         {% if user %}
-        <li><a class="nav-link scrollto" href="#hero">{{user.nick}}님</a></li>
+        <li><a class="nav-link scrollto" href="/#hero">{{user.nick}}님</a></li>
         <li>
           <a id="logout" href="/auth/logout" class="nav-link">로그아웃</a>
         </li>
         {% endif %} {% if not user %}
-        <li><a class="nav-link scrollto" href="#login">로그인</a></li>
-        <li><a class="nav-link scrollto" href="#join2">회원가입</a></li>
+        <li><a class="nav-link scrollto" href="/#login">로그인</a></li>
+        <li><a class="nav-link scrollto" href="/#join2">회원가입</a></li>
         {% endif %}
       </ul>
       <i class="bi bi-list mobile-nav-toggle"></i>

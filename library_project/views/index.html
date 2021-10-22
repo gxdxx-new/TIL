@@ -1,294 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-    <title>YU 도서</title>
-    <meta content="" name="description" />
-    <meta content="" name="keywords" />
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
-      crossorigin="anonymous"
-    />
+  <title>YU 도서</title>
+  <meta content="" name="description" />
+  <meta content="" name="keywords" />
 
-    <!-- Favicons -->
-    <link href="/assets/img/favicon.png" rel="icon" />
-    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
 
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-      rel="stylesheet"
-    />
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon" />
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
 
-    <!-- Vendor CSS Files -->
-    <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
-    <link
-      href="/assets/vendor/bootstrap/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="/assets/vendor/bootstrap-icons/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link
-      href="/assets/vendor/boxicons/css/boxicons.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="/assets/vendor/glightbox/css/glightbox.min.css"
-      rel="stylesheet"
-    />
-    <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
-    <link
-      href="/assets/vendor/swiper/swiper-bundle.min.css"
-      rel="stylesheet"
-    />
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet" />
 
-    <!-- Login Form -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <link
-      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-      rel="stylesheet"
-      id="bootstrap-css"
-    />
-    <link href="/login_css/login_css.css" rel="stylesheet" />
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+  <link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+  <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
 
-    <!-- Template Main CSS File -->
-    <link href="/assets/css/style.css" rel="stylesheet" />
+  <!-- Login Form -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
+  <link href="/login_css/login_css.css" rel="stylesheet" />
 
-    <!-- search Form -->
-    <link href="/search_css/search_css.css" rel="stylesheet" />
+  <!-- Template Main CSS File -->
+  <link href="/assets/css/style.css" rel="stylesheet" />
 
-    <!-- join check -->
-    <script>
-      function joinFormSubmit() {
-        const joinEmail = document.getElementById('joinEmail');
-        const joinNick = document.getElementById('joinNick');
-        const joinPassword = document.getElementById('joinPassword');
-        const joinConfirmPassword = document.getElementById('joinConfirmPassword');
-        const regularExpression = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  <!-- search Form -->
+  <link href="/search_css/search_css.css" rel="stylesheet" />
 
-        if (joinEmail.value === "") {
-          alert('이메일을 입력하세요.')
-          joinEmail.focus();
-          return false;
-        }
+  <!-- join check -->
+  <script>
+    function joinFormSubmit() {
+      const joinEmail = document.getElementById("joinEmail");
+      const joinNick = document.getElementById("joinNick");
+      const joinPassword = document.getElementById("joinPassword");
+      const joinConfirmPassword = document.getElementById(
+        "joinConfirmPassword"
+      );
+      const regularExpression =
+        /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
-        if(joinEmail.value.match(regularExpression) === null) {
-          alert('이메일 형식을 맞춰주세요.')
-          joinEmail.focus();
-          return false;
-        }
-
-        if (joinNick.value === "") {
-          alert('닉네임을 입력하세요.')
-          joinNick.focus();
-          return false;
-        }
-        
-        if(joinPassword.value === "") {
-          alert('비밀번호를 입력하세요.');
-          joinPasswrod.focus();
-          return false;
-        }
-
-        if(joinConfirmPassword.value === "") {
-          alert('비밀번호를 입력하세요.');
-          joinPasswrod.focus();
-          return false;
-        }
-
-        if(joinPassword.value !== joinConfirmPassword.value) {
-          alert('비밀번호가 일치하지 않습니다.')
-          joinConfirmPassword.focus();
-          return false;
-        }
-
-        document.joinForm.submit()
+      if (joinEmail.value === "") {
+        alert("이메일을 입력하세요.");
+        joinEmail.focus();
+        return false;
       }
-    </script> 
-  </head>
 
-  <body>
-    <!-- ======= Header ======= -->
-    {% include "header.html" %}
+      if (joinEmail.value.match(regularExpression) === null) {
+        alert("이메일 형식을 맞춰주세요.");
+        joinEmail.focus();
+        return false;
+      }
 
-    <!-- ======= 메인페이지 ======= -->
-    {% include "hero.html" %}
+      if (joinNick.value === "") {
+        alert("닉네임을 입력하세요.");
+        joinNick.focus();
+        return false;
+      }
 
-    <main id="main">
-      <!-- ======= 책 검색 ======= -->
-      <section id="search" class="about">
-        {% include "search.html" %}
-      </section>
-      <!-- End About Section -->
+      if (joinPassword.value === "") {
+        alert("비밀번호를 입력하세요.");
+        joinPasswrod.focus();
+        return false;
+      }
 
-      <!-- ======= 대출현황 ======= -->
-      <section id="loan" class="features">
-        <div class="container">
-          <div class="section-title" data-aos="fade-up">
-            <h2>loan</h2>
-            <p>대출현황</p>
-          </div>
+      if (joinConfirmPassword.value === "") {
+        alert("비밀번호를 입력하세요.");
+        joinPasswrod.focus();
+        return false;
+      }
 
-          <div class="row" data-aos="fade-left">
-            <div class="col-lg-3 col-md-4">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="50">
-                <i class="ri-store-line" style="color: #ffbb2c"></i>
-                <h3><a href="">Lorem Ipsum</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="100">
-                <i class="ri-bar-chart-box-line" style="color: #5578ff"></i>
-                <h3><a href="">Dolor Sitema</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="150">
-                <i class="ri-calendar-todo-line" style="color: #e80368"></i>
-                <h3><a href="">Sed perspiciatis</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4 mt-lg-0">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="200">
-                <i class="ri-paint-brush-line" style="color: #e361ff"></i>
-                <h3><a href="">Magni Dolores</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="250">
-                <i class="ri-database-2-line" style="color: #47aeff"></i>
-                <h3><a href="">Nemo Enim</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="300">
-                <i class="ri-gradienter-line" style="color: #ffa76e"></i>
-                <h3><a href="">Eiusmod Tempor</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="350">
-                <i class="ri-file-list-3-line" style="color: #11dbcf"></i>
-                <h3><a href="">Midela Teren</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="400">
-                <i class="ri-price-tag-2-line" style="color: #4233ff"></i>
-                <h3><a href="">Pira Neve</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="450">
-                <i class="ri-anchor-line" style="color: #b2904f"></i>
-                <h3><a href="">Dirada Pack</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="500">
-                <i class="ri-disc-line" style="color: #b20969"></i>
-                <h3><a href="">Moton Ideal</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="550">
-                <i class="ri-base-station-line" style="color: #ff5828"></i>
-                <h3><a href="">Verdo Park</a></h3>
-              </div>
-            </div>
-            <div class="col-lg-3 col-md-4 mt-4">
-              <div class="icon-box" data-aos="zoom-in" data-aos-delay="600">
-                <i class="ri-fingerprint-line" style="color: #29cc61"></i>
-                <h3><a href="">Flavor Nivelanda</a></h3>
-              </div>
-            </div>
-          </div>
+      if (joinPassword.value !== joinConfirmPassword.value) {
+        alert("비밀번호가 일치하지 않습니다.");
+        joinConfirmPassword.focus();
+        return false;
+      }
+
+      document.joinForm.submit();
+    }
+  </script>
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  {% include "header.html" %}
+
+  <!-- ======= 메인페이지 ======= -->
+  {% include "hero.html" %}
+
+  <main id="main">
+    <!-- ======= 책 검색 ======= -->
+    {% include "search.html" %}
+
+    <!-- ======= 대출현황 ======= -->
+    <section id="loan" class="features">
+      <div class="container">
+        <div class="section-title" data-aos="fade-up">
+          <h2>loan</h2>
+          <p>대출현황</p>
         </div>
-      </section>
-      <!-- End Features Section -->
+      </div>
+    </section>
 
-      <!-- ======= Counts Section ======= -->
-      <section id="counts" class="counts">
-        <div class="container">
-          <div class="row" data-aos="fade-up">
-            <div class="col-lg-3 col-md-6">
-              <div class="count-box">
-                <i class="bi bi-emoji-smile"></i>
-                <span
-                  data-purecounter-start="0"
-                  data-purecounter-end="232"
-                  data-purecounter-duration="1"
-                  class="purecounter"
-                ></span>
-                <p>Happy Clients</p>
-              </div>
-            </div>
+    <!-- =======  열람실 ======= -->
+    {% include "seat.html" %}
 
-            <div class="col-lg-3 col-md-6 mt-5 mt-md-0">
-              <div class="count-box">
-                <i class="bi bi-journal-richtext"></i>
-                <span
-                  data-purecounter-start="0"
-                  data-purecounter-end="521"
-                  data-purecounter-duration="1"
-                  class="purecounter"
-                ></span>
-                <p>Projects</p>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mt-5 mt-lg-0">
-              <div class="count-box">
-                <i class="bi bi-headset"></i>
-                <span
-                  data-purecounter-start="0"
-                  data-purecounter-end="1463"
-                  data-purecounter-duration="1"
-                  class="purecounter"
-                ></span>
-                <p>Hours Of Support</p>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mt-5 mt-lg-0">
-              <div class="count-box">
-                <i class="bi bi-people"></i>
-                <span
-                  data-purecounter-start="0"
-                  data-purecounter-end="15"
-                  data-purecounter-duration="1"
-                  class="purecounter"
-                ></span>
-                <p>Hard Workers</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- End Counts Section -->
-
-      <!-- =======  열람실 ======= -->
-      <section id="study_room" class="gallery">
-        <div class="container">
-          <div class="section-title" data-aos="fade-up">
-            <h2>study room</h2>
-            <p>열람실</p>
-          </div>   
-          {% include "seat.html" %}
-        </div>
-      </section>
-      <!-- End Gallery Section -->
-
-      <!-- ======= 게시판 ======= -->
-      <section id="board" class="gallery">
+    <!-- ======= 게시판 ======= -->
+    <!-- <section id="board" class="gallery">
         <div class="container">
           <div class="section-title" data-aos="fade-up">
             <h2>board</h2>
@@ -296,74 +128,41 @@
           </div>
           {% include "board.html" %}
           {% include "write.html" %}
-      </section>
-      <!-- End Gallery Section -->
+      </section> -->
 
-      <!-- ======= 로그인 ======= -->
-      <!-- 로그인 안했으면 로그인 폼 보여주고 했으면 안보이게 -->
-      {% if not user %}
-      <section id="login" class="contact">
-        <div class="container">
-          <div class="section-title" data-aos="fade-up">
-            <h2>login</h2>
-            <p>로그인</p>
-            {% include "login.html" %} 
-          </div>
-          </div>
-        </div>
-      </section>
-      {% endif %}
+    <!-- ======= 로그인 ======= -->
+    <!-- 로그인 안했으면 로그인 폼 보여주고 했으면 안보이게 -->
+    {% if not user %} {% include "login.html" %} {% endif %}
 
-      <!-- 회원가입 -->
-      {% if not user %}
-      <section id="join2" class="contact">
-        <div class="container">
-          <div class="section-title" data-aos="fade-up">
-            <h2>join</h2>
-            <p>회원가입</p>
-            {% include "join.html" %} 
-          </div>
-          </div>
-        </div>
-      </section>
-      {% endif %}
+    <!-- 회원가입 -->
+    {% if not user %} {% include "join.html" %} {% endif %}
+  </main>
+  <!-- End #main -->
 
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
 
-    </main>
-    <!-- End #main -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+    integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+    integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+    crossorigin="anonymous"></script>
 
-    <a
-      href="#"
-      class="back-to-top d-flex align-items-center justify-content-center"
-      ><i class="bi bi-arrow-up-short"></i
-    ></a>
-    <div id="preloader"></div>
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
-      integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
-      integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
-      crossorigin="anonymous"
-    ></script>
+  <!-- Template Main JS File -->
+  <script src="/assets/js/main.js"></script>
+</body>
 
-    <!-- Vendor JS Files -->
-    <script src="/assets/vendor/aos/aos.js"></script>
-    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="/assets/vendor/php-email-form/validate.js"></script>
-    <script src="/assets/vendor/purecounter/purecounter.js"></script>
-    <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
-
-    <!-- Template Main JS File -->
-    <script src="/assets/js/main.js"></script>
-  </body>
 </html>

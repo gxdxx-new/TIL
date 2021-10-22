@@ -1,0 +1,25 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>도서명</th>
+      <th>대출일자</th>
+      <th>반납일자</th>
+      <th>대출연장횟수</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for post in currentPosts %}
+    <tr>
+      <td>{{post.id}}</td>
+      <td>
+        <a data-toggle="modal" href="#myModal" data-title="{{post.title}}"
+          data-content="{{post.content}}">{{post.title}}
+        </a>
+      </td>
+      <td>{{post.userNick}}</td>
+      <td>{{post.createdAt}}</td>
+      <td>{{post.hit}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

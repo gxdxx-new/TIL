@@ -13,12 +13,8 @@
     <tr>
       <td>{{post.id}}</td>
       <td>
-        <a
-          data-toggle="modal"
-          href="#myModal"
-          data-title="{{post.title}}"
-          data-content="{{post.content}}"
-          >{{post.title}}
+        <a data-toggle="modal" href="#myModal" data-title="{{post.title}}"
+          data-content="{{post.content}}">{{post.title}}
         </a>
       </td>
       <td>{{post.userNick}}</td>
@@ -73,12 +69,6 @@
 </div>
 
 <script>
-  // function buttonClick() {
-  //   console.log("213123122");
-  //   req.body.post.hit += 1;
-  //   alert("Das");
-  // }
-
   $("#myModal").on("show.bs.modal", function (e) {
     const title = $(e.relatedTarget).data("title");
     const content = $(e.relatedTarget).data("content");
