@@ -4,12 +4,45 @@ module.exports = class User extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        book: {
+        loan: {
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
+          allowNull: false,
+        },
+        title: {
           type: Sequelize.STRING(40),
-          allowNull: true,
+          allowNull: false,
           unique: true,
         },
+        author: {
+          type: Sequelize.STRING(15),
+          allowNull: false,
+        },
+        publisher: {
+          type: Sequelize.STRING(40),
+          allowNull: false,
+        },
+        publicationYear: {
+          type: Sequelize.INTEGER.UNSIGNED,
+          defaultValue: 0,
+          allowNull: false,
+        },
+        page: {
+          type: Sequelize.STRING(40),
+          defaultValue: 0,
+          allowNull: false,
+        },
+        price: {
+          type: Sequelize.INTEGER.UNSIGNED,
+          defaultValue: 0,
+          allowNull: false,
+        },
+        img: {
+          type: Sequelize.STRING(100),
+          allowNull: false,
+        },
       },
+
       {
         sequelize,
         timestamps: true,
