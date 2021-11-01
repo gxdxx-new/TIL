@@ -107,28 +107,10 @@
     {% include "search.html" %}
 
     <!-- ======= 대출현황 ======= -->
-    <section id="loan" class="features">
-      <div class="container">
-        <div class="section-title" data-aos="fade-up">
-          <h2>loan</h2>
-          <p>대출현황</p>
-        </div>
-      </div>
-    </section>
+    {% if user %} {% include "loan.html" %} {% endif %}
 
     <!-- =======  열람실 ======= -->
     {% include "seat.html" %}
-
-    <!-- ======= 게시판 ======= -->
-    <!-- <section id="board" class="gallery">
-        <div class="container">
-          <div class="section-title" data-aos="fade-up">
-            <h2>board</h2>
-            <p>게시판</p>
-          </div>
-          {% include "board.html" %}
-          {% include "write.html" %}
-      </section> -->
 
     <!-- ======= 로그인 ======= -->
     <!-- 로그인 안했으면 로그인 폼 보여주고 했으면 안보이게 -->

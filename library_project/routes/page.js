@@ -1,5 +1,5 @@
 const express = require("express");
-const { Post, User } = require("../models");
+const { Post, User, Book } = require("../models");
 //const crawl = require("../crawler/crawl");
 const router = express.Router();
 
@@ -22,13 +22,14 @@ router.use((req, res, next) => {
 
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.findAll({
+    const userBooks = await Book.findAll({
       include: {
         model: User,
-        attributes: ["id", "nick"],
+        attributes: ["email", "nick"],
       },
       order: [["createdAt", "DESC"]],
     });
+
     const seats = await getHtml().then((html) => {
       let ulList = [];
       const $ = cheerio.load(html.data);
@@ -50,15 +51,11 @@ router.get("/", async (req, res) => {
         };
       });
       const data = ulList.filter((n) => n.title);
-      //console.log(data);
       return data;
     });
-    console.log("123");
-    console.log(seats);
-    console.log("213");
     res.render("index", {
       title: "YU도서",
-      posts: posts,
+      userBooks: userBooks,
       seats: seats,
     });
   } catch (err) {
@@ -67,8 +64,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/join", (req, res) => {
-  res.render("join", { title: "회원가입 - YU도서" });
-});
+// router.get("/join", (req, res) => {
+//   res.render("join", { title: "회원가입 - YU도서" });
+// });
 
 module.exports = router;

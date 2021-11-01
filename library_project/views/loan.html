@@ -1,25 +1,49 @@
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>도서명</th>
-      <th>대출일자</th>
-      <th>반납일자</th>
-      <th>대출연장횟수</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for post in currentPosts %}
-    <tr>
-      <td>{{post.id}}</td>
-      <td>
-        <a data-toggle="modal" href="#myModal" data-title="{{post.title}}"
-          data-content="{{post.content}}">{{post.title}}
-        </a>
-      </td>
-      <td>{{post.userNick}}</td>
-      <td>{{post.createdAt}}</td>
-      <td>{{post.hit}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<section id="loan" class="features">
+  <div class="container">
+    <div class="section-title" data-aos="fade-up">
+      <h2>loan</h2>
+      <p>대출현황</p>
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>제목</th>
+            <th>저자명</th>
+            <th>출판사</th>
+            <th>발행년도</th>
+            <th>페이지 수</th>
+            <th>가격</th>
+            <th>표지이미지</th>
+            <th>대출일자</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for book in userBooks %}
+          <tr>
+            <td>
+              <a href="/search/loan?&title_info={{book.title_info}}&author={{book.author}}&publisher={{book.publisher}}&pub_year={{book.pub_year}}&page={{book.page}}&price={{book.price}}&image={{book.image}}"
+                onclick="buttonClick()">
+                {{book.title}}
+              </a>
+            <td>{{book.author}}</td>
+            <td>{{book.publisher}}</td>
+            <td>{{book.publicationYear}}</td>
+            <td>{{book.page}}</td>
+            <td>{{book.price}}</td>
+            <td>
+              <img class="fit-picture" src={{book.img}}>
+            </td>
+            {% if book.loan %}
+            <td>
+              {{book.createdAt}}
+            </td>
+            {% else %}
+            <td>연체중</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
