@@ -22,33 +22,18 @@ router.get("/library/", async (req, res, next) => {
   let queryParams =
     "?" +
     encodeURIComponent("serviceKey") +
-    "=Gc%2FEM8UVhS6aGwllwxru0f09DP%2Bu%2FNUYy74JAjUFf7FC6q1%2Bf0vz6C5Cz7uxuOtw7X8HrhsWE98kcd%2F9PfX9sw%3D%3D"; /* Service Key*/
+    "=Gc%2FEM8UVhS6aGwllwxru0f09DP%2Bu%2FNUYy74JAjUFf7FC6q1%2Bf0vz6C5Cz7uxuOtw7X8HrhsWE98kcd%2F9PfX9sw%3D%3D";
   queryParams +=
-    "&" + encodeURIComponent("numOfRows") + "=" + encodeURIComponent("1"); /* */
+    "&" + encodeURIComponent("numOfRows") + "=" + encodeURIComponent("10");
   queryParams +=
-    "&" + encodeURIComponent("pageNo") + "=" + encodeURIComponent("1"); /* */
+    "&" + encodeURIComponent("pageNo") + "=" + encodeURIComponent("1");
   queryParams +=
-    "&" +
-    encodeURIComponent("resultType") +
-    "=" +
-    encodeURIComponent("json"); /* */
+    "&" + encodeURIComponent("resultType") + "=" + encodeURIComponent("json");
   queryParams +=
     "&" +
     encodeURIComponent("title_info") +
     "=" +
-    encodeURIComponent(req.query.search_book); /* */
-  // queryParams +=
-  //   "&" +
-  //   encodeURIComponent("shelf_date") +
-  //   "=" +
-  //   encodeURIComponent("2021/09/14"); /* */
-  // queryParams +=
-  //   "&" +
-  //   encodeURIComponent("author") +
-  //   "=" +
-  //   encodeURIComponent(
-  //     "브래드 멜처 글 ; 크리스토퍼 엘리오풀로스 그림 ; 마술연필 옮김"
-  //   ); /* */
+    encodeURIComponent(req.query.search_book);
 
   request(
     {
@@ -62,65 +47,64 @@ router.get("/library/", async (req, res, next) => {
       console.log("@#!!#");
       const obj = JSON.parse(body);
       books = obj.getBookNewList.item;
+      console.log(books[0]);
       console.log(books[0].title_info);
       console.log(obj.getBookNewList.item[0].publisher);
-      // console.log(obj.getBookNewList.item[1].publisher);
       console.log("@!#");
 
-      let loanBooks = [];
-
-      var loanBook = await Book.findOne({
-        attributes: ["createdAt"],
-        where: {
-          title: books[0].title_info,
-          loan: true,
-        },
-      });
-      console.log(loanBook.createdAt);
-
-      // for (var key in books) {
-      //   // console.log(books[key].title_info);
-      //   var loanBook = await Book.findOne({
-      //     attributes: ["createdAt"],
-      //     where: {
-      //       title: books[key].title_info,
-      //       loan: "true",
-      //     },
-      //   });
+      // var loanBook = await Book.findOne({
+      //   // attributes: ["createdAt"],
+      //   where: {
+      //     title: books[0].title_info,
+      //     loan: true,
+      //   },
+      // });
+      // if (loanBook !== null) {
       //   console.log(loanBook.createdAt);
-      //   // console.log(loanBook);
-      //   if (loanBook !== null) {
-      //     loanBooks[key] = loanBook.createdAt;
-      //   } else {
-      //     loanBooks[key] = "대출가능";
-      //   }
-      //   console.log(loanBooks[key]);
       // }
+
+      for (var key in books) {
+        // console.log(books[key].title_info);
+        var loanBook = await Book.findOne({
+          where: {
+            title: books[key].title_info,
+          },
+        });
+
+        // console.log(loanBook);
+        if (loanBook !== null) {
+          console.log(loanBook.createdAt);
+          books[key].loan = true;
+          books[key].createdAt = loanBook.createdAt;
+        }
+      }
 
       res.render("searchResult", {
         title: "YU도서",
         books: books,
-        loan: loanBook,
+        // loan: loanBook,
       });
     }
   );
+});
 
-  // try {
-  //   const books = await Book.findAll({
-  //     where: {
-  //       title: req.query.search_book,
-  //     },
-  //     order: [["createdAt", "DESC"]],
-  //   });
-  //   // res.render("index", {
-  //   //   title: "YU도서",
-  //   //   books: books,
-  //   // });
-  //   res.redirect("/#board");
-  // } catch (err) {
-  //   console.error(err);
-  //   next(err);
-  // }
+router.get("/loan", async (req, res, next) => {
+  try {
+    await Book.create({
+      loan: true,
+      title: req.query.title_info,
+      author: req.query.author,
+      publisher: req.query.publisher,
+      publicationYear: req.query.pub_year,
+      page: req.query.page,
+      price: req.query.price,
+      img: req.query.image,
+    });
+    res.redirect("/");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 module.exports = router;

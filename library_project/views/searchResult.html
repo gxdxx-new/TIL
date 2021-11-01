@@ -70,7 +70,22 @@
             <tbody>
                 {% for book in books %}
                 <tr>
+                    <!-- <td>
+                        <a href="/search/loan/{{book.title_info}}/{{book.author}}/{{book.publisher}}/{{book.pub_year}}/{{book.page}}/{{book.price}}/{{book.image}}"
+                            onclick="buttonClick()">
+                            {{book.title_info}}
+                        </a>
+                    </td> -->
+                    {% if book.loan %}
                     <td>{{book.title_info}}</td>
+                    {% else %}
+                    <td>
+                        <a href="/search/loan?&title_info={{book.title_info}}&author={{book.author}}&publisher={{book.publisher}}&pub_year={{book.pub_year}}&page={{book.page}}&price={{book.price}}&image={{book.image}}"
+                            onclick="buttonClick()">
+                            {{book.title_info}}
+                        </a>
+                    </td>
+                    {% endif %}
                     <td>{{book.author}}</td>
                     <td>{{book.publisher}}</td>
                     <td>{{book.pub_year}}</td>
@@ -79,9 +94,13 @@
                     <td>
                         <img class="fit-picture" src={{book.image}}>
                     </td>
+                    {% if book.loan %}
                     <td>
-                        {{loan.createdAt}}
+                        {{book.createdAt}}
                     </td>
+                    {% else %}
+                    <td>대출가능</td>
+                    {% endif %}
                     <!-- <td>
                         <a data-toggle="modal" href="#myModal" data-title="{{post.title}}"
                             data-content="{{post.content}}" onclick="buttonClick()">{{post.title}}
@@ -138,6 +157,16 @@
 
         <!-- Template Main JS File -->
         <script src="/assets/js/main.js"></script>
+
+
+        <script>
+            function buttonClick() {
+                if (confirm('책을 대출합니다.'))
+                    return true;
+                else
+                    return false;
+            }
+        </script>
 </body>
 
 </html>
