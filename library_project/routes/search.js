@@ -1,22 +1,13 @@
 const express = require("express");
 const { Book, User } = require("../models");
+const { isLoggedIn } = require("./middlewares");
+
 const router = express.Router();
 
 const request = require("request");
 const parse = require("json-parse");
 
-router.get("/library/", async (req, res, next) => {
-  // await Book.create({
-  //   loan: true,
-  //   title: "오늘아, 안녕 : 더책",
-  //   author: "김유진 글 ; 서현 그림",
-  //   publisher: "창비",
-  //   publicationYear: "2018",
-  //   page: 28,
-  //   price: "27000",
-  //   img: "https://image-library.busan.go.kr/klascover/resources/images/2021-03-18/9788936455200",
-  // });
-
+router.get("/library", async (req, res, next) => {
   const url =
     "http://apis.data.go.kr/6260000/BookNewListService/getBookNewList";
   let queryParams =
@@ -52,26 +43,13 @@ router.get("/library/", async (req, res, next) => {
       console.log(obj.getBookNewList.item[0].publisher);
       console.log("@!#");
 
-      // var loanBook = await Book.findOne({
-      //   // attributes: ["createdAt"],
-      //   where: {
-      //     title: books[0].title_info,
-      //     loan: true,
-      //   },
-      // });
-      // if (loanBook !== null) {
-      //   console.log(loanBook.createdAt);
-      // }
-
       for (var key in books) {
-        // console.log(books[key].title_info);
         var loanBook = await Book.findOne({
           where: {
             title: books[key].title_info,
           },
         });
 
-        // console.log(loanBook);
         if (loanBook !== null) {
           console.log(loanBook.createdAt);
           books[key].loan = true;
@@ -82,13 +60,12 @@ router.get("/library/", async (req, res, next) => {
       res.render("searchResult", {
         title: "YU도서",
         books: books,
-        // loan: loanBook,
       });
     }
   );
 });
 
-router.get("/loan", async (req, res, next) => {
+router.get("/loan", isLoggedIn, async (req, res, next) => {
   try {
     await Book.create({
       loan: true,
@@ -105,6 +82,32 @@ router.get("/loan", async (req, res, next) => {
     console.error(error);
     next(error);
   }
+});
+
+var client_id = "Q_oU6NvlzQaFG47fBaxL";
+var client_secret = "2ateLNCG4Q";
+
+router.get("/book.json", function (req, res) {
+  var api_url =
+    "https://openapi.naver.com/v1/search/book?query=" +
+    encodeURI(req.query.query); // json 결과
+  var request = require("request");
+  var options = {
+    url: api_url,
+    headers: {
+      "X-Naver-Client-Id": client_id,
+      "X-Naver-Client-Secret": client_secret,
+    },
+  };
+  request.get(options, function (error, response, body) {
+    books = JSON.parse(body).items;
+
+    console.log(books);
+    res.render("searchResultNaver", {
+      title: "YU도서",
+      books: books,
+    });
+  });
 });
 
 module.exports = router;
