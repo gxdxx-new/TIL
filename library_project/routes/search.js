@@ -88,6 +88,8 @@ var client_id = "Q_oU6NvlzQaFG47fBaxL";
 var client_secret = "2ateLNCG4Q";
 
 router.get("/book.json", function (req, res) {
+  console.log(req.query.query);
+
   var api_url =
     "https://openapi.naver.com/v1/search/book?query=" +
     encodeURI(req.query.query); // json 결과
@@ -101,6 +103,24 @@ router.get("/book.json", function (req, res) {
   };
   request.get(options, function (error, response, body) {
     books = JSON.parse(body).items;
+
+    for (let key in books) {
+      let title = books[key].title;
+      title = title.replace(/<b>/g, "");
+      title = title.replace(/<\/b>/g, "");
+      console.log(title);
+
+      books[key].title = title;
+    }
+
+    for (let key in books) {
+      let description = books[key].description;
+      description = description.replace(/<b>/g, "");
+      description = description.replace(/<\/b>/g, "");
+      console.log(description);
+
+      books[key].description = description;
+    }
 
     console.log(books);
     res.render("searchResultNaver", {
