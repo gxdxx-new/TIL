@@ -14,7 +14,6 @@ router.get("/page/:page", async (req, res) => {
     const posts = await Post.findAll({
       include: {
         model: User,
-        attributes: ["id", "nick"],
       },
       order: [["createdAt", "DESC"]],
     });
@@ -22,14 +21,14 @@ router.get("/page/:page", async (req, res) => {
     const currentPosts = await Post.findAll({
       include: {
         model: User,
-        attributes: ["id", "nick"],
       },
       order: [["createdAt", "DESC"]],
       offset: offset,
       limit: 2,
     });
+    console.log(currentPosts);
     // res.redirect("/");
-    res.render("board2", {
+    res.render("board", {
       title: "YU도서",
       posts: posts,
       currentPosts: currentPosts,
@@ -37,6 +36,27 @@ router.get("/page/:page", async (req, res) => {
   } catch (err) {
     console.error(err);
     next(err);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    let post = await Post.findOne({ where: { id: req.params.id } });
+
+    await Post.update(
+      {
+        hit: post.hit + 1,
+      },
+      { where: { id: req.params.id } }
+    );
+
+    res.render("post", {
+      title: "YU도서",
+      post: post,
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
 });
 
