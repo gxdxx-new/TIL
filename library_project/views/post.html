@@ -75,6 +75,39 @@
             </tbody>
         </table>
 
+        <table class="table table-hover">
+            <td>dd</td>
+        </table>
+
+        <form class="form-signin" id="login-form" action="/post/comment/{{post.id}}" method="post">
+            <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" />
+                <label class="custom-control-label" for="customCheck1">익명</label>
+            </div>
+
+            <div class="form-label-group">
+                <input type="text" id="writeContent" name="writeContent" class="form-control" maxlength="100" />
+                <label for="inputComment">댓글 작성</label>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">
+                댓글 작성
+            </button>
+
+            <!-- <hr class="my-4" />
+
+            <a id="kakao" href="/auth/kakao" class="btn btn-lg btn-google btn-block text-uppercase">
+                카카오 로그인
+            </a> -->
+        </form>
+
+        <div>
+            {% for comment in comments %}
+            asd
+            {{comment.content}}
+            {% endfor %}
+        </div>
+
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
         <div id="preloader"></div>

@@ -1,5 +1,5 @@
 const express = require("express");
-const { Post } = require("../models");
+const { Post, Comment } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
@@ -8,11 +8,29 @@ const router = express.Router();
 router.post("/", isLoggedIn, async (req, res, next) => {
   try {
     await Post.create({
+      email: req.user.email,
+      nick: req.user.nick,
       title: req.body.writeTitle,
       content: req.body.writeContent,
-      userEmail: req.user.email,
-      userNick: req.user.nick,
+      UserId: req.user.id,
     });
+    res.redirect("/");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post("/comment/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    await Comment.create({
+      PostId: req.params.id,
+      email: req.user.email,
+      nick: req.user.nick,
+      content: req.body.writeContent,
+    });
+    console.log("@#!!#!");
+    console.log(req.params.id);
     res.redirect("/");
   } catch (error) {
     console.error(error);

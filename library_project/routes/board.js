@@ -1,5 +1,5 @@
 const express = require("express");
-const { Post, User } = require("../models");
+const { Post, User, Comment } = require("../models");
 const router = express.Router();
 
 router.get("/page/:page", async (req, res) => {
@@ -41,7 +41,12 @@ router.get("/page/:page", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    let post = await Post.findOne({ where: { id: req.params.id } });
+    let post = await Post.findOne({
+      include: {
+        model: Comment,
+      },
+      where: { id: req.params.id },
+    });
 
     await Post.update(
       {
@@ -50,9 +55,18 @@ router.get("/:id", async (req, res) => {
       { where: { id: req.params.id } }
     );
 
+    // let comment = await Comment.findAll({
+    //   include: {
+    //     model: Post,
+    //     where: { id: req.params.id },
+    //   },
+    // });
+    console.log(post.Comments[0]);
+
     res.render("post", {
       title: "YU도서",
       post: post,
+      comments: post.Comments,
     });
   } catch (error) {
     console.error(error);
