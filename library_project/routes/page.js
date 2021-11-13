@@ -1,5 +1,5 @@
 const express = require("express");
-const { Post, User, Book } = require("../models");
+const { Post, User, Book, Loan } = require("../models");
 //const crawl = require("../crawler/crawl");
 const router = express.Router();
 
@@ -25,7 +25,15 @@ router.get("/", async (req, res) => {
     const userBooks = await Book.findAll({
       include: {
         model: User,
-        attributes: ["email", "nick"],
+        attributes: ["email"],
+      },
+      order: [["createdAt", "DESC"]],
+    });
+
+    const userBooksReturned = await Loan.findAll({
+      include: {
+        model: User,
+        attributes: ["email"],
       },
       order: [["createdAt", "DESC"]],
     });
@@ -56,6 +64,7 @@ router.get("/", async (req, res) => {
     res.render("index", {
       title: "YU도서",
       userBooks: userBooks,
+      userBooksReturned: userBooksReturned,
       seats: seats,
     });
   } catch (err) {

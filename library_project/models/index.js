@@ -3,6 +3,7 @@ const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
 const User = require("./user");
 const Book = require("./book");
+const Loan = require("./loan");
 const Post = require("./post");
 const Comment = require("./comment");
 
@@ -17,16 +18,19 @@ const sequelize = new Sequelize(
 db.sequelize = sequelize;
 db.User = User;
 db.Book = Book;
+db.Loan = Loan;
 db.Post = Post;
 db.Comment = Comment;
 
 User.init(sequelize);
 Book.init(sequelize);
+Loan.init(sequelize);
 Post.init(sequelize);
 Comment.init(sequelize);
 
 User.associate(db);
 Book.associate(db);
+Loan.associate(db);
 Post.associate(db);
 Comment.associate(db);
 

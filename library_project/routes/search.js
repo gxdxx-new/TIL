@@ -1,5 +1,5 @@
 const express = require("express");
-const { Book, User } = require("../models");
+const { Book, User, Loan } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
@@ -24,7 +24,7 @@ router.get("/library", async (req, res, next) => {
     "&" +
     encodeURIComponent("title_info") +
     "=" +
-    encodeURIComponent(req.query.search_book);
+    encodeURIComponent(req.query.library_book);
 
   request(
     {
@@ -77,7 +77,36 @@ router.get("/loan", isLoggedIn, async (req, res, next) => {
       price: req.query.price,
       img: req.query.image,
     });
+
     res.redirect("/");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.get("/loan/return/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    let book = await Book.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+    console.log(book.dataValues.createdAt);
+    await Loan.create({
+      loanDate: book.dataValues.createdAt,
+      title: book.dataValues.title,
+      author: book.dataValues.author,
+      publisher: book.dataValues.publisher,
+      publicationYear: book.dataValues.publicationYear,
+      page: book.dataValues.page,
+      price: book.dataValues.price,
+      img: book.dataValues.img,
+      UserId: req.user.id,
+    });
+
+    await Book.destroy({ where: { id: req.params.id } });
+    res.redirect("/#loan");
   } catch (error) {
     console.error(error);
     next(error);
@@ -88,11 +117,11 @@ var client_id = "Q_oU6NvlzQaFG47fBaxL";
 var client_secret = "2ateLNCG4Q";
 
 router.get("/book.json", function (req, res) {
-  console.log(req.query.query);
+  console.log(req.query.naver_book);
 
   var api_url =
     "https://openapi.naver.com/v1/search/book?query=" +
-    encodeURI(req.query.query); // json 결과
+    encodeURI(req.query.naver_book); // json 결과
   var request = require("request");
   var options = {
     url: api_url,

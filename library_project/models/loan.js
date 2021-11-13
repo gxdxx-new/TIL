@@ -1,12 +1,11 @@
 const Sequelize = require("sequelize");
 
-module.exports = class Book extends Sequelize.Model {
+module.exports = class Loan extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        loan: {
-          type: Sequelize.BOOLEAN,
-          defaultValue: false,
+        loanDate: {
+          type: Sequelize.DATE,
           allowNull: false,
         },
         title: {
@@ -46,8 +45,8 @@ module.exports = class Book extends Sequelize.Model {
         sequelize,
         timestamps: true,
         underscored: false,
-        modelName: "Book",
-        tableName: "books",
+        modelName: "Loan",
+        tableName: "loans",
         paranoid: true,
         charset: "utf8",
         collate: "utf8_general_ci",
@@ -56,6 +55,6 @@ module.exports = class Book extends Sequelize.Model {
   }
 
   static associate(db) {
-    db.Book.belongsTo(db.User);
+    db.Loan.belongsTo(db.User);
   }
 };
