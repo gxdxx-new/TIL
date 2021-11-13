@@ -45,8 +45,11 @@
 
 <body>
     <!-- ======= Header ======= -->
-    {% include "header.html" %} {% include "hero.html" %}
+    {% include "header.html" %}
 
+    </br>
+    </br>
+    </br>
     </br>
     </br>
     </br>
@@ -58,54 +61,77 @@
             <p>게시판</p>
         </div>
 
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>조회수</th>
-                    <th>내용</th>
-                </tr>
-            </thead>
-            <tbody>
-                <td>{{post.title}}</td>
-                <td>{{post.nick}}</td>
-                <td>{{post.hit}}</td>
-                <td>{{post.content}}</td>
-            </tbody>
-        </table>
+        <div class="container">
+            <div class="row">
+                <div class="card card-signin my-5">
+                    <div class="card-body" style="padding:50px;">
+                        <div class="form-group">
+                            <!-- <label for="title">제목</label> -->
+                            <h3>{{post.title}}</h5>
+                        </div>
 
-        <table class="table table-hover">
-            <td>dd</td>
-        </table>
+                        <div style="float: right;">
+                            <table class="table table-hover">
+                                <p><b>작성자: </b>{{post.nick}}</p>
+                                <p><b>조회수: </b>{{post.hit}}</p>
+                                <p><b>등록일: </b>{{post.createdAt}}</p>
+                            </table>
+                        </div>
 
-        <form class="form-signin" id="login-form" action="/post/comment/{{post.id}}" method="post">
-            <div class="custom-control custom-checkbox mb-3">
-                <input type="checkbox" class="custom-control-input" id="customCheck1" />
-                <label class="custom-control-label" for="customCheck1">익명</label>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+
+                        <div class="form-group">
+                            <!-- <label for="content">내용</label> -->
+                            <h5>{{post.content}}</h7>
+                        </div>
+
+                        <br />
+
+                        <hr class="my-4" />
+
+                        <form id="login-form" action="/post/comment/{{post.id}}" method="post">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input" id="anonymousCheck"
+                                    name="anonymousCheck" />
+                                <label class="custom-control-label" for="anonymousCheck">익명</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="text" id="writeContent" name="writeContent" class="form-control"
+                                    maxlength="100" required="required" pattern=".{1,100}" />
+                                <label for="inputComment">댓글을 입력하세요.</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-default btn-primary">
+                                댓글 작성
+                            </button>
+                        </form>
+
+                        <br />
+
+                        {% if comments %}
+                        <div style="border:1px solid #dddada; padding:30px;">
+                            {% for comment in comments %}
+                            <div class="form-group">
+                                <img src="https://user-images.githubusercontent.com/35963403/141422794-c9579a5f-c033-4182-b6a5-37b52f9a3906.png"
+                                    width="30">
+                                <label for="title">{{comment.nick}}</label>
+                                <p>{{comment.createdAt}}</p>
+                                <h6>{{comment.content}}</h5>
+                            </div>
+
+                            <hr class="my-4" />
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-
-            <div class="form-label-group">
-                <input type="text" id="writeContent" name="writeContent" class="form-control" maxlength="100" />
-                <label for="inputComment">댓글 작성</label>
-            </div>
-
-            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">
-                댓글 작성
-            </button>
-
-            <!-- <hr class="my-4" />
-
-            <a id="kakao" href="/auth/kakao" class="btn btn-lg btn-google btn-block text-uppercase">
-                카카오 로그인
-            </a> -->
-        </form>
-
-        <div>
-            {% for comment in comments %}
-            asd
-            {{comment.content}}
-            {% endfor %}
         </div>
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i

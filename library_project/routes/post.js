@@ -14,7 +14,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       content: req.body.writeContent,
       UserId: req.user.id,
     });
-    res.redirect("/");
+    res.redirect("/board/page/1");
   } catch (error) {
     console.error(error);
     next(error);
@@ -30,8 +30,10 @@ router.post("/comment/:id", isLoggedIn, async (req, res, next) => {
       content: req.body.writeContent,
     });
     console.log("@#!!#!");
+    console.log(req.body.writeContent);
+    console.log(req.body.anonymousCheck);
     console.log(req.params.id);
-    res.redirect("/");
+    res.redirect("/board/" + req.params.id);
   } catch (error) {
     console.error(error);
     next(error);
