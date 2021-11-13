@@ -13,20 +13,25 @@ router.get("/page/:page", async (req, res) => {
 
     const posts = await Post.findAll({
       include: {
-        model: User,
+        model: Comment,
       },
       order: [["createdAt", "DESC"]],
     });
+    console.log("SADASKJDAKAAL");
+    console.log(posts[0].Comments);
+    let x = posts[0].Comments[0].dataValues.PostId;
+    console.log(x);
+    console.log("SDASDASDAS");
 
     const currentPosts = await Post.findAll({
       include: {
-        model: User,
+        model: Comment,
       },
       order: [["createdAt", "DESC"]],
       offset: offset,
       limit: 10,
     });
-    console.log(currentPosts);
+    console.log(currentPosts[0].Comments.length);
     // res.redirect("/");
     res.render("board", {
       title: "YU도서",

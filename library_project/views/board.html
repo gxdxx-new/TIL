@@ -74,16 +74,24 @@
       <tbody>
         {% for post in currentPosts %}
         <tr>
+          {% if post.deleted === true %}
+          <td>삭제된 게시물입니다.</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          {% else %}
           <td>{{post.id}}</td>
           <td>
             <!-- <a data-toggle="modal" href="#myModal" data-title="{{post.title}}" data-content="{{post.content}}"
               onclick="buttonClick()">{{post.title}}
             </a> -->
-            <a href="/board/{{post.id}}">{{post.title}}</a>
+            <a href="/board/{{post.id}}">{{post.title}} [{{post.Comments.length}}]</a>
           </td>
           <td>{{post.nick}}</td>
           <td>{{post.createdAt}}</td>
           <td>{{post.hit}}</td>
+          {% endif %}
         </tr>
         {% endfor %}
       </tbody>
