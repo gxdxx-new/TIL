@@ -8,7 +8,7 @@ router.get("/page/:page", async (req, res) => {
     let offset = 0;
     console.log(req.params.page);
     if (pageNum > 1) {
-      offset = 2 * (pageNum - 1);
+      offset = 10 * (pageNum - 1);
     }
 
     const posts = await Post.findAll({
@@ -24,7 +24,7 @@ router.get("/page/:page", async (req, res) => {
       },
       order: [["createdAt", "DESC"]],
       offset: offset,
-      limit: 2,
+      limit: 10,
     });
     console.log(currentPosts);
     // res.redirect("/");

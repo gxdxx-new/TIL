@@ -45,8 +45,11 @@
 
 <body>
   <!-- ======= Header ======= -->
-  {% include "header.html" %} {% include "hero.html" %}
+  {% include "header.html" %}
 
+  </br>
+  </br>
+  </br>
   </br>
   </br>
   </br>
@@ -87,7 +90,9 @@
     </table>
 
     <hr />
-    <a class="btn btn-default btn-primary">글쓰기</a>
+
+    <a id="write" href="#write" class="btn btn-facebook">
+      글쓰기</a>
 
     <nav>
       <ul class="pagination justify-content-center">
@@ -96,7 +101,7 @@
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        {% set pages = (posts.length + 1) // 2 %} {% for page in range(pages) %}
+        {% set pages = (posts.length + 9) // 10 %} {% for page in range(pages) %}
         <li><a href="/board/page/{{page+1}}">{{loop.index}}</a></li>
         {% endfor %}
         <li>
@@ -107,51 +112,11 @@
       </ul>
     </nav>
 
-    <div class="modal fade" id="myModal" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <!-- <button type="button" class="close" data-dismiss="modal">×</button> -->
-
-            <p id="title" class="modal-title"></p>
-          </div>
-
-          <div class="modal-body">
-            <p id="content" class="modal-content"></p>
-          </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     </br>
     </br>
     </br>
 
     {% include "write.html" %}
-
-    <script>
-      // function buttonClick() {
-      //   alert("버튼 클릭");
-      //   console.log("213123122");
-      //   console.log(req.body.post.hit);
-      //   req.body.post.hit += 1;
-      //   alert("Das");
-      // }
-
-      $("#myModal").on("show.bs.modal", function (e) {
-        console.log("2131312");
-        const title = $(e.relatedTarget).data("title");
-        const content = $(e.relatedTarget).data("content");
-        document.getElementById("title").innerHTML = title;
-        document.getElementById("content").innerHTML = content;
-      });
-    </script>
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
