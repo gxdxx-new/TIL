@@ -5,7 +5,7 @@
       <p>대출현황</p>
 
       <table class="table table-hover">
-        <thead>
+        <thead style="text-align: center;">
           <tr>
             <th>제목</th>
             <th>저자명</th>
@@ -15,14 +15,14 @@
             <th>가격</th>
             <th>표지이미지</th>
             <th>대출일자</th>
+            <th>반납일자</th>
           </tr>
         </thead>
         <tbody>
           {% for book in userBooks %}
           <tr>
             <td>
-              <a href="/search/loan?&title_info={{book.title_info}}&author={{book.author}}&publisher={{book.publisher}}&pub_year={{book.pub_year}}&page={{book.page}}&price={{book.price}}&image={{book.image}}"
-                onclick="buttonClick()">
+              <a href="/search/loan/return/{{book.id}}" onclick="return buttonClick()">
                 {{book.title}}
               </a>
             <td>{{book.author}}</td>
@@ -42,8 +42,43 @@
             {% endif %}
           </tr>
           {% endfor %}
+
+          {% for book in userBooksReturned %}
+          <tr>
+            <td>{{book.title}}</td>
+            <td>{{book.author}}</td>
+            <td>{{book.publisher}}</td>
+            <td>{{book.publicationYear}}</td>
+            <td>{{book.page}}</td>
+            <td>{{book.price}}</td>
+            <td>
+              <img class="fit-picture" src={{book.img}}>
+            </td>
+            <td>
+              {{book.loanDate}}
+            </td>
+            <td>{{book.createdAt}}</td>
+          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
+
+  <script>
+    function buttonClick() {
+      if (confirm('책을 반납합니다.'))
+        return true;
+      else
+        return false;
+    }
+  </script>
+
 </section>
+
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
