@@ -22,21 +22,58 @@ router.use((req, res, next) => {
 
 router.get("/", async (req, res) => {
   try {
+    const seats = await getHtml().then((html) => {
+      let ulList = [];
+      const $ = cheerio.load(html.data);
+      const $bodyList = $("table.clicker_libtech_table_list tbody").children(
+        "tr"
+      );
+      $bodyList.each(function (i, elem) {
+        ulList[i] = {
+          // title: $(this).find("td.clicker_align_left").text(),
+          // seats: $(this).find("td.clicker_align_right").text(),
+          // remaingSeats: $(this)
+          //   .find("td.clicker_align_right.clicker_font_bold")
+          //   .text(),
+          // usingRates: $(this).find("b").text(),
+          title: $(this).children("td:eq(0)").text(),
+          seats: $(this).children("td:eq(1)").text(),
+          remaingSeats: $(this).children("td:eq(2)").text(),
+          usingRates: $(this).children("td:eq(3)").text(),
+        };
+      });
+      const data = ulList.filter((n) => n.title);
+      return data;
+    });
+
+    res.render("index", {
+      title: "YU도서",
+      seats: seats,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
     const userBooks = await Book.findAll({
       include: {
         model: User,
-        attributes: ["email"],
+        where: { id: req.user.id },
       },
       order: [["createdAt", "DESC"]],
     });
-
+    console.log(userBooks);
     const userBooksReturned = await Loan.findAll({
       include: {
         model: User,
-        attributes: ["email"],
+        where: { id: req.user.id },
       },
       order: [["createdAt", "DESC"]],
     });
+    console.log(req.user);
 
     const seats = await getHtml().then((html) => {
       let ulList = [];
@@ -61,6 +98,7 @@ router.get("/", async (req, res) => {
       const data = ulList.filter((n) => n.title);
       return data;
     });
+
     res.render("index", {
       title: "YU도서",
       userBooks: userBooks,
@@ -72,9 +110,5 @@ router.get("/", async (req, res) => {
     next(err);
   }
 });
-
-// router.get("/join", (req, res) => {
-//   res.render("join", { title: "회원가입 - YU도서" });
-// });
 
 module.exports = router;

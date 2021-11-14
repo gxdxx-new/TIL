@@ -34,7 +34,7 @@ router.post(
         nick: joinNick,
         password: hash,
       });
-      return res.redirect("/");
+      res.redirect("/");
     } catch (error) {
       console.error(error);
       return next(error);
@@ -56,7 +56,7 @@ router.post("/login", isNotLoggedIn, async (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      return res.redirect("/");
+      res.redirect("/" + req.user.id);
     });
   })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙인다.
 });
