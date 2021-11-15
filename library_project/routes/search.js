@@ -1,5 +1,5 @@
 const express = require("express");
-const { Book, User, Loan } = require("../models");
+const { Book, User, Loan, Recommend } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
@@ -67,7 +67,42 @@ router.get("/library", async (req, res, next) => {
 
 router.get("/loan", isLoggedIn, async (req, res, next) => {
   try {
+    const loanCount = await Book.findAll({ where: { UserId: req.user.id } });
+
+    if (loanCount.length + 1 >= 2) {
+      return res.send(
+        "<script>alert('최대 2권 대출 가능합니다.');history.back();</script>"
+      );
+    }
+
+    const recommend = await Recommend.findOne({
+      where: {
+        title: req.query.title_info,
+      },
+    });
+    console.log(recommend);
+    if (recommend === null) {
+      await Recommend.create({
+        count: 1,
+        title: req.query.title_info,
+        author: req.query.author,
+        publisher: req.query.publisher,
+        publicationYear: req.query.pub_year,
+        page: req.query.page,
+        price: req.query.price,
+        img: req.query.image,
+      });
+    } else {
+      await Recommend.update(
+        {
+          count: recommend.count + 1,
+        },
+        { where: { title: req.query.title_info } }
+      );
+    }
+
     await Book.create({
+      UserId: req.user.id,
       loan: true,
       title: req.query.title_info,
       author: req.query.author,
@@ -78,7 +113,7 @@ router.get("/loan", isLoggedIn, async (req, res, next) => {
       img: req.query.image,
     });
 
-    res.redirect("/");
+    return res.redirect("/login/" + req.user.id);
   } catch (error) {
     console.error(error);
     next(error);
@@ -107,6 +142,21 @@ router.get("/loan/return/:id", isLoggedIn, async (req, res, next) => {
 
     await Book.destroy({ where: { id: req.params.id } });
     res.redirect("/#loan");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.get("/recommend", async (req, res, next) => {
+  try {
+    const recommend = await Recommend.findAll({
+      order: [["count", "DESC"]],
+      limit: 10,
+    });
+    console.log(recommend[0].dataValues);
+
+    res.render("recommend", { recommends: recommend });
   } catch (error) {
     console.error(error);
     next(error);
