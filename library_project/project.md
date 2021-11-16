@@ -249,3 +249,30 @@ db에서 게시글들을 가져와서 화면에 보여줘야 한다.
 - 현재 게시판에 게시글이 보이게 해놨다.
   - 클릭할 때 마다 조회수 오르도록 해야함
   - 글 제목 누르면 Modal로 내용이 보이게
+
+---
+
+### 게시글 삭제
+
+게시글을 삭제할때 DB에서 삭제하지 않고 수정을 해서 화면상에 삭제된 게시물입니다.가 나오게 한다.
+
+- 삭제하면 기본키인 index가 함께 삭제되기 때문에
+
+---
+
+### 버튼 onclick 문제
+
+<button type="submit" name="delete_post" class="btn btn-default btn-primary" onclick="return buttonClick()">
+  글삭제
+</button>
+
+- 처음에 onclick="buttonClick()" 으로만 하니 확인을 눌러도 글이 삭제되지 않았다.
+  - return을 붙여 buttonClick()의 true, false 값을 받아오니 글이 삭제됐다.
+
+---
+
+### 'ER_BAD_FIELD_ERROR' 에러
+
+db를 수정하고 계속 sqlMessage: "Unknown column 'Book.loan' in 'field list'",이 나타난다.
+
+- sequlize를 생성할 때 book.js의 내용을 loan.js의 내용으로 붙여넣기 했다가 loan.js를 수정안해서 loan.js의 컬럼들이 덮어씌웠다
