@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CD2MSXBBQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-1CD2MSXBBQ');
+  </script>
+
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
@@ -103,23 +113,65 @@
   {% include "hero.html" %}
 
   <main id="main">
+
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+
     <!-- ======= 책 검색 ======= -->
-    {% include "search.html" %}
+    <!-- {% include "search.html" %} -->
+
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
 
     <!-- ======= 대출현황 ======= -->
     {% if user %} {% include "loan.html" %} {% endif %}
 
+    </br>
+    </br>
+    </br>
+
     <!-- =======  열람실 ======= -->
     {% include "seat.html" %}
 
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+
     <!-- ======= 로그인 ======= -->
-    <!-- 로그인 안했으면 로그인 폼 보여주고 했으면 안보이게 -->
     {% if not user %} {% include "login.html" %} {% endif %}
+
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
 
     <!-- 회원가입 -->
     {% if not user %} {% include "join.html" %} {% endif %}
+
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+
+    <!-- 비밀번호찾기 -->
+    {% if not user %} {% include "find.html" %} {% endif %}
+
   </main>
-  <!-- End #main -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>

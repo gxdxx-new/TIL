@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CD2MSXBBQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-1CD2MSXBBQ');
+    </script>
+
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
@@ -38,23 +48,26 @@
 
     <!-- Template Main CSS File -->
     <link href="/assets/css/style.css" rel="stylesheet" />
-
-    <!-- search Form -->
-    <link href="/search_css/search_css.css" rel="stylesheet" />
 </head>
 
 <body>
-    <!-- ======= Header ======= -->
-    {% include "header.html" %} {% include "hero.html" %}
+    {% include "header.html" %}
+
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
 
     <div class="container">
 
         <div class="section-title" data-aos="fade-up">
-            <h2>board</h2>
+            <h2>search</h2>
             <p>검색결과</p>
         </div>
 
-        <table class="table table-hover">
+        <table class="table table-hover" style="text-align: center;">
             <thead>
                 <tr>
                     <th>제목</th>
@@ -70,18 +83,12 @@
             <tbody>
                 {% for book in books %}
                 <tr>
-                    <!-- <td>
-                        <a href="/search/loan/{{book.title_info}}/{{book.author}}/{{book.publisher}}/{{book.pub_year}}/{{book.page}}/{{book.price}}/{{book.image}}"
-                            onclick="buttonClick()">
-                            {{book.title_info}}
-                        </a>
-                    </td> -->
                     {% if book.loan %}
                     <td>{{book.title_info}}</td>
                     {% else %}
                     <td>
                         <a href="/search/loan?&title_info={{book.title_info}}&author={{book.author}}&publisher={{book.publisher}}&pub_year={{book.pub_year}}&page={{book.page}}&price={{book.price}}&image={{book.image}}"
-                            onclick="buttonClick()">
+                            onclick="return buttonClick()">
                             {{book.title_info}}
                         </a>
                     </td>
@@ -99,39 +106,12 @@
                         {{book.createdAt}}
                     </td>
                     {% else %}
-                    <td>대출가능</td>
+                    <td>대출 가능</td>
                     {% endif %}
-                    <!-- <td>
-                        <a data-toggle="modal" href="#myModal" data-title="{{post.title}}"
-                            data-content="{{post.content}}" onclick="buttonClick()">{{post.title}}
-                        </a>
-                    </td> -->
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-        <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <!-- <button type="button" class="close" data-dismiss="modal">×</button> -->
-
-                        <p id="title" class="modal-title"></p>
-                    </div>
-
-                    <div class="modal-body">
-                        <p id="content" class="modal-content"></p>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
@@ -167,6 +147,7 @@
                     return false;
             }
         </script>
+    </div>
 </body>
 
 </html>

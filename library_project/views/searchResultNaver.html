@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CD2MSXBBQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-1CD2MSXBBQ');
+    </script>
+
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
@@ -38,15 +48,14 @@
 
     <!-- Template Main CSS File -->
     <link href="/assets/css/style.css" rel="stylesheet" />
-
-    <!-- search Form -->
-    <link href="/search_css/search_css.css" rel="stylesheet" />
 </head>
 
 <body>
-    <!-- ======= Header ======= -->
-    {% include "header.html" %} {% include "hero.html" %}
+    {% include "header.html" %}
 
+    </br>
+    </br>
+    </br>
     </br>
     </br>
     </br>
@@ -58,7 +67,7 @@
             <p>검색결과</p>
         </div>
 
-        <table class="table table-hover">
+        <table class="table table-hover" style="text-align: center;">
             <thead>
                 <tr>
                     <th>제목</th>

@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CD2MSXBBQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-1CD2MSXBBQ');
+  </script>
+
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
@@ -39,8 +49,6 @@
   <!-- Template Main CSS File -->
   <link href="/assets/css/style.css" rel="stylesheet" />
 
-  <!-- search Form -->
-  <link href="/search_css/search_css.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -61,7 +69,10 @@
       <p>게시판</p>
     </div>
 
-    <table class="table table-hover">
+    </br>
+    </br>
+
+    <table class="table table-hover" style="text-align: center;">
       <thead>
         <tr>
           <th>번호</th>
@@ -75,20 +86,17 @@
         {% for post in currentPosts %}
         <tr>
           {% if post.deleted === true %}
-          <td>삭제된 게시물입니다.</td>
           <td></td>
+          <td>삭제된 게시물입니다. [{{post.Comments.length}}]</td>
           <td></td>
           <td></td>
           <td></td>
           {% else %}
           <td>{{post.id}}</td>
           <td>
-            <!-- <a data-toggle="modal" href="#myModal" data-title="{{post.title}}" data-content="{{post.content}}"
-              onclick="buttonClick()">{{post.title}}
-            </a> -->
             <a href="/board/{{post.id}}">{{post.title}} [{{post.Comments.length}}]</a>
           </td>
-          <td>{{post.nick}}</td>
+          <td>{{post.nick}}{{post.snsId}}</td>
           <td>{{post.createdAt}}</td>
           <td>{{post.hit}}</td>
           {% endif %}
@@ -102,54 +110,56 @@
     <a id="write" href="#write" class="btn btn-facebook">
       글쓰기</a>
 
-    <nav>
-      <ul class="pagination justify-content-center">
-        <li>
-          <a href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        {% set pages = (posts.length + 9) // 10 %} {% for page in range(pages) %}
-        <li><a href="/board/page/{{page+1}}">{{loop.index}}</a></li>
-        {% endfor %}
-        <li>
-          <a href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+  </div>
 
-    </br>
-    </br>
-    </br>
+  <nav>
+    <ul class="pagination justify-content-center">
+      <li>
+        <a href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% set pages = (posts.length + 9) // 10 %} {% for page in range(pages) %}
+      <li><a href="/board/page/{{page+1}}">{{loop.index}}</a></li>
+      {% endfor %}
+      <li>
+        <a href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 
-    {% include "write.html" %}
+  </br>
+  </br>
+  </br>
 
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-        class="bi bi-arrow-up-short"></i></a>
-    <div id="preloader"></div>
+  {% include "write.html" %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
-      integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
-      integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
-      crossorigin="anonymous"></script>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
 
-    <!-- Vendor JS Files -->
-    <script src="/assets/vendor/aos/aos.js"></script>
-    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="/assets/vendor/php-email-form/validate.js"></script>
-    <script src="/assets/vendor/purecounter/purecounter.js"></script>
-    <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+    integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+    integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+    crossorigin="anonymous"></script>
 
-    <!-- Template Main JS File -->
-    <script src="/assets/js/main.js"></script>
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/purecounter/purecounter.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="/assets/js/main.js"></script>
 </body>
 
 </html>
