@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 const { check, validationResult } = require("express-validator");
 const User = require("../models/user");
+const sanitizeHtml = require("sanitize-html");
 
 const router = express.Router();
 
@@ -43,10 +44,10 @@ router.post(
 
       const hash = await bcrypt.hash(joinPassword, 12);
       await User.create({
-        email: joinEmail,
-        nick: joinNick,
+        email: sanitizeHtml(joinEmail),
+        nick: sanitizeHtml(joinNick),
         password: hash,
-        phoneNumber: req.body.joinPhoneNumber,
+        phoneNumber: sanitizeHtml(req.body.joinPhoneNumber),
       });
       res.redirect("/");
     } catch (error) {
@@ -79,17 +80,22 @@ router.post("/login", isNotLoggedIn, async (req, res, next) => {
 
 router.post("/find", isNotLoggedIn, async (req, res, next) => {
   try {
-    let user = await User.findAll({
-      where: { email: req.body.email, phoneNumber: req.body.phoneNumber },
-    });
-
-    const hash = await bcrypt.hash(req.body.password, 12);
-    await User.update(
-      {
-        password: hash,
+    let user = await User.findOne({
+      where: {
+        email: req.body.email,
+        provider: "local",
+        phoneNumber: req.body.phoneNumber,
       },
-      { where: { email: req.body.email } }
-    );
+    });
+    if (user !== null) {
+      const hash = await bcrypt.hash(req.body.password, 12);
+      await User.update(
+        {
+          password: hash,
+        },
+        { where: { email: req.body.email } }
+      );
+    }
     res.redirect("/");
   } catch (error) {
     console.error(error);

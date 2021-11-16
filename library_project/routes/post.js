@@ -1,6 +1,7 @@
 const express = require("express");
 const { Post, Comment } = require("../models");
 const { isLoggedIn } = require("./middlewares");
+const sanitizeHtml = require("sanitize-html");
 
 const router = express.Router();
 
@@ -9,8 +10,8 @@ router.post("/", isLoggedIn, async (req, res, next) => {
     await Post.create({
       email: req.user.email,
       nick: req.user.nick,
-      title: req.body.writeTitle,
-      content: req.body.writeContent,
+      title: sanitizeHtml(req.body.writeTitle),
+      content: sanitizeHtml(req.body.writeContent),
       UserId: req.user.id,
       snsId: req.user.snsId,
     });
@@ -43,7 +44,7 @@ router.post("/comment/:id", isLoggedIn, async (req, res, next) => {
       PostId: req.params.id,
       email: req.user.email,
       nick: req.user.nick,
-      content: req.body.writeContent,
+      content: sanitizeHtml(req.body.writeContent),
     });
     res.redirect("/board/" + req.params.id);
   } catch (error) {
