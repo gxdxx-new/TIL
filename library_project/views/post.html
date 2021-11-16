@@ -38,13 +38,9 @@
 
     <!-- Template Main CSS File -->
     <link href="/assets/css/style.css" rel="stylesheet" />
-
-    <!-- search Form -->
-    <link href="/search_css/search_css.css" rel="stylesheet" />
 </head>
 
 <body>
-    <!-- ======= Header ======= -->
     {% include "header.html" %}
 
     </br>
@@ -66,13 +62,15 @@
                 <div class="card card-signin my-5">
                     <div class="card-body" style="padding:50px;">
                         <div class="form-group">
-                            <!-- <label for="title">제목</label> -->
                             <h3>{{post.title}}</h5>
                         </div>
 
+                        <br />
+                        <br />
+
                         <div style="float: right;">
                             <table class="table table-hover">
-                                <p><b>작성자: </b>{{post.nick}}</p>
+                                <p><b>작성자: </b>{{post.nick}}{{post.snsId}}</p>
                                 <p><b>조회수: </b>{{post.hit}}</p>
                                 <p><b>등록일: </b>{{post.createdAt}}</p>
                             </table>
@@ -84,10 +82,24 @@
                         <br />
                         <br />
                         <br />
+                        <br />
+                        <br />
+                        <br />
 
                         <div class="form-group">
-                            <!-- <label for="content">내용</label> -->
                             <h5>{{post.content}}</h7>
+                        </div>
+
+                        <br />
+                        <br />
+
+                        <div style="float: right;">
+                            <form id="delete_post" action="/post/delete/{{post.id}}" method="post">
+                                <button type="submit" name="delete_post" class="btn btn-default btn-primary"
+                                    onclick="return buttonClick()">
+                                    글삭제
+                                </button>
+                            </form>
                         </div>
 
                         <br />
@@ -120,11 +132,18 @@
                             <div class="form-group">
                                 <img src="https://user-images.githubusercontent.com/35963403/141422794-c9579a5f-c033-4182-b6a5-37b52f9a3906.png"
                                     width="30">
-                                <label for="title">{{comment.nick}}</label>
+                                <label for="title">{{comment.nick}}{{comment.snsId}}</label>
                                 <p>{{comment.createdAt}}</p>
                                 <h6>{{comment.content}}</h5>
+                                    <form id="delete_post" action="/post/comment/delete/{{comment.id}}" method="post"
+                                        style="float: right;">
+                                        <button type="submit" name="delete_post" class="btn btn-facebook"
+                                            onclick="return buttonClickComment()">
+                                            댓글삭제
+                                        </button>
+                                    </form>
                             </div>
-
+                            </br>
                             <hr class="my-4" />
                             {% endfor %}
                         </div>
@@ -133,6 +152,21 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            function buttonClick() {
+                if (confirm('글을 삭제합니다.'))
+                    return true;
+                else
+                    return false;
+            }
+            function buttonClickComment() {
+                if (confirm('댓글을 삭제합니다.'))
+                    return true;
+                else
+                    return false;
+            }
+        </script>
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
                 class="bi bi-arrow-up-short"></i></a>
