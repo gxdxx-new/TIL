@@ -1,6 +1,6 @@
 const express = require("express");
-const { Post, User, Book, Loan } = require("../models");
-//const crawl = require("../crawler/crawl");
+const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
+const { User, Book, Loan } = require("../models");
 const router = express.Router();
 
 const axios = require("axios");
@@ -20,7 +20,7 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get("/", async (req, res) => {
+router.get("/", isNotLoggedIn, async (req, res, next) => {
   try {
     const seats = await getHtml().then((html) => {
       let ulList = [];
@@ -30,12 +30,6 @@ router.get("/", async (req, res) => {
       );
       $bodyList.each(function (i, elem) {
         ulList[i] = {
-          // title: $(this).find("td.clicker_align_left").text(),
-          // seats: $(this).find("td.clicker_align_right").text(),
-          // remaingSeats: $(this)
-          //   .find("td.clicker_align_right.clicker_font_bold")
-          //   .text(),
-          // usingRates: $(this).find("b").text(),
           title: $(this).children("td:eq(0)").text(),
           seats: $(this).children("td:eq(1)").text(),
           remaingSeats: $(this).children("td:eq(2)").text(),
@@ -56,24 +50,22 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/login/:id", isLoggedIn, async (req, res) => {
   try {
     const userBooks = await Book.findAll({
       include: {
         model: User,
-        where: { id: req.user.id },
+        where: { id: req.params.id },
       },
       order: [["createdAt", "DESC"]],
     });
-    console.log(userBooks);
     const userBooksReturned = await Loan.findAll({
       include: {
         model: User,
-        where: { id: req.user.id },
+        where: { id: req.params.id },
       },
       order: [["createdAt", "DESC"]],
     });
-    console.log(req.user);
 
     const seats = await getHtml().then((html) => {
       let ulList = [];
@@ -83,12 +75,6 @@ router.get("/:id", async (req, res) => {
       );
       $bodyList.each(function (i, elem) {
         ulList[i] = {
-          // title: $(this).find("td.clicker_align_left").text(),
-          // seats: $(this).find("td.clicker_align_right").text(),
-          // remaingSeats: $(this)
-          //   .find("td.clicker_align_right.clicker_font_bold")
-          //   .text(),
-          // usingRates: $(this).find("b").text(),
           title: $(this).children("td:eq(0)").text(),
           seats: $(this).children("td:eq(1)").text(),
           remaingSeats: $(this).children("td:eq(2)").text(),

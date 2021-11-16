@@ -2,51 +2,38 @@
   <div class="container d-flex align-items-center justify-content-between">
     <div class="logo">
       <h1>
+        {% if user %}
+        <a class="nav-link scrollto" href="/login/{{user.id}}"><span>YU도서</span></a>
+        {% else %}
         <a class="nav-link scrollto" href="/#"><span>YU도서</span></a>
+        {% endif %}
       </h1>
     </div>
 
     <nav id="navbar" class="navbar">
       <ul>
-        <li><a class="nav-link scrollto active" href="/#">Home</a></li>
-        <li><a class="nav-link scrollto" href="/#search">책 검색</a></li>
-        <li><a class="nav-link scrollto" href="/#loan">대출현황</a></li>
-        <li><a class="nav-link scrollto" href="/#study_room">열람실</a></li>
-        <li><a class="nav-link scrollto" href="/#board">게시판</a></li>
-        <li><a class="nav-link scrollto" href="/board/page/1">게시판2</a></li>
-
-        <li class="dropdown">
-          <a href="/#team"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-          <ul>
-            <li><a href="/#about">Drop Down 1</a></li>
-            <li class="dropdown">
-              <a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-              <ul>
-                <li><a href="#">Deep Drop Down 1</a></li>
-                <li><a href="#">Deep Drop Down 2</a></li>
-                <li><a href="#">Deep Drop Down 3</a></li>
-                <li><a href="#">Deep Drop Down 4</a></li>
-                <li><a href="#">Deep Drop Down 5</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Drop Down 2</a></li>
-            <li><a href="#">Drop Down 3</a></li>
-            <li><a href="#">Drop Down 4</a></li>
-          </ul>
-        </li>
         {% if user %}
-        <li><a class="nav-link scrollto" href="/#hero">{{user.nick}}님</a></li>
+        <li><a class="nav-link scrollto active" href="/login/{{user.id}}">Home</a></li>
+        <li><a class="nav-link scrollto" href="/login/{{user.id}}/#search">도서 검색</a></li>
+        <li><a class="nav-link scrollto" href="/login/{{user.id}}/#loan">대출현황</a></li>
+        <li><a class="nav-link scrollto" href="/login/{{user.id}}/#study_room">열람실</a></li>
+        <li><a class="nav-link scrollto" href="/search/recommend">추천도서</a></li>
+        <li><a class="nav-link scrollto" href="/board/page/1">게시판</a></li>
+        <li><a class="nav-link scrollto" href="/#hero">{{user.nick}}{{user.snsId}}님</a></li>
         <li>
           <a id="logout" href="/auth/logout" class="nav-link">로그아웃</a>
         </li>
-        {% endif %} {% if not user %}
+        {% else %}
+        <li><a class="nav-link scrollto active" href="/#">Home</a></li>
+        <li><a class="nav-link scrollto" href="/#search">도서 검색</a></li>
+        <li><a class="nav-link scrollto" href="/#study_room">열람실</a></li>
+        <li><a class="nav-link scrollto" href="/search/recommend">추천도서</a></li>
+        <li><a class="nav-link scrollto" href="/board/page/1">게시판</a></li>
         <li><a class="nav-link scrollto" href="/#login">로그인</a></li>
-        <li><a class="nav-link scrollto" href="/#join2">회원가입</a></li>
+        <li><a class="nav-link scrollto" href="/#join">회원가입</a></li>
         {% endif %}
       </ul>
       <i class="bi bi-list mobile-nav-toggle"></i>
     </nav>
-    <!-- .navbar -->
   </div>
 </header>
-<!-- End Header -->
