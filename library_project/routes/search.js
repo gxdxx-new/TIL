@@ -1,11 +1,10 @@
 const express = require("express");
-const { Book, User, Loan, Recommend } = require("../models");
+const { Book, Loan, Recommend } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
 
 const request = require("request");
-const parse = require("json-parse");
 
 router.get("/library", async (req, res, next) => {
   const url =
@@ -32,31 +31,19 @@ router.get("/library", async (req, res, next) => {
       method: "GET",
     },
     async function (error, response, body) {
-      console.log("Status", response.statusCode);
-      console.log("Headers", JSON.stringify(response.headers));
-      console.log("Reponse received", body);
-      console.log("@#!!#");
       const obj = JSON.parse(body);
       books = obj.getBookNewList.item;
-      console.log(books[0]);
-      console.log(books[0].title_info);
-      console.log(obj.getBookNewList.item[0].publisher);
-      console.log("@!#");
-
       for (var key in books) {
         var loanBook = await Book.findOne({
           where: {
             title: books[key].title_info,
           },
         });
-
         if (loanBook !== null) {
-          console.log(loanBook.createdAt);
           books[key].loan = true;
           books[key].createdAt = loanBook.createdAt;
         }
       }
-
       res.render("searchResult", {
         title: "YU도서",
         books: books,
@@ -68,19 +55,17 @@ router.get("/library", async (req, res, next) => {
 router.get("/loan", isLoggedIn, async (req, res, next) => {
   try {
     const loanCount = await Book.findAll({ where: { UserId: req.user.id } });
-
     if (loanCount.length + 1 >= 2) {
       return res.send(
         "<script>alert('최대 2권 대출 가능합니다.');history.back();</script>"
       );
     }
-
     const recommend = await Recommend.findOne({
       where: {
         title: req.query.title_info,
       },
     });
-    console.log(recommend);
+
     if (recommend === null) {
       await Recommend.create({
         count: 1,
@@ -100,7 +85,6 @@ router.get("/loan", isLoggedIn, async (req, res, next) => {
         { where: { title: req.query.title_info } }
       );
     }
-
     await Book.create({
       UserId: req.user.id,
       loan: true,
@@ -112,7 +96,6 @@ router.get("/loan", isLoggedIn, async (req, res, next) => {
       price: req.query.price,
       img: req.query.image,
     });
-
     return res.redirect("/login/" + req.user.id);
   } catch (error) {
     console.error(error);
@@ -127,7 +110,6 @@ router.get("/loan/return/:id", isLoggedIn, async (req, res, next) => {
         id: req.params.id,
       },
     });
-    console.log(book.dataValues.createdAt);
     await Loan.create({
       loanDate: book.dataValues.createdAt,
       title: book.dataValues.title,
@@ -139,7 +121,6 @@ router.get("/loan/return/:id", isLoggedIn, async (req, res, next) => {
       img: book.dataValues.img,
       UserId: req.user.id,
     });
-
     await Book.destroy({ where: { id: req.params.id } });
     res.redirect("/#loan");
   } catch (error) {
@@ -154,8 +135,6 @@ router.get("/recommend", async (req, res, next) => {
       order: [["count", "DESC"]],
       limit: 10,
     });
-    console.log(recommend[0].dataValues);
-
     res.render("recommend", { recommends: recommend });
   } catch (error) {
     console.error(error);
@@ -167,8 +146,6 @@ var client_id = "Q_oU6NvlzQaFG47fBaxL";
 var client_secret = "2ateLNCG4Q";
 
 router.get("/book.json", function (req, res) {
-  console.log(req.query.naver_book);
-
   var api_url =
     "https://openapi.naver.com/v1/search/book?query=" +
     encodeURI(req.query.naver_book); // json 결과
@@ -182,13 +159,10 @@ router.get("/book.json", function (req, res) {
   };
   request.get(options, function (error, response, body) {
     books = JSON.parse(body).items;
-
     for (let key in books) {
       let title = books[key].title;
       title = title.replace(/<b>/g, "");
       title = title.replace(/<\/b>/g, "");
-      console.log(title);
-
       books[key].title = title;
     }
 
@@ -196,12 +170,8 @@ router.get("/book.json", function (req, res) {
       let description = books[key].description;
       description = description.replace(/<b>/g, "");
       description = description.replace(/<\/b>/g, "");
-      console.log(description);
-
       books[key].description = description;
     }
-
-    console.log(books);
     res.render("searchResultNaver", {
       title: "YU도서",
       books: books,
