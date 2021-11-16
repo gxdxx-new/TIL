@@ -21,18 +21,32 @@ router.post(
     }
     const { joinEmail, joinNick, joinPassword, joinConfirmPassword } = req.body;
     if (joinPassword !== joinConfirmPassword) {
-      return res.redirect("/join?error=exist");
+      return res.send(
+        "<script>alert('비밀번호가 일치하지 않습니다.');location.href='/#login';</script>"
+      );
     }
     try {
       const exUser = await User.findOne({ where: { email: joinEmail } });
       if (exUser) {
-        return res.redirect("/join?error=exist");
+        return res.send(
+          "<script>alert('이미 존재하는 아이디입니다.');location.href='/#login';</script>"
+        );
       }
+      const exPhoneNumber = await User.findOne({
+        where: { phoneNumber: req.body.joinPhoneNumber },
+      });
+      if (exPhoneNumber) {
+        return res.send(
+          "<script>alert('이미 존재하는 전화번호입니다.');location.href='/#login';</script>"
+        );
+      }
+
       const hash = await bcrypt.hash(joinPassword, 12);
       await User.create({
         email: joinEmail,
         nick: joinNick,
         password: hash,
+        phoneNumber: req.body.joinPhoneNumber,
       });
       res.redirect("/");
     } catch (error) {
@@ -49,16 +63,38 @@ router.post("/login", isNotLoggedIn, async (req, res, next) => {
       return next(authError);
     }
     if (!user) {
-      return res.redirect(`/?loginError=${info.message}`);
+      return res.send(
+        "<script>alert('아이디 또는 비밀번호가 틀렸습니다.');location.href='/#login';</script>"
+      );
     }
     return req.login(user, (loginError) => {
       if (loginError) {
         console.error(loginError);
         return next(loginError);
       }
-      res.redirect("/" + req.user.id);
+      res.redirect("/login/" + req.user.id);
     });
   })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙인다.
+});
+
+router.post("/find", isNotLoggedIn, async (req, res, next) => {
+  try {
+    let user = await User.findAll({
+      where: { email: req.body.email, phoneNumber: req.body.phoneNumber },
+    });
+
+    const hash = await bcrypt.hash(req.body.password, 12);
+    await User.update(
+      {
+        password: hash,
+      },
+      { where: { email: req.body.email } }
+    );
+    res.redirect("/");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 router.get("/logout", isLoggedIn, (req, res) => {
@@ -75,7 +111,7 @@ router.get(
     failureRedirect: "/",
   }),
   (req, res) => {
-    res.redirect("/");
+    res.redirect("/login/" + req.user.id);
   }
 );
 
