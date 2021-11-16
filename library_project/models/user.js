@@ -17,10 +17,18 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(100),
           allowNull: true,
         },
+        phoneNumber: {
+          type: Sequelize.STRING(100),
+          allowNull: true,
+        },
         provider: {
           type: Sequelize.STRING(10),
           allowNull: false,
           defaultValue: "local",
+        },
+        snsId: {
+          type: Sequelize.STRING(30),
+          allowNull: true,
         },
       },
       {
@@ -38,6 +46,7 @@ module.exports = class User extends Sequelize.Model {
 
   static associate(db) {
     db.User.hasMany(db.Post);
+    db.User.hasMany(db.Comment);
     db.User.hasMany(db.Book);
     db.User.hasMany(db.Loan);
   }

@@ -1,4 +1,4 @@
-<section id="join2" class="contact">
+<section id="join" class="contact">
   <div class="container">
     <div class="section-title" data-aos="fade-up">
       <h2>join</h2>
@@ -31,16 +31,22 @@
                     <label for="inputPassword2">Confirm Password</label>
                   </div>
 
-                  <button class="btn btn-lg btn-primary btn-block text-uppercase" type="button"
-                    onclick="joinFormSubmit();">
+                  <div class="form-label-group">
+                    <input type="text" id="joinPhoneNumber" name="joinPhoneNumber" class="form-control" required />
+                    <label for="phoneNumber">phone number (숫자만 입력하세요)</label>
+                  </div>
+
+                  <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">
                     회원가입
                   </button>
-                  <hr class="my-4" />
-                  <a id="find-email" href="/auth/join/" class="btn btn-lg btn-google btn-block text-uppercase">
-                    아이디 찾기
-                  </a>
-                  <a id="find-password" href="/auth/join/" class="btn btn-lg btn-facebook btn-block text-uppercase">
+                  <a href="/#find" class="btn btn-lg btn-facebook btn-block text-uppercase">
                     비밀번호 찾기</a>
+                  <hr class="my-4" />
+                  <a id="kakao" href="/auth/kakao" class="btn btn-lg btn-google btn-block text-uppercase">
+                    카카오 로그인
+                  </a>
+                  <a id="google" href="/auth/google" class="btn btn-lg btn-facebook btn-block text-uppercase scrollto">
+                    구글 로그인</a>
                 </form>
               </div>
             </div>
