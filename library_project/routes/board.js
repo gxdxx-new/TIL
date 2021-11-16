@@ -1,10 +1,10 @@
 const express = require("express");
-const { Post, User, Comment } = require("../models");
+const { Post, Comment } = require("../models");
 const router = express.Router();
 
 router.get("/page/:page", async (req, res) => {
   try {
-    let pageNum = req.params.page; // 요청 페이지 넘버
+    let pageNum = req.params.page;
     let offset = 0;
     console.log(req.params.page);
     if (pageNum > 1) {
@@ -17,8 +17,6 @@ router.get("/page/:page", async (req, res) => {
       },
       order: [["createdAt", "DESC"]],
     });
-    console.log("SADASKJDAKAAL");
-    console.log("SDASDASDAS");
 
     const currentPosts = await Post.findAll({
       include: {
@@ -28,7 +26,6 @@ router.get("/page/:page", async (req, res) => {
       offset: offset,
       limit: 10,
     });
-    // res.redirect("/");
     res.render("board", {
       title: "YU도서",
       posts: posts,
@@ -55,15 +52,6 @@ router.get("/:id", async (req, res) => {
       },
       { where: { id: req.params.id } }
     );
-
-    // let comment = await Comment.findAll({
-    //   include: {
-    //     model: Post,
-    //     where: { id: req.params.id },
-    //   },
-    // });
-    console.log(post.Comments[0]);
-
     res.render("post", {
       title: "YU도서",
       post: post,

@@ -12,6 +12,10 @@ module.exports = class Post extends Sequelize.Model {
           type: Sequelize.STRING(15),
           allowNull: false,
         },
+        snsId: {
+          type: Sequelize.STRING(30),
+          allowNull: true,
+        },
         title: {
           type: Sequelize.STRING(100),
           allowNull: false,
@@ -24,6 +28,10 @@ module.exports = class Post extends Sequelize.Model {
           type: Sequelize.INTEGER.UNSIGNED,
           defaultValue: 0,
         },
+        deleted: {
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
+        },
       },
       {
         sequelize,
@@ -31,7 +39,7 @@ module.exports = class Post extends Sequelize.Model {
         underscored: false,
         modelName: "Post",
         tableName: "posts",
-        paranoid: false,
+        paranoid: true,
         charset: "utf8mb4",
         collate: "utf8mb4_general_ci",
       }

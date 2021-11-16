@@ -22,10 +22,11 @@ const test = {
 
 const production = {
   username: env.MYSQL_USERNAME,
-  password: null,
-  database: "database_production",
+  password: env.MYSQL_PASSWORD,
+  database: env.MYSQL_DATABASE,
   host: env.MYSQL_HOST,
   dialect: "mysql",
+  logging: false,
   //port: env.MYSQL_PORT
 };
 

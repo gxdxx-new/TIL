@@ -1,29 +1,28 @@
-<div class="container">
-  <div class="row">
-    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-      <div class="card card-signin my-5">
-        <div class="card-body">
-          <h5 class="card-title text-center">글쓰기</h5>
-          <form action="/post/" method="post">
-            <div class="form-group">
-              <label for="title">제목</label>
-              <input type="text" class="form-control" id="writeTitle" placeholder="제목 입력(4-100)" name="writeTitle"
-                maxlength="100" required="required" pattern=".{4,100}" />
-            </div>
-            <div class="form-group">
-              <label for="content">내용</label>
-              <textarea class="form-control" rows="8" id="writeContent" name="writeContent"
-                placeholder="내용 작성"></textarea>
-            </div>
-            <button type="submit" class="btn btn-default btn-primary">
-              등록
-            </button>
-            <button type="submit" class="btn btn-default btn-primary">
-              삭제
-            </button>
-          </form>
+<section id="write" class="contact">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">글쓰기</h5>
+            <form action="/post/" method="post">
+              <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="writeTitle" placeholder="제목 입력(4-100)" name="writeTitle"
+                  maxlength="100" required="required" pattern=".{4,100}" />
+              </div>
+              <div class="form-group">
+                <label for="content">내용</label>
+                <textarea class="form-control" rows="8" id="writeContent" name="writeContent"
+                  placeholder="내용 작성"></textarea>
+              </div>
+              <button type="submit" class="btn btn-default btn-primary">
+                등록
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>

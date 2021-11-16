@@ -12,9 +12,12 @@ module.exports = class Comment extends Sequelize.Model {
           type: Sequelize.STRING(15),
           allowNull: false,
         },
+        snsId: {
+          type: Sequelize.STRING(30),
+          allowNull: true,
+        },
         content: {
-          type: Sequelize.STRING(500),
-          allowNull: false,
+          type: Sequelize.STRING(100),
         },
       },
       {
@@ -23,7 +26,7 @@ module.exports = class Comment extends Sequelize.Model {
         underscored: false,
         modelName: "Comment",
         tableName: "comments",
-        paranoid: false,
+        paranoid: true,
         charset: "utf8mb4",
         collate: "utf8mb4_general_ci",
       }
@@ -32,5 +35,6 @@ module.exports = class Comment extends Sequelize.Model {
 
   static associate(db) {
     db.Comment.belongsTo(db.Post);
+    db.Comment.belongsTo(db.User);
   }
 };
