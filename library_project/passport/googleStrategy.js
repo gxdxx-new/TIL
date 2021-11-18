@@ -9,7 +9,7 @@ module.exports = () => {
       {
         clientID: process.env.GOOGLE_ID,
         clientSecret: process.env.GOOGLE_PASSWORD,
-        callbackURL: "http://localhost:8001/auth/google/callback",
+        callbackURL: "http://www.libraryproject.ga/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
         console.log("google profile", profile);
