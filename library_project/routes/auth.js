@@ -3,7 +3,7 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 const { check, validationResult } = require("express-validator");
-const User = require("../models/user");
+const { User, Book, Post, Comment } = require("../models");
 const sanitizeHtml = require("sanitize-html");
 
 const router = express.Router();
@@ -78,6 +78,33 @@ router.post("/login", isNotLoggedIn, async (req, res, next) => {
   })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙인다.
 });
 
+router.get("/user/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    let user = await User.findOne({ where: { id: req.params.id } });
+
+    let loanCount;
+    let postCount;
+    let commentCount;
+
+    loanCount = await Book.findAll({ where: { UserId: req.params.id } });
+    user.loanCount = loanCount.length;
+    postCount = await Post.findAll({ where: { UserId: req.params.id } });
+    user.postCount = postCount.length;
+    commentCount = await Comment.findAll({
+      where: { UserId: req.params.id },
+    });
+    user.commentCount = commentCount.length;
+
+    res.render("userPage", {
+      title: "YU도서",
+      user: user,
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 router.post("/find", isNotLoggedIn, async (req, res, next) => {
   try {
     let user = await User.findOne({
@@ -106,6 +133,11 @@ router.post("/find", isNotLoggedIn, async (req, res, next) => {
 router.get("/logout", isLoggedIn, (req, res) => {
   req.logout();
   req.session.destroy();
+  res.redirect("/");
+});
+
+router.get("/delete/:id", isLoggedIn, async (req, res) => {
+  await User.destroy({ where: { id: req.params.id } });
   res.redirect("/");
 });
 

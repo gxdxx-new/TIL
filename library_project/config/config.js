@@ -23,7 +23,7 @@ const test = {
 const production = {
   username: env.MYSQL_USERNAME,
   password: env.MYSQL_PASSWORD,
-  database: env.MYSQL_DATABASE,
+  database: env.MYSQL_DATABASE_PRODUCTION,
   host: env.MYSQL_HOST,
   dialect: "mysql",
   logging: false,
