@@ -1,0 +1,66 @@
+<section id="reserve" class="features">
+    <div class="container">
+        <div class="section-title" data-aos="fade-up">
+            <h2>Reserve</h2>
+            <p>예약현황</p>
+
+            <table class="table table-hover" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th>제목</th>
+                        <th>저자명</th>
+                        <th>출판사</th>
+                        <th>발행년도</th>
+                        <th>페이지 수</th>
+                        <th>가격</th>
+                        <th>표지이미지</th>
+                        <th>예약일자</th>
+                        <th>대출가능여부</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in userReserved %}
+                    <tr>
+                        {% if book.returned %}
+                        <td>
+                            <a href="/search/loan?&title_info={{book.title}}&author={{book.author}}&publisher={{book.publisher}}&pub_year={{book.publicationYear}}&page={{book.page}}&price={{book.price}}&image={{book.img}}"
+                                onclick="return loanReservedBook()">
+                                {{book.title}}
+                            </a>
+                        </td>
+                        {% else %}
+                        <td>{{book.title}}</td>
+                        {% endif %}
+                        <td>{{book.author}}</td>
+                        <td>{{book.publisher}}</td>
+                        <td>{{book.publicationYear}}</td>
+                        <td>{{book.page}}</td>
+                        <td>{{book.price}}</td>
+                        <td>
+                            <img class="fit-picture" src={{book.img}}>
+                        </td>
+                        <td>{{book.createdAt}} [예약여부 {{book.reserved}}] [반납여부 {{book.returned}}]</td>
+                        <td>{{book.returned}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function loanReservedBook() {
+            if (confirm('예약한 책을 대출합니다.'))
+                return true;
+            else
+                return false;
+        }
+    </script>
+
+</section>
+
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>

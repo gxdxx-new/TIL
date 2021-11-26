@@ -78,6 +78,7 @@
                     <th>가격</th>
                     <th>표지이미지</th>
                     <th>대출일자</th>
+                    <th>예약</th>
                 </tr>
             </thead>
             <tbody>
@@ -105,6 +106,10 @@
                     <td>
                         {{book.createdAt}}
                     </td>
+                    <td> <a id="reserve" class="btn btn-facebook"
+                            href="/search/reserve?&title_info={{book.title_info}}&author={{book.author}}&publisher={{book.publisher}}&pub_year={{book.pub_year}}&page={{book.page}}&price={{book.price}}&image={{book.image}}"
+                            onclick="return buttonClick2()">
+                            예약하기</a></td>
                     {% else %}
                     <td>대출 가능</td>
                     {% endif %}
@@ -142,6 +147,12 @@
         <script>
             function buttonClick() {
                 if (confirm('책을 대출합니다.'))
+                    return true;
+                else
+                    return false;
+            }
+            function buttonClick2() {
+                if (confirm('책을 예약합니다.'))
                     return true;
                 else
                     return false;

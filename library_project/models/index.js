@@ -7,6 +7,7 @@ const Loan = require("./loan");
 const Recommend = require("./recommend");
 const Post = require("./post");
 const Comment = require("./comment");
+const Reserve = require("./reserve");
 
 const db = {};
 const sequelize = new Sequelize(
@@ -23,6 +24,7 @@ db.Loan = Loan;
 db.Recommend = Recommend;
 db.Post = Post;
 db.Comment = Comment;
+db.Reserve = Reserve;
 
 User.init(sequelize);
 Book.init(sequelize);
@@ -30,6 +32,7 @@ Loan.init(sequelize);
 Recommend.init(sequelize);
 Post.init(sequelize);
 Comment.init(sequelize);
+Reserve.init(sequelize);
 
 User.associate(db);
 Book.associate(db);
@@ -37,5 +40,6 @@ Loan.associate(db);
 Recommend.associate(db);
 Post.associate(db);
 Comment.associate(db);
+Reserve.associate(db);
 
 module.exports = db;

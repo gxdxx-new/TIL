@@ -1,5 +1,5 @@
 const express = require("express");
-const { Book, Loan, Recommend } = require("../models");
+const { Book, Loan, Recommend, Reserve } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
@@ -55,7 +55,7 @@ router.get("/library", async (req, res, next) => {
 router.get("/loan", isLoggedIn, async (req, res, next) => {
   try {
     const loanCount = await Book.findAll({ where: { UserId: req.user.id } });
-    if (loanCount.length + 1 >= 2) {
+    if (loanCount.length >= 2) {
       return res.send(
         "<script>alert('최대 2권 대출 가능합니다.');history.back();</script>"
       );
@@ -85,6 +85,23 @@ router.get("/loan", isLoggedIn, async (req, res, next) => {
         { where: { title: req.query.title_info } }
       );
     }
+    const reserve = await Reserve.findOne({
+      where: { title: req.query.title_info },
+    });
+    if (reserve !== null) {
+      if (reserve.UserId === req.user.id) {
+        await Reserve.destroy({ where: { UserId: req.user.id } });
+      } else {
+        await Reserve.update(
+          {
+            returned: false,
+          },
+          {
+            where: { title: req.query.title_info },
+          }
+        );
+      }
+    }
     await Book.create({
       UserId: req.user.id,
       loan: true,
@@ -105,11 +122,12 @@ router.get("/loan", isLoggedIn, async (req, res, next) => {
 
 router.get("/loan/return/:id", isLoggedIn, async (req, res, next) => {
   try {
-    let book = await Book.findOne({
+    const book = await Book.findOne({
       where: {
         id: req.params.id,
       },
     });
+    2;
     await Loan.create({
       loanDate: book.dataValues.createdAt,
       title: book.dataValues.title,
@@ -121,8 +139,76 @@ router.get("/loan/return/:id", isLoggedIn, async (req, res, next) => {
       img: book.dataValues.img,
       UserId: req.user.id,
     });
+    await Reserve.update(
+      {
+        returned: true,
+      },
+      {
+        where: { title: book.dataValues.title },
+      }
+    );
     await Book.destroy({ where: { id: req.params.id } });
     res.redirect("/#loan");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.get("/reserve", isLoggedIn, async (req, res, next) => {
+  try {
+    const reserveCount = await Reserve.findAll({
+      where: { UserId: req.user.id },
+    });
+    if (reserveCount.length >= 1) {
+      return res.send(
+        "<script>alert('최대 1권 예약 가능합니다.');history.back();</script>"
+      );
+    }
+    const book = await Book.findOne({
+      where: { title: req.query.title_info, UserId: req.user.id },
+    });
+    if (book !== null) {
+      if (book.title === req.query.title_info) {
+        return res.send(
+          "<script>alert('내가 대출한 책을 예약할 수 없습니다.');history.back();</script>"
+        );
+      }
+    }
+    const reserve = await Reserve.findOne({
+      where: { title: req.query.title_info },
+    });
+    if (reserve !== null) {
+      if (reserve.reserved === true) {
+        return res.send(
+          "<script>alert('이미 예약된 책입니다.');history.back();</script>"
+        );
+      }
+      await Reserve.update(
+        {
+          UserId: req.user.id,
+          reserved: true,
+          returned: false,
+        },
+        {
+          where: { title: req.query.title_info },
+        }
+      );
+    } else {
+      await Reserve.create({
+        title: req.query.title_info,
+        author: req.query.author,
+        publisher: req.query.publisher,
+        publicationYear: req.query.pub_year,
+        page: req.query.page,
+        price: req.query.price,
+        img: req.query.image,
+        UserId: req.user.id,
+        reserved: true,
+        returned: false,
+      });
+    }
+    res.redirect("/login/" + req.user.id);
   } catch (error) {
     console.error(error);
     next(error);

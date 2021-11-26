@@ -16,10 +16,19 @@
         <li><a class="nav-link scrollto active" href="/login/{{user.id}}">Home</a></li>
         <li><a class="nav-link scrollto" href="/login/{{user.id}}/#search">도서 검색</a></li>
         <li><a class="nav-link scrollto" href="/login/{{user.id}}/#loan">대출현황</a></li>
+        <li><a class="nav-link scrollto" href="/login/{{user.id}}/#reserve">예약현황</a></li>
         <li><a class="nav-link scrollto" href="/login/{{user.id}}/#study_room">열람실</a></li>
         <li><a class="nav-link scrollto" href="/search/recommend">추천도서</a></li>
         <li><a class="nav-link scrollto" href="/board/page/1">게시판</a></li>
         <li><a class="nav-link scrollto" href="/auth/user/{{user.id}}">{{user.nick}}{{user.snsId}}님</a></li>
+        {% for book in userReserved %}
+        {% if book.returned %}
+        <li><a class="nav-link scrollto" href="#" onclick="calculate()"><img
+              src="https://user-images.githubusercontent.com/35963403/143487535-276fcefb-a218-4463-ac01-68f6f99ed92f.jpg"
+              width="30px"></a>
+        </li>
+        {% endif %}
+        {% endfor %}
         <li>
           <a id="logout" href="/auth/logout" class="nav-link">로그아웃</a>
         </li>
@@ -37,3 +46,34 @@
     </nav>
   </div>
 </header>
+
+<!-- Notice -->
+<script type="text/javascript">
+  window.onload = function () {
+    if (window.Notification) {
+      Notification.requestPermission();
+    }
+  }
+
+  function calculate() {
+    setTimeout(function () {
+      notify();
+    }, 1000);
+  }
+
+  function notify() {
+    if (Notification.permission !== 'granted') {
+      alert('notification is disabled');
+    }
+    else {
+      var notification = new Notification('알림 메시지', {
+        icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+        body: '예약하신 책 대출 가능합니다.',
+      });
+
+      notification.onclick = function () {
+        window.open('http://localhost:8001/#reserve');
+      };
+    }
+  }
+</script>

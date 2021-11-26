@@ -1,6 +1,6 @@
 const express = require("express");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
-const { User, Book, Loan } = require("../models");
+const { User, Book, Loan, Reserve } = require("../models");
 const router = express.Router();
 
 const axios = require("axios");
@@ -66,6 +66,13 @@ router.get("/login/:id", isLoggedIn, async (req, res) => {
       },
       order: [["createdAt", "DESC"]],
     });
+    const userReserved = await Reserve.findAll({
+      include: {
+        model: User,
+        where: { id: req.params.id },
+      },
+      order: [["createdAt", "DESC"]],
+    });
 
     const seats = await getHtml().then((html) => {
       let ulList = [];
@@ -89,6 +96,7 @@ router.get("/login/:id", isLoggedIn, async (req, res) => {
       title: "YU도서",
       userBooks: userBooks,
       userBooksReturned: userBooksReturned,
+      userReserved: userReserved,
       seats: seats,
     });
   } catch (err) {

@@ -138,6 +138,13 @@
     </br>
     </br>
 
+    <!-- ====== 예약현황 ====== -->
+    {% if user %} {% include "reserve.html" %} {% endif %}
+
+    </br>
+    </br>
+    </br>
+
     <!-- =======  열람실 ======= -->
     {% include "seat.html" %}
 
@@ -170,7 +177,6 @@
 
     <!-- 비밀번호찾기 -->
     {% if not user %} {% include "find.html" %} {% endif %}
-
   </main>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
