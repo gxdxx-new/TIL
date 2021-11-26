@@ -27,7 +27,9 @@ router.post(
       );
     }
     try {
-      const exUser = await User.findOne({ where: { email: joinEmail } });
+      const exUser = await User.findOne({
+        where: { email: joinEmail, provider: "local" },
+      });
       if (exUser) {
         return res.send(
           "<script>alert('이미 존재하는 아이디입니다.');location.href='/#login';</script>"

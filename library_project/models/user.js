@@ -10,15 +10,15 @@ module.exports = class User extends Sequelize.Model {
         },
         nick: {
           type: Sequelize.STRING(15),
-          allowNull: false,
+          allowNull: true,
         },
         password: {
           type: Sequelize.STRING(100),
-          allowNull: false,
+          allowNull: true,
         },
         phoneNumber: {
           type: Sequelize.STRING(100),
-          allowNull: false,
+          allowNull: true,
         },
         provider: {
           type: Sequelize.STRING(10),
@@ -48,5 +48,6 @@ module.exports = class User extends Sequelize.Model {
     db.User.hasMany(db.Comment);
     db.User.hasMany(db.Book);
     db.User.hasMany(db.Loan);
+    db.User.hasMany(db.Reserve);
   }
 };
