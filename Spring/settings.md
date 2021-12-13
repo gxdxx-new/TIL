@@ -1,57 +1,195 @@
-필요한 라이브러리를 가져오고 빌드하는 life cycle까지 관리해주는 tool
+## 프로젝트 환경설정
 
+### Gradle
+
+- 필요한 라이브러리를 가져오고 빌드하는 life cycle까지 관리해주는 tool
 - Maven과 Gradle이 있지만 Gradle로 넘어오는 추세
 
-ADD DEPENDENCIES에서 Spring Web, Thymeleaf 추가
+### https://start.spring.io
 
-intelliJ에서 해당 폴더에 있는 build.gradle 파일을 오픈하면 된다.
+- ADD DEPENDENCIES에서 Spring Web, Thymeleaf 추가
+- intelliJ에서 해당 폴더에 있는 build.gradle 파일을 오픈하면 됨
+  - /src/build.gradle
 
-/src/build.gradle
+### 실행
 
-자바가 바로 실행되지 않고 gradle을 통해서 실행될 때
+- 자바가 바로 실행되지 않고 gradle을 통해서 실행되면 느림
+- setting-gradle에서 Build and run using, Run tests using을 IntelliJ IDEA로 변경
 
-- 실행 속도가 느림
-- setting-gradle에서 Build and run using, Run tests using을 IntelliJ IDEA로 변경한다.
+<br>
 
-웹 애플리케이션에서 첫번째 진입점이 Controller
+## 정적 컨텐츠
 
-Controller에는 Controller 애노테이션을 적어줘야 한다.
+- 서버에서 작업 없이 html 파일을 그대로 웹브라우저로 보냄
+- 스프링부트는 resuorces/static 폴더에서 정적 컨텐츠를 찾아서 제공
+  - 해당 폴더에 index.html을 생성하면 Welcome Page 기능을 제공
 
-@GetMapping("hello")을 적어주면 /hello로 들어왔을때 메서드를 호출해준다.
+1. 웹브라우저에서 static html을 입력
 
-model.addAttribute("data", "hello!!!");의 value가 hello.html에서 ${data}로 치환이 된다.
+2. 내장 톰캣 서버가 요청을 받음
 
-웹브라우저에서 localhost:8080/hello를 보내면 스프링부트는 톰캣이라는 내장 웹서버에서 받아서 스프링으로 보낸다.
+3. 스프링에서는 hello-static 관련 Controller가 있는지 찾음(**Controller가 정적 파일보다 우선순위 가짐**)
 
-- GetMapping("Hello")를 찾고 HelloController에 있는 hello 메서드가 실행된다.
-- 스프링이 model을 만들어서 넣어준다.
-- model에 값을 추가하고 return("hello")하면 resources/templates/hello.html을 렌더링한다.
-- 컨트롤러에서 리턴 값으로 문자를 반환하면 뷰 리졸버(viewResolver)가 화면을 찾아서 처리한다.
+4. 없으면 resources/static/hello-static.html을 찾아서 반환
 
-템플릿 엔진: 서버에서 프로그래밍해서 html을 동적으로 바꿔서
+<br>
 
-웹브라우저에서 static html을 입력 -> 내장 톰캣 서버가 요청을 받음 -> 스프링에서는 hello-static 관련 컨트롤러가 있는지 찾아봄(컨트롤러가 우선순위 가짐) -> 없으면 resources/static/hello-static.html을 찾아서 반환
+## MVC와 템플릿 엔진
 
-### MVC와 템플릿 엔진
+- Model
+  - 화면에 필요한 것들을 담아서 화면에 넘김
+- View
+  - 화면 관련된 일에만 집중해야 됨
+  - Controller와 Model은 비즈니스 로직과 관련 있거나 서버 뒷단의 일들을 처리하는데 집중해야 됨
+- Controller
+  - 웹 애플리케이션에서 첫번째 진입점
+  - Controller에는 Controller 애노테이션을 적어줘야 함
+- 템플릿 엔진은 서버에서 html 파일을 동적으로 바꿔서 웹브라우저로 보냄
 
-웹 브라우저에서 localhost:8080/hello-mvc 넘기면 -> 내장 톰캣서버가 요청을 받고 스프링에 보냄 -> 매핑이 돼있는 helloController의 메서드를 호출해줌 -> 메서드의 리턴 html 파일명과 같은 html을 뷰 리졸버가 찾아줌-> 타임리프가 렌더링해서 변환을 한 html을 웹 브라우저에 반환
+```java
+package hello.studyspring.controller;
 
-### API
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@ResponseBody: http의 바디부분에 데이터를 직접 넣어주겠다는 뜻
-JSON(키-값으로 이루어진 구조)를 반환
-객체를 반환 가능
+@Controller
+public class HelloController {
 
-#### @ResponseBody 사용원리
+    @GetMapping("hello")
+    public String hello(Model model) {
+        model.addAttribute("data", "hello!!!");
+        return "hello";
+    }
 
-- 웹브라우저에서 localhost:8080/hello-api 입력 -> 내장 톰캣 서버가 요청을 받고 스프링에 보냄 -> @ResponseBody 애노테이션이 있기 때문에 객체가 오면 뷰 없이 JSON 방식으로 데이터를 만들어서 http 바디에 반환 -> HttpMessageConverte가 동작 -> 단순문자: StringConverter 동작, 객체: JsonConverter 동작
+    @GetMapping("hello-mvc")
+    public String helloMvc(@RequestParam("name") String name, Model model) {    // @RequestParam("name"): 외부에서 파라미터를 받음, Model model: 모델을 받으면 뷰에서 렌더링할 때 씀
+        model.addAttribute("name", name);
+        return "hello-template";
+    }
+}
+```
 
-### 웹 애플리케이션 계층 구조
+1. 웹 브라우저에서 localhost:8080/hello-mvc?name=spring를 넘기면
 
-컨트롤러: 웹 MVC의 컨트롤러 역할
-서비스: 핵심 비즈니스 로직 구현
-리포지토리: 데이터베이스에 접근, 도메인 객체를 DB에 저장하고 관리
-도메인: 비즈니스 도메인 객체, ex) 회원, 주문, 쿠폰 등등 주로 데이터베이스에 저장하고 관리됨
+2. 내장 톰캣서버가 요청을 받고 스프링에 보냄
+
+3. @GetMapping("hello-mvc") 매핑이 되어있는 Controller를 찾아서 helloController에 있는 helloMvc 메서드를 호출
+
+4. 스프링이 만들어서 넣어준 model에 값을 추가하고 return 하면
+
+5. 메서드의 리턴 html 파일명과 같은 html을 뷰 리졸버(viewResolver)가 찾음
+
+   - 뷰 리졸버: 뷰를 찾아주고 템플릿 엔진을 연결시켜 줌
+   - `resources:templates/` + {ViewName} + `.html`
+
+6. 타임리프 템플릿 엔진이 렌더링해서 변환을 한 html을 웹 브라우저에 반환
+
+```html
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <p th:text="'hello ' + ${name}">hello! empty</p>
+  </body>
+</html>
+```
+
+- 모델의 키값이 name인 것에서 값을 꺼내서 치환 해줌
+
+<br>
+
+## API
+
+문자, 객체만 전달하거나 서버끼리 통신할 때 API 방식을 이용
+
+### 문자 반환
+
+```java
+package hello.studyspring.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class HelloController {
+    ...
+
+    @GetMapping("hello-spring")
+    @ResponseBody
+    public String helloString(@RequestParam("name") String name) {
+        return "hello " + name;
+    }
+}
+```
+
+### 객체 반환
+
+```java
+package hello.studyspring.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class HelloController {
+    ...
+
+    // JSON으로 반환
+    // @ResponseBody가 있으면 HttpMessageConverter가 동작
+    @GetMapping("hello-api")
+    @ResponseBody
+    public Hello helloApi(@RequestParam("name") String name) {
+        Hello hello = new Hello();
+        hello.setName(name);
+        return hello;
+    }
+
+    static class Hello {  // static 클래스로 선언해서 HelloController 클래스 내에서 사용 가능
+        private String name;
+
+        // gettersetter : Alt + Insert
+        // 자바 빈 규약(get, set 메서드를 통해서 접근 가능하게 함), property 접근방식이라고도 함
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+}
+```
+
+### @ResponseBody 사용원리
+
+1. 웹브라우저에서 localhost:8080/hello-api 입력
+
+2. 내장 톰캣 서버가 요청을 받고 스프링에 보냄
+
+3. @GetMapping("hello-api") 매핑이 되어있는 Controller를 찾고 helloController에 있는 helloApi 메서드를 호출
+
+4. @ResponseBody 애노테이션이 있기 때문에 리턴하면 뷰 리졸버 대신 HttpMessageConverte가 동작
+
+   - 문자 반환: StringConverter 동작
+   - 객체 반환: JsonConverter 동작
+
+5. 리턴값이 객체이면 뷰 없이 JSON 방식으로 데이터를 만들어서 http 바디에 반환
+
+<br>
+
+## 웹 애플리케이션 계층 구조
+
+- 컨트롤러: 웹 MVC의 컨트롤러 역할
+- 서비스: 핵심 비즈니스 로직 구현
+- 리포지토리: 데이터베이스에 접근, 도메인 객체를 DB에 저장하고 관리
+- 도메인: 비즈니스 도메인 객체, ex) 회원, 주문, 쿠폰 등등 주로
+  데이터베이스에 저장하고 관리됨
 
 ### 회원 리포지토리 테스트 케이스 작성
 
@@ -122,3 +260,9 @@ DI
 - ex) 리포지터리를 다른 리포지터리로 교체할 때 기존 코드를 수정하지 않고 교체 가능
 
 @Autowired을 통한 DI는 스프링 컨테이너에 올라가 있어야 가능
+
+### 회원관리예제
+
+get: 데이터 조회
+
+post: 데이터 전달
