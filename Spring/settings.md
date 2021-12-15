@@ -199,9 +199,9 @@ public class HelloController {
 
 <img width="500" alt="1_1" src="https://user-images.githubusercontent.com/35963403/145792386-94eff002-1141-4182-b4f8-742ca0d49f95.PNG">
 
-- 컨트롤러: 웹 MVC의 컨트롤러 역할
-- 서비스: 핵심 비즈니스 로직 구현
-- 리포지토리: 데이터베이스에 접근, 도메인 객체를 DB에 저장하고 관리
+- 컨트롤러: 웹 MVC의 컨트롤러 역할, **외부 요청을 받음**
+- 서비스: **핵심 비즈니스 로직 구현**
+- 리포지토리: 데이터베이스에 접근, 도메인 객체를 DB에 **저장하고 관리**
 - 도메인: 비즈니스 도메인 객체, ex) 회원, 주문, 쿠폰 등등 주로
   데이터베이스에 저장하고 관리됨
 
@@ -565,41 +565,127 @@ class MemberServiceTest {
 
 <br>
 
-### 스프링 빈과 의존관계
+# 스프링 빈과 의존관계
 
-컨트롤러와 서비스 연결: 컨트롤러에 생성자에 @Autowired 해놓으면 컨트롤러가 생성될 때 스프링 빈에 등록되어 있는 서비스 객체를 가져와 넣어줌 -> DI
+## 컴포넌트 스캔과 자동 의존관계 설정
 
-서비스와 리포지터리 연결:
+### 스프링 빈을 등록하고, 의존관계 설정하기
 
-스프링이 실행될 때 스프링 컨테이너가 생김 -> @Controller 애노테이션이 있으면 컨트롤러 객체를 생성해서 스프링에 넣어둠 -> 스프링이 관리
--> 스프링 컨테이너에서 스프링 빈이 관리되는것임
+1. 스프링이 실행될 때 스프링 컨테이너가 생긴다.
+2. @Component 애노테이션이 있으면 스프링 빈으로 자동 등록된다.
+   - @Component를 포함하는 다음 애노테이션도 스프링 빈으로 자동 등록된다.
+     - @Controller
+     - @Service
+     - @Repository
+3. 등록된 스프링 빈은 스프링 컨테이너에서 관리된다.
 
-컨트롤러가 서비스를 가져다 써야됨 -> 객체를 생성해서 쓰는것보다 스프링 컨테이너에 등록을 하고 씀(하나만 등록이 됨) -> 생성자에 @Autowired가 돼있으면 스프링 컨테이너에서 서비스를 받아와서 씀 -> 서비스 클래스에 @Service 추가 -> 리포지터리 클래스에 @Repository 추가
+<br>
 
-@Component가 있어도 되는 위치?
+### 컨트롤러와 서비스 연결
+
+1. Controller에 @Controller, Service에 @Service 추가
+2. Controller의 생성자에 @Autowired 추가
+3. Controller가 생성될 때 스프링 컨테이너에 스프링 빈으로 등록되어 있는 Service 객체를 가져와 넣어줌
+
+<br>
+
+### 서비스와 리포지터리 연결
+
+1. Service에 @service, Repository에 @Repository 추가
+2. Service의 생성자에 @Autowired 추가
+3. Service가 생성될 때 스프링 컨테이너에 스프링 빈으로 등록되어 있는 Repository 객체를 가져와 넣어줌
+
+<br>
+
+<img width="500" alt="1_1" src="https://user-images.githubusercontent.com/35963403/146039893-3f4eb971-aa22-4413-bd4d-7cf4fb9928ff.PNG">
+
+<br>
+
+### 객체를 생성해서 쓰기 vs 스프링 컨테이너에 등록 하고 쓰기
+
+- 객체를 생성해서 쓰면 여러 컨트롤러에서 여러 서비스 객체가 생성됨
+- 스프링 컨테이너에 등록을 하면 싱글톤으로 등록(유일하게 하나만 등록해서 공유)
+  - 같은 스프링 빈이면 모두 같은 인스턴스
+
+<br>
+
+### @Component가 있어도 되는 위치?
 
 - SpringApplication이 있는 패키지만 가능하다.
 
-### 자바코드로 직접 스프링 빈 등록하기
+<br>
 
-DI
+## 자바코드로 직접 스프링 빈 등록하기
 
-- 필드 주입
-- setter 주입
-  - 단점: 컨트롤러 호출했을 때 setter가 public으로 되어있어야함 -> 잘못 바뀌면 문제발생
-- 생성자 주입
-  - 의존관계가 실행중에 동적으로 변하는 경우는 없으므로 생성자 주입 권장
-  - 한번 세팅하면 바꿀일 없음
+### Dependency Injection (의존성 주입)의 3가지 방법
 
-정형화된 컨트롤러, 서비스, 리포지터리 같은 코드는 컴포넌트 스캔 사용
+1. 필드 주입
+   - 테스트 실행시 스프링 컨테이너의 도움 없이 Service가 가지고 있는 여러 Repository를 자유롭게 변경하면서 테스트 할 수 있어야 함
+   - 필드 주입을 사용하면 스프링 컨테이너가 없을 때 의존하는 객체를 변경할 수 없음
+2. setter 주입
+   - 컨트롤러 호출했을 때 setter가 public으로 되어있어야함 -> 잘못 바뀌면 문제발생
+3. 생성자 주입
+   - 스프링 컨테이너가 올라가고 세팅이 될 때 넣고, 변경을 못하도록 막을 수 있음
+   - 의존관계가 실행중에 동적으로 변하는 경우는 없으므로 생성자 주입 권장
+   - 한번 세팅하면 바꿀일 없음
+   - 스프링 컨테이너의 도움 없이 원하는 객체를 변경해서 테스트 하거나 실행 가능
 
-정형화되지 않거나, 상황에 따라 구현 클래스를 변경해야할 때는 설정을 통해 스프링 빈으로 등록
+<br>
 
-- ex) 리포지터리를 다른 리포지터리로 교체할 때 기존 코드를 수정하지 않고 교체 가능
+### 컴포넌트 스캔 VS 직접 스프링 빈 등록
 
-@Autowired을 통한 DI는 스프링 컨테이너에 올라가 있어야 가능
+- 정형화된 컨트롤러, 서비스, 리포지터리 같은 코드는 컴포넌트 스캔 사용
+- 정형화되지 않거나, 상황에 따라 구현 클래스를 변경해야할 때는 설정을 통해 스프링 빈으로 등록
+  - ex) 리포지터리를 다른 리포지터리로 교체할 때 기존 코드를 수정하지 않고 교체 가능
+- @Autowired을 통한 DI는 스프링 컨테이너에 올라가 있어야 가능
+  - 스프링 빈으로 등록하지 않고 내가 직접 생성한 객체에는 동작하지 않음
 
-### 회원관리예제
+<br>
+
+# 회원 관리 예제 - 웹 MVC 개발
+
+## 회원 웹 기능 - 홈 화면 추가
+
+### 홈 컨트롤러 추가
+
+```java
+package hello.studyspring.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class HomeController {
+
+    @GetMapping("/")
+    public String home() {
+        return "home"; //home.html 호충
+    }
+}
+```
+
+1. localhost:8080/ 요청이 들어옴
+2. 스프링 컨테이너에 @Getmapping("/")이 있는지 찾음
+3. 있기 때문에 static 폴더의 index.html을 무시하고 home.html을 실행시킴
+
+```html
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <div class="container">
+      <div>
+        <h1>Hello Spring</h1>
+        <p>회원 기능</p>
+        <p>
+          <a href="/members/new">회원 가입</a>
+          <a href="/members">회원 목록</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+```
 
 get: 데이터 조회
 
