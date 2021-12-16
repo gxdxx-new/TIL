@@ -51,10 +51,7 @@
 ```java
 package hello.studyspring.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+...
 
 @Controller
 public class HelloController {
@@ -109,11 +106,7 @@ public class HelloController {
 ```java
 package hello.studyspring.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+...
 
 @Controller
 public class HelloController {
@@ -132,11 +125,7 @@ public class HelloController {
 ```java
 package hello.studyspring.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+...
 
 @Controller
 public class HelloController {
@@ -269,9 +258,7 @@ public interface MemberRepository {
 ```java
 package hello.studyspring.repository;
 
-import hello.studyspring.domain.Member;
-
-import java.util.*;
+...
 
 public class MemoryMemberRepository implements MemberRepository{
 
@@ -323,14 +310,7 @@ public class MemoryMemberRepository implements MemberRepository{
 ```java
 package hello.studyspring.repository;
 
-import hello.studyspring.domain.Member;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
+...
 
 public class MemoryMemberRepositoryTest {
 
@@ -400,14 +380,7 @@ public class MemoryMemberRepositoryTest {
 ```java
 package hello.studyspring.service;
 
-import hello.studyspring.domain.Member;
-import hello.studyspring.repository.MemberRepository;
-import hello.studyspring.repository.MemoryMemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
+...
 
 public class MemberService {
 
@@ -477,15 +450,7 @@ public MemberService(MemberRepository memberRepository) {
 // MemberServiceTest
 package hello.studyspring.service;
 
-import hello.studyspring.domain.Member;
-import hello.studyspring.repository.MemoryMemberRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+...
 
 class MemberServiceTest {
 
@@ -651,8 +616,7 @@ class MemberServiceTest {
 ```java
 package hello.studyspring.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+...
 
 @Controller
 public class HomeController {
@@ -687,6 +651,176 @@ public class HomeController {
 </html>
 ```
 
-get: 데이터 조회
+<br>
 
-post: 데이터 전달
+## 회원 웹 기능 - 등록
+
+### 회원 등록 폼 컨트롤러
+
+```java
+package hello.studyspring.controller;
+
+...
+
+@Controller
+public class MemberController {
+
+    private final MemberService memberService;
+
+    @Autowired
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
+    @GetMapping("/members/new")
+    public String createForm() {
+        return "members/createMemberForm";
+    }
+
+    @PostMapping("/members/new")
+    public String create(MemberForm form) {
+        Member member = new Member();
+        member.setName(form.getName());
+
+        // 회원가입
+        memberService.join(member);
+
+        // 홈 화면으로 이동
+        return "redirect:/";
+    }
+}
+```
+
+1. home.html에서 회원가입 버튼을 누르면 /members/new로 이동함
+2. createMemberForm.html이 실행되고 사용자가 이름을 입력하면 /members/new에 Post 방식으로 넘어옴
+3. create 메서드가 호출되면서 MemberForm 객체에 입력값인 name이 들어옴
+   - 스프링이 setName 메서드를 호출해 name 변수에 값을 넣어줌
+4. getName 메서드로 값을 꺼내 member 객체에 저장
+5. memberService에 회원가입 메서드를 실행
+6. redirect로 홈 화면으로 이동
+
+### 웹 등록 화면에서 데이터를 전달 받을 폼 객체
+
+```java
+package hello.studyspring.controller;
+
+public class MemberForm {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+```
+
+```html
+<!-- templates/members/createMemberForm.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <div class="container">
+      <form action="/members/new" method="post">
+        <div class="form-group">
+          <label for="name">이름</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="이름을 입력하세요"
+          />
+        </div>
+        <button type="submit">등록</button>
+      </form>
+    </div>
+  </body>
+</html>
+```
+
+- get: 데이터 조회
+- post: 데이터 전달
+
+<br>
+
+## 회원 웹 기능 - 조회
+
+### 회원 컨트롤러에서 조회 기능
+
+```java
+package hello.studyspring.controller;
+
+...
+
+@Controller
+public class MemberController {
+
+    private final MemberService memberService;
+
+    @Autowired
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
+    @GetMapping("/members/new")
+    public String createForm() {
+        return "members/createMemberForm";
+    }
+
+    @PostMapping("/members/new")
+    public String create(MemberForm form) {
+        Member member = new Member();
+        member.setName(form.getName());
+
+        //회원가입
+        memberService.join(member);
+
+        //홈 화면으로 이동
+        return "redirect:/";
+    }
+
+    @GetMapping("/members")
+    public String List(Model model) {
+        List<Member> members = memberService.findMember();
+        model.addAttribute("members", members);
+        return "members/memberList";
+    }
+}
+```
+
+- member 리스트 전체를 모델에 담아서 화면에 넘김
+
+### 회원 리스트 html
+
+```html
+<!-- templates/members/memberLish.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <div class="container">
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>이름</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="member : ${members}">
+              <td th:text="${member.id}"></td>
+              <td th:text="${member.name}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+- 타임리프
+  - th:each로 모델에 있는 members 키에 있는 members 리스트를 루프를 돌며 객체를 하나씩 꺼내서 member에 넣음
