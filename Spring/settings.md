@@ -16,6 +16,17 @@
 - 자바가 바로 실행되지 않고 gradle을 통해서 실행되면 느림
 - setting-gradle에서 Build and run using, Run tests using을 IntelliJ IDEA로 변경
 
+### 빌드하고 실행하기
+
+- 인텔리제이 bash 터미널 열기
+- 프로젝트 폴더에서 ./gradlew build
+- build/libs 폴더에 jar 파일이 생성됨
+- 서버 배포할 때는 jar 파일만 복사해서 서버에 넣어주고 실행하면 됨
+
+### 윈도우에서 Git bash 터미널 사용하기
+
+File -> Settings -> Tools -> Terminal에서 Shell path를 bash.exe로 변경
+
 <br>
 
 # 스프링 웹 개발 기초
