@@ -18,7 +18,6 @@
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/BufferedReader.md">BufferedReader / BufferedWriter 와 Scanner의 차이점, 사용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/permutation.md">순열, 조합 코드 정리</a>
 
----
 
 ## Spring 프로젝트 진행하며 공부한 것 정리
 
@@ -38,7 +37,6 @@
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/builder.md">빌더(Builder) 패턴 장점과 사용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/ajax.md">AJAX란?</a>
 
----
 
 ## Spring 강의
 
@@ -54,13 +52,11 @@
 
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/shop-project-study/study.md">쇼핑몰 프로젝트</a>
 
----
 
 ## TDD
 
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/tdd/basic.md">단위 테스트 작성법</a>
 
----
 
 ## Algorithm
 
@@ -72,26 +68,22 @@
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Algorithm/dynamicProgramming.md">다이나믹 프로그래밍 (동적계획법) 정리</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Algorithm/binarySearch.md">이진 탐색 알고리즘 정리</a>
 
----
 
 ## Git
 
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/git/error.md">브랜치가 달라서 생긴 문제 해결</a>
 
----
 
 ## Python
 
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Python/List.md">List 자료형 사용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Python/input.md">파이썬 입출력 방법</a>
 
----
 
 ## Linux
 
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Linux/linux.md">리눅스 정리</a>
 
----
 
 ## 자바 알고리즘 문제풀이
 
@@ -110,7 +102,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/String/1_11.md">문자열 압축 (valueOf(), toString())</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/String/1_12.md">암호 (replace())</a>
 
----
 
 ### 배열
 
@@ -126,7 +117,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/Array/2_11.md">임시반장 정하기</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/Array/2_12.md">멘토링</a>
 
----
 
 ### 투포인터
 
@@ -137,7 +127,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/TwoPointers/3_5.md">연속된 자연수의 합</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/TwoPointers/3_6.md">최대 길이 연속 부분 수열</a>
 
----
 
 ### HashMap
 
@@ -147,7 +136,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/HashMap/4_4.md">모든 아나그램 찾기 (Two Pointers, Sliding Window)</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/HashMap/4_5.md">K번째 큰 수 (TreeSet)</a>
 
----
 
 ### 스택
 
@@ -157,7 +145,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/StackQueue/5_4.md">후위식 연산 (postfix)</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/StackQueue/5_5.md">쇠막대기</a>
 
----
 
 ### 큐
 
@@ -165,7 +152,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/StackQueue/5_7.md">교육과정 설계 (contains())</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/StackQueue/5_8.md">응급실</a>
 
----
 
 ### 정렬
 
@@ -179,7 +165,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/Sorting/6_9.md">뮤직비디오 (결정 알고리즘)</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/Sorting/6_10.md">마구간 정하기 (결정 알고리즘)</a>
 
----
 
 ### DFS
 
@@ -198,7 +183,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/DFSBFS/8_10.md">미로 탐색</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/DFSBFS/9_13.md">섬나라 아일랜드</a>
 
----
 
 ### BFS
 
@@ -206,7 +190,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/DFSBFS/7_14.md">그래프 최단거리</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/DFSBFS/9_12.md">토마토</a>
 
----
 
 ### 그리디
 
@@ -215,7 +198,6 @@
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/Greedy/9_6.md">친구인가? (Union&Find)</a>
 - #### <a href="https://github.com/gxdxx/TIL_private/blob/main/problem_solving/Greedy/9_7.md">원더랜드 (최소스패닝트리 : 크루스칼, Union&Find 활용)</a>
 
----
 
 ### 다이나믹 프로그래밍
 
