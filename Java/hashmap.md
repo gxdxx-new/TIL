@@ -123,3 +123,55 @@ while(keys.hasNext()){
 ```
 
 - Iterator을 사용해 Map 안의 전체 요소를 출력할 수도 있다.
+
+### 키(key) 기준으로 정렬
+
+```java
+HashMap<String, Integer> map = new HashMap<>();
+        
+map.put("A", 65);
+map.put("C", 67);
+map.put("E", 90);
+
+List<String> keySet = new ArrayList<>(map.keySet());
+
+System.out.println("==Key 값 기준으로 오름차순 정렬==");
+List<String> keys = new ArrayList<>(map.keySet());
+Collections.sort(keys);
+for (String key : keys) {
+    System.out.println(String.format("Key : %s, Value : %s", key, map.get(key)));
+}
+
+keys.sort(Collections.reverseOrder());
+
+System.out.println("==Key 값 기준으로 내림차순 정렬==");
+for (String key : keys) {
+    System.out.println(String.format("Key : %s, Value : %s", key, map.get(key)));
+}
+```
+
+### 값(value) 기준으로 정렬
+
+```java
+HashMap<String, Integer> map = new HashMap<>();
+
+map.put("A", 65);
+map.put("C", 67);
+map.put("D", 68);
+
+List<String> keySet = new ArrayList<>(map.keySet());
+
+// Value 기준으로 오름차순 정렬.
+System.out.println("==오름차순 정렬==");
+keySet.sort((o1, o2) -> map.get(o1) - map.get(o2));
+for (String key : keySet) {
+    System.out.println(String.format("Key : %s, Value : %s", key, map.get(key)));
+}
+
+// Value 기준으로 내림차순 정렬.
+keySet.sort((o1, o2) -> map.get(o2) - map.get(o1));
+System.out.println("==내림차순 정렬==");
+for (String key : keySet) {
+    System.out.println(String.format("Key : %s, Value : %s", key, map.get(key)));
+}
+```
