@@ -19,6 +19,12 @@
 
 ---
 
+### Greedy
+
+- #### <a href="https://github.com/gxdxx/TIL/blob/main/Algorithm/Programmers/greedy/42861.md">섬 연결하기 (Level 3)</a>
+
+---
+
 ### Graph
 
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Algorithm/Programmers/graph/49189.md">가장 먼 노드 (Level 3)</a>
