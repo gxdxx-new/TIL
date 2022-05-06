@@ -7,6 +7,12 @@
 
 ---
 
+### Queue
+
+- #### <a href="https://github.com/gxdxx/TIL/blob/main/Algorithm/Programmers/queue/42587.md">프린터 (Level 2)</a>
+
+---
+
 ### Heap
 
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Algorithm/Programmers/heap/42626.md">더 맵게 (Level 2)</a>
