@@ -9,6 +9,7 @@
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/static.md">Static 정리</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/hashing.md">Hashing (해싱) 정리</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/data-type.md">데이터 타입 (기본 타입, 참조 타입) 정리</a>
+- #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/sorting.md">배열 정렬하는 법 (int, String, 객체)</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/garbage-collection.md">Garbage Collection (가비지 컬렉션)</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/split.md">String.split() 메소드 사용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/substring.md">String.substring() 메소드 사용법</a>
