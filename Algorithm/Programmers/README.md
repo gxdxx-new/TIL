@@ -22,6 +22,7 @@
 ### Greedy
 
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Algorithm/Programmers/greedy/42861.md">섬 연결하기 (Level 3)</a>
+- #### <a href="https://github.com/gxdxx/TIL/blob/main/Algorithm/Programmers/greddy/42885.md">구명보트 (Level 2)</a>
 
 ---
 
