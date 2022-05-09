@@ -14,6 +14,7 @@
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/split.md">String.split() 메소드 사용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/substring.md">String.substring() 메소드 사용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/equals.md">문자열 비교에서 == 와 equals() 차이점</a>
+- #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/new-string.md">String 객체 생성 방식의 차이점 (new String() vs " ")</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/lambda.md">람다식 (Lambda Expressions) 사용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/stream.md">Stream (스트링) 사용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Java/BufferedReader.md">BufferedReader / BufferedWriter 와 Scanner의 차이점, 사용법</a>
