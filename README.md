@@ -38,6 +38,7 @@
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/command-query-seperation.md">커맨드와 쿼리 분리 (CQS) 활용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/builder.md">빌더(Builder) 패턴 장점과 사용법</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/ajax.md">AJAX란?</a>
+- #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/json-web-token.md">JWT 토큰 기반 인증 시스템</a>
 
 
 ## Spring 강의
