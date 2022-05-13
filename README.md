@@ -40,6 +40,7 @@
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/ajax.md">AJAX란?</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/json-web-token.md">JWT 토큰 기반 인증 시스템</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/http-status-code.md">HTTP Status Code (상태 코드) 정리</a>
+- #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/api-library-framework.md">API vs Library vs Framework</a>
 
 ## Spring 강의
 
