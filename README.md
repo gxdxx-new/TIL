@@ -42,6 +42,7 @@
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/http-status-code.md">HTTP Status Code (상태 코드) 정리</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/api-library-framework.md">API vs Library vs Framework</a>
 - #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/querydsl-error.md">QueryDSL 테스트 에러 해결법 (JpaQueryFactory 빈 등록)</a>
+- #### <a href="https://github.com/gxdxx/TIL/blob/main/Spring/annotation.md">Spring, Lombok 대표적인 어노테이션 정리</a>
 
 ## Spring 강의
 
